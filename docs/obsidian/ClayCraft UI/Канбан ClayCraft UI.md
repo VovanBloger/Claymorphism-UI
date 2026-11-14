@@ -17,6 +17,8 @@ kanban-plugin: board
 
 ## Готово
 
+- [x] Обновить GitHub Pages со Sticker Notch (aa2da91), проверить публичный сайт и исправить оставшиеся пути превью под /Claymorphism-UI/.
+
 - [x] Добавить отдельный Sticker Notch из Генератора стикеров: исходная физика, генератор/дизайн-система, React/CSS/JSON экспорт, keyboard/reduced-motion и проверки.
 
 - [x] Уменьшить текст внутри `activity-rings` (`26px`/`9px`, `r: 101/76/51`) для свободного вписывания внутрь синего кольца, починить 3D-иконки/маскоты и subpath-пути (`resolveClayAssetPath`, `base: './'`), запушить `main` (`5e2022b`) и опубликовать `dist/` в `gh-pages`.

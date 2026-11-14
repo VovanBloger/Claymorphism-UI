@@ -2,6 +2,10 @@
 
 Дизайн-система и генератор soft 3D claymorphism на React + TypeScript + Vite.
 
+[Открыть демо на GitHub Pages](https://vovanbloger.github.io/Claymorphism-UI/).
+
+Публикация: production-сборка `npm run build`, содержимое `dist/` и `.nojekyll` в ветке `gh-pages`; Pages source — `gh-pages / (root)`. Пути локальных ассетов должны проходить через `resolveClayAssetPath`, чтобы работать в подкаталоге проекта.
+
 ## Запуск
 
 ```powershell
