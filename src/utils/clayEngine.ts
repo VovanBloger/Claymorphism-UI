@@ -11,6 +11,23 @@ export interface ClayAsset {
   usageHint: string;
 }
 
+export function resolveClayAssetPath(assetPath: string): string {
+  if (!assetPath) return assetPath;
+  if (assetPath.startsWith('http://') || assetPath.startsWith('https://') || assetPath.startsWith('data:')) {
+    return assetPath;
+  }
+  const clean = assetPath.replace(/^\/+/, '');
+  const base =
+    typeof import.meta !== 'undefined' &&
+    (import.meta as unknown as { env?: { BASE_URL?: string } }).env?.BASE_URL
+      ? (import.meta as unknown as { env?: { BASE_URL?: string } }).env!.BASE_URL!
+      : './';
+  if (base === './' || base === '.') {
+    return `./${clean}`;
+  }
+  return `${base.replace(/\/$/, '')}/${clean}`;
+}
+
 export const UPLOADED_CLAY_ASSETS: ClayAsset[] = [
   {
     id: 'star_mascot',

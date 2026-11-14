@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
+import { resolveClayAssetPath } from '../utils/clayEngine';
 
 export interface ClayNavItem {
   id: string;
@@ -126,7 +127,7 @@ function ClayBottomNavButton({
         }}
       >
         <img
-          src={item.assetPath}
+          src={resolveClayAssetPath(item.assetPath)}
           alt=""
           referrerPolicy="no-referrer"
           className="w-6 h-6 object-contain clay-icon-3d"

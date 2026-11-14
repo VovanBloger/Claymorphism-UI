@@ -69,9 +69,9 @@ export function ReferenceElement({ kind, title }: { kind: ReferenceElementKind; 
   if (kind === 'activity-rings') {
     const arc = (radius: number) => `M 120 ${120-radius} A ${radius} ${radius} 0 1 1 120 ${120+radius} A ${radius} ${radius} 0 1 1 120 ${120-radius}`;
     const rings = [
-      {r:99,p:goal?1:.78,top:'#FFC8C0',color:'#FF978E',edge:'#EE7A72',track:'#FCE8E6'},
-      {r:73.5,p:.52,top:'#D6FAE8',color:'#9EE2C4',edge:'#7AC6A7',track:'#E6F7EF'},
-      {r:48,p:.9,top:'#D8F4FE',color:'#9DD8F0',edge:'#79BDDD',track:'#E7F5FB'},
+      {r:101,p:goal?1:.78,top:'#FFC8C0',color:'#FF978E',edge:'#EE7A72',track:'#FCE8E6'},
+      {r:76,p:.52,top:'#D6FAE8',color:'#9EE2C4',edge:'#7AC6A7',track:'#E6F7EF'},
+      {r:51,p:.9,top:'#D8F4FE',color:'#9DD8F0',edge:'#79BDDD',track:'#E7F5FB'},
     ];
     return <section className="ref-activity">
       <div className="ref-ring-wrap">
@@ -118,13 +118,13 @@ export function ReferenceElement({ kind, title }: { kind: ReferenceElementKind; 
             </filter>
             {rings.map(({r,top,color,edge})=><linearGradient key={r} id={`${ringId}-ring-${r}`} x1="0" y1="0" x2=".8" y2="1"><stop offset="0" stopColor={top}/><stop offset=".48" stopColor={color}/><stop offset="1" stopColor={edge}/></linearGradient>)}
           </defs>
-          {rings.map(({r,p,track})=><g key={r} fill="none" strokeWidth="21" strokeLinecap="round">
+          {rings.map(({r,p,track})=><g key={r} fill="none" strokeWidth="20" strokeLinecap="round">
             <circle cx="120" cy="120" r={r} stroke={track} filter={`url(#${ringId}-track)`}/>
             <path className="ref-ring-progress" pathLength="100" strokeDasharray={`${p*100} 100`} d={arc(r)} stroke={`url(#${ringId}-ring-${r})`} filter={`url(#${ringId}-clay)`}/>
           </g>)}
           <g className="ref-ring-center" textAnchor="middle">
-            <text className="ref-ring-number" x="120" y="114" dominantBaseline="middle">{goal?'950':'742'}</text>
-            <text className="ref-ring-caption" x="120" y="136"><tspan x="120">kcal burned</tspan><tspan x="120" dy="12">today</tspan></text>
+            <text className="ref-ring-number" x="120" y="113" dominantBaseline="middle">{goal?'950':'742'}</text>
+            <text className="ref-ring-caption" x="120" y="129"><tspan x="120">kcal burned</tspan><tspan x="120" dy="11">today</tspan></text>
           </g>
         </svg>
       </div>

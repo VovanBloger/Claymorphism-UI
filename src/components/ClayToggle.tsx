@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { resolveClayAssetPath } from '../utils/clayEngine';
 
 export type ClayToggleAccent = 'purple' | 'mint' | 'rose' | 'butter';
 
@@ -99,7 +100,7 @@ export function ClayToggle({
         <div className="flex items-center gap-3.5 min-w-0 flex-1">
           {iconSrc && (
             <img
-              src={iconSrc}
+              src={resolveClayAssetPath(iconSrc)}
               alt=""
               referrerPolicy="no-referrer"
               className="w-11 h-11 object-contain clay-icon-3d shrink-0"
@@ -168,7 +169,7 @@ export function ClayToggle({
       <div className="flex items-center gap-3.5 min-w-0 flex-1">
         {iconSrc && (
           <img
-            src={iconSrc}
+            src={resolveClayAssetPath(iconSrc)}
             alt=""
             referrerPolicy="no-referrer"
             className="w-10 h-10 object-contain clay-icon-3d shrink-0"

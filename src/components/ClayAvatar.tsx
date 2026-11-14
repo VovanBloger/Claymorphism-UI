@@ -1,5 +1,5 @@
 import React from 'react';
-import { CLAY_COLOR_PRESETS, ClayColorPresetId } from '../utils/clayEngine';
+import { CLAY_COLOR_PRESETS, ClayColorPresetId, resolveClayAssetPath } from '../utils/clayEngine';
 
 export interface ClayAvatarProps {
   src: string;
@@ -23,7 +23,7 @@ export function ClayAvatar({
   badgeText,
 }: ClayAvatarProps) {
   const preset = CLAY_COLOR_PRESETS[presetId] || CLAY_COLOR_PRESETS['purple-cta'];
-  const isGirlCat = src.includes('ChatGPT_14');
+  const isGirlCat = src.includes('ChatGPT_14') || src.includes('girl_cat_mascot');
 
   // Exact sill-aligned dimensions so Mia's elbows rest on the inner sill (92.6%),
   // her 4 hands & cat paws hang over the bottom 3D frame rim, and the top ~28% of
@@ -143,7 +143,7 @@ export function ClayAvatar({
           }}
         >
           <img
-            src={src}
+            src={resolveClayAssetPath(src)}
             alt={alt}
             referrerPolicy="no-referrer"
             style={{

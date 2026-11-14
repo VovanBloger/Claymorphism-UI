@@ -31,6 +31,7 @@ import {
   ClayColorPresetId,
   GeneratorComponentType,
   GeneratorConfig,
+  resolveClayAssetPath,
 } from '../utils/clayEngine';
 import { ReferenceLibrary } from './ReferenceLibrary';
 import { ComponentGenerator } from './ComponentGenerator';
@@ -139,7 +140,7 @@ export function ReferenceShowcases({
                     onClick={() => triggerInspect('clay-avatar', 'girl_cat_mascot', 'peach', 'Hi, Mia!', 'Круглый портрет на светлой пластилиновой подложке')}
                   >
                     <span className="dashboard-profile-portrait">
-                      <img src="/assets/aistudio/____________ChatGPT_14_____._2026__.__04_20_48_8694cf43.png" alt="Mia и кот" />
+                      <img src={resolveClayAssetPath('/assets/aistudio/girl_cat_mascot.png')} alt="Mia и кот" />
                     </span>
                   </button>
 
@@ -239,7 +240,7 @@ export function ReferenceShowcases({
                 </span>
               </div>
               <img
-                src="/assets/aistudio/2_28937b99.jpg"
+                src={resolveClayAssetPath('/assets/aistudio/2_28937b99.jpg')}
                 alt="Original Dashboard Reference"
                 className="w-full max-w-4xl mx-auto rounded-[28px] shadow-xl border-4 border-white/60"
               />
@@ -309,7 +310,7 @@ export function ReferenceShowcases({
                   {/* Left 3D Character — Enlarged so hands & cat paws hang over the bottom edge */}
                   <div className="md:col-span-5 flex justify-center relative z-30">
                     <img
-                      src="/assets/aistudio/____________ChatGPT_14_____._2026__.__04_20_48_8694cf43.png"
+                      src={resolveClayAssetPath('/assets/aistudio/girl_cat_mascot.png')}
                       alt="Good Morning Mia & Cat"
                       className="w-64 sm:w-72 h-auto object-contain -mt-6 -mb-11 drop-shadow-[0_18px_20px_rgba(68,46,128,0.34)] transition-transform duration-300 group-hover:scale-105"
                     />
@@ -320,7 +321,7 @@ export function ReferenceShowcases({
                     <div className="inline-flex items-center gap-2 text-2xl sm:text-[26px] font-black text-[#2E2348] font-display leading-tight clay-text-3d">
                       Good Morning, Mia!
                       <img
-                        src="/assets/aistudio/11111_21446bf1.png"
+                        src={resolveClayAssetPath('/assets/aistudio/star_mascot.png')}
                         alt="Sun Star"
                         className="w-8 h-8 object-contain clay-icon-3d"
                       />
@@ -342,7 +343,7 @@ export function ReferenceShowcases({
                   {/* Right 3D Decorative Cloud / Plant Accent */}
                   <div className="md:col-span-2 hidden md:flex flex-col items-end justify-center">
                     <img
-                      src="/assets/aistudio/icon_magic_wand_7de955e9.png"
+                      src={resolveClayAssetPath('/assets/aistudio/icon_magic_wand_7de955e9.png')}
                       alt="Magic Music"
                       className="w-24 h-24 object-contain clay-float clay-icon-3d"
                     />
@@ -622,7 +623,7 @@ export function ReferenceShowcases({
                   >
                     <div className="absolute top-4 right-5 w-24 h-24 rounded-full bg-[#FFE8B5]/40 blur-xl pointer-events-none" />
                     <img
-                      src="/assets/aistudio/icon_speech_bubbles_62f65106.png"
+                      src={resolveClayAssetPath('/assets/aistudio/icon_speech_bubbles_62f65106.png')}
                       alt="Chill Vibes"
                       className="absolute top-4 right-5 w-20 h-20 object-contain clay-icon-3d"
                     />
@@ -658,7 +659,7 @@ export function ReferenceShowcases({
               >
                 <div className="flex items-center gap-4">
                   <img
-                    src="/assets/aistudio/11111_21446bf1.png"
+                    src={resolveClayAssetPath('/assets/aistudio/star_mascot.png')}
                     alt="Cute Smiling Star Mascot"
                     className="w-16 h-16 object-contain -my-2 clay-icon-3d clay-float"
                   />
@@ -704,7 +705,7 @@ export function ReferenceShowcases({
                 </span>
               </div>
               <img
-                src="/assets/aistudio/1_47e2d1fa.jpg"
+                src={resolveClayAssetPath('/assets/aistudio/1_47e2d1fa.jpg')}
                 alt="Original Login Reference"
                 className="w-full max-w-md mx-auto rounded-[28px] shadow-xl border-4 border-white/60"
               />
@@ -714,12 +715,12 @@ export function ReferenceShowcases({
           {/* Outer Lavender Stage with Floating Clay Clouds */}
           <div className="relative py-8 px-4 flex justify-center items-center">
             <img
-              src="/assets/aistudio/cloud_upload_bc9d95e9.png"
+              src={resolveClayAssetPath('/assets/aistudio/cloud_upload_bc9d95e9.png')}
               alt="Floating Clay Cloud"
               className="hidden md:block absolute left-8 top-16 w-28 h-28 object-contain clay-float pointer-events-none clay-icon-3d"
             />
             <img
-              src="/assets/aistudio/welcome_gift_d09e2000.png"
+              src={resolveClayAssetPath('/assets/aistudio/welcome_gift_d09e2000.png')}
               alt="Floating Gift"
               className="hidden md:block absolute right-10 bottom-16 w-28 h-28 object-contain clay-float pointer-events-none clay-icon-3d"
             />
@@ -752,7 +753,7 @@ export function ReferenceShowcases({
                 className="relative z-30 mt-3 -mb-9 cursor-pointer transition-transform hover:scale-105"
               >
                 <img
-                  src="/assets/aistudio/____________ChatGPT_14_____._2026__.__04_20_48_8694cf43.png"
+                  src={resolveClayAssetPath('/assets/aistudio/girl_cat_mascot.png')}
                   alt="Peeking Girl and Cat Mascot"
                   className="w-64 sm:w-72 h-auto object-contain drop-shadow-[0_18px_20px_rgba(68,46,128,0.34)]"
                 />
@@ -805,7 +806,7 @@ export function ReferenceShowcases({
                     }}
                   >
                     <img
-                      src="/assets/aistudio/icon_padlock_e2e3dd3f.png"
+                      src={resolveClayAssetPath('/assets/aistudio/icon_padlock_e2e3dd3f.png')}
                       alt="Padlock"
                       className="w-7 h-7 object-contain clay-icon-3d"
                     />
@@ -923,7 +924,7 @@ export function ReferenceShowcases({
                   }}
                 >
                   <img
-                    src={asset.path}
+                    src={resolveClayAssetPath(asset.path)}
                     alt={asset.ruName}
                     className="w-20 h-20 object-contain clay-icon-3d"
                   />

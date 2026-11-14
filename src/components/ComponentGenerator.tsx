@@ -10,6 +10,7 @@ import {
   UPLOADED_CLAY_ASSETS,
   computeClayStyles,
   generateComponentCode,
+  resolveClayAssetPath,
 } from '../utils/clayEngine';
 import { ClaySlider } from './ClaySlider';
 import { ClayBottomNav } from './ClayBottomNav';
@@ -649,7 +650,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                       style={{ opacity: isSelected ? 1 : 0 }}
                     />
                     <img
-                      src={asset.path}
+                      src={resolveClayAssetPath(asset.path)}
                       alt={asset.ruName}
                       referrerPolicy="no-referrer"
                       className="w-9 h-9 object-contain clay-icon-3d"
@@ -797,7 +798,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                     >
                       <div className="relative z-30 shrink-0 -mt-8 -mb-7">
                         <ClayAvatar
-                          src={selectedAsset.path}
+                          src={resolveClayAssetPath(selectedAsset.path)}
                           alt={selectedAsset.ruName}
                           size="lg"
                           presetId={config.physics.presetId}
@@ -994,7 +995,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                       }}
                     >
                       <img
-                        src={selectedAsset.path}
+                        src={resolveClayAssetPath(selectedAsset.path)}
                         alt={selectedAsset.ruName}
                         referrerPolicy="no-referrer"
                         className="w-10 h-10 object-contain clay-icon-3d"
@@ -1039,7 +1040,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                         }}
                       >
                         <img
-                          src={selectedAsset.path}
+                          src={resolveClayAssetPath(selectedAsset.path)}
                           alt={selectedAsset.ruName}
                           referrerPolicy="no-referrer"
                           className="w-8 h-8 object-contain clay-icon-3d"
@@ -1064,7 +1065,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                     <div className="flex items-center justify-between mb-5">
                       <div className="flex items-center gap-2.5">
                         <img
-                          src={selectedAsset.path}
+                          src={resolveClayAssetPath(selectedAsset.path)}
                           alt={selectedAsset.ruName}
                           className="w-7 h-7 object-contain clay-icon-3d"
                         />
@@ -1125,7 +1126,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="text-base font-black font-display">{config.titleText}</h4>
                       <img
-                        src={selectedAsset.path}
+                        src={resolveClayAssetPath(selectedAsset.path)}
                         alt={selectedAsset.ruName}
                         className="w-7 h-7 object-contain clay-icon-3d"
                       />
@@ -1197,7 +1198,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                   >
                     <div className="flex items-center gap-4">
                       <img
-                        src={selectedAsset.path}
+                        src={resolveClayAssetPath(selectedAsset.path)}
                         alt={selectedAsset.ruName}
                         referrerPolicy="no-referrer"
                         className="w-16 h-16 object-contain clay-icon-3d shrink-0"
