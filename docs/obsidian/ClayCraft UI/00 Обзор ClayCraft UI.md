@@ -66,3 +66,5 @@ npm exec -- vite --host 127.0.0.1 --port 3001
 ## История публикаций
 
 - 2026-11-15: GitHub Pages обновлён до main `a38d25e`, публикация `aa2da91` в `gh-pages`. Демо: https://vovanbloger.github.io/Claymorphism-UI/. Добавлен Sticker Notch; исправлены пути превью для подкаталога Pages. Проверены 11 тестов, build и публичный UI. Источник Pages — `gh-pages /`, `.nojekyll`, `base: ./`.
+
+- 2026-11-15: `fa8e561` — Clay Dock и Sticker Notch объединены в единый блок примеров нижнего меню в библиотеке; живые стенды удалены из дизайн-системы. Сборка `d9e5f01` отправлена в gh-pages.
