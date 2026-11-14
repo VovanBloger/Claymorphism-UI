@@ -119,7 +119,7 @@ export function StickerNotchNav({activeId, onSelect, speed = .6}: {
     <div ref={orb} className="sticker-notch-orb" style={{left:target}} aria-hidden="true"><div ref={orbIcon} className="sticker-notch-orb-icon"><img className="sticker-notch-clay-icon" src={displayedTab.icon} alt="" draggable={false}/>{'badge' in displayedTab && <span className="sticker-notch-badge">{displayedTab.badge}</span>}</div></div>
     <div className="sticker-notch-items">
       {STICKER_TABS.map((tab,index) => { const active = activeId===tab.id; return <button key={tab.id} type="button" aria-label={tab.label} aria-current={active?'page':undefined} tabIndex={active?0:-1} onKeyDown={event=>onKey(event,index)} onClick={()=>onSelect(tab.id)}>
-        <span className="sticker-notch-dock-icon" style={{opacity:active?0:1}} aria-hidden="true"><img className="sticker-notch-clay-icon" src={tab.icon} alt="" draggable={false}/>{'badge' in tab && <span className="sticker-notch-badge">{tab.badge}</span>}</span>
+        <span className={`sticker-notch-dock-icon${active?' is-selected':''}`} aria-hidden="true"><img className="sticker-notch-clay-icon" src={tab.icon} alt="" draggable={false}/>{'badge' in tab && <span className="sticker-notch-badge">{tab.badge}</span>}</span>
         <span className="sticker-notch-label" style={{opacity:active?1:0}}>{tab.label}</span>
       </button>;})}
     </div>

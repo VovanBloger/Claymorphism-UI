@@ -6,13 +6,24 @@
 .sticker-notch-orb-icon{position:relative;display:grid;place-items:center;color:#6d49c8}
 .sticker-notch-items{position:absolute;left:12px;right:12px;top:22px;bottom:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));z-index:3}
 .sticker-notch-items button{position:relative;display:flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:18px;padding:0;cursor:pointer;font:inherit;color:#ffffffe6;min-width:0;-webkit-tap-highlight-color:transparent}
-.sticker-notch-items button:focus-visible{outline:3px solid #624599;outline-offset:3px}
-.sticker-notch-dock-icon{position:relative;display:grid;place-items:center;transition:opacity 180ms ease,transform 220ms ease}
-.sticker-notch-items button:hover .sticker-notch-dock-icon{transform:translateY(-2px)}
+/* Override the library's generic rectangular button press material. */
+.sticker-notch .sticker-notch-items button:hover,.sticker-notch .sticker-notch-items button:active{background:transparent;box-shadow:none;transform:none;filter:none}
+.sticker-notch .sticker-notch-items button:focus-visible{outline:none!important}
+.sticker-notch-items button:focus-visible::after{content:"";position:absolute;width:44px;height:44px;border:2px solid #624599;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+.sticker-notch-items button[aria-current="page"]:focus-visible::after{top:0;width:54px;height:54px}
+.sticker-notch-dock-icon{position:relative;display:grid;place-items:center;transform:scale(1);opacity:1;transition:transform 220ms cubic-bezier(.22,1,.36,1),opacity 160ms ease}
+/* Shrink the selected dock icon before fading it; the orb flight is unchanged. */
+.sticker-notch-dock-icon.is-selected{transform:scale(0);opacity:0;transition:transform 220ms cubic-bezier(.4,0,.2,1),opacity 140ms 70ms ease}
+@media(hover:hover){
+ .sticker-notch-items button:hover .sticker-notch-clay-icon{transform:scale(1.12) rotate(-6deg)}
+ .sticker-notch:has(button[aria-current="page"]:hover) .sticker-notch-orb-icon img{transform:scale(1.08) rotate(-5deg)}
+}
+.sticker-notch-items button:active .sticker-notch-clay-icon{transform:scale(.9) rotate(3deg)}
 .sticker-notch-label{position:absolute;bottom:7px;color:white;font-size:10.5px;line-height:14px;font-weight:700;white-space:nowrap;text-shadow:0 1px 4px #482a914d;transition:opacity 190ms ease;pointer-events:none}
 .sticker-notch-badge{position:absolute;top:-9px;right:-11px;min-width:17px;height:17px;padding:0 3px;border-radius:99px;background:#f17fa3;box-shadow:inset 0 1px 2px #ffffff73,0 2px 4px #6b42852e;color:white;display:grid;place-items:center;font-size:10px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums}
 @media(prefers-reduced-motion:reduce){.sticker-notch *{transition:none!important;animation:none!important}}
 
 /* Shared Clay asset pack: transparent objects, no extra square badge. */
-.sticker-notch-clay-icon{display:block;width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 2px 2px #563b8340);pointer-events:none}
-.sticker-notch-orb-icon .sticker-notch-clay-icon{width:32px;height:32px}
+.sticker-notch-clay-icon{display:block;width:36px;height:36px;transition:transform 200ms cubic-bezier(.22,1,.36,1);object-fit:contain;filter:drop-shadow(0 2px 2px #563b8340);pointer-events:none}
+.sticker-notch-orb-icon .sticker-notch-clay-icon{width:42px;height:42px}
+@media(prefers-reduced-motion:reduce){.sticker-notch .sticker-notch-clay-icon{transform:none!important}}
