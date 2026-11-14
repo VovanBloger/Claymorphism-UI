@@ -10,7 +10,7 @@ import {
   Eye,
   Activity,
 } from 'lucide-react';
-import { CLAY_COLOR_PRESETS, ClayColorPresetId, UPLOADED_CLAY_ASSETS } from '../utils/clayEngine';
+import { CLAY_COLOR_PRESETS, ClayColorPresetId, UPLOADED_CLAY_ASSETS, resolveClayAssetPath } from '../utils/clayEngine';
 import { ClayBottomNav, ClayNavItem } from './ClayBottomNav';
 import { StickerNotchNavDemo } from './StickerNotchNav';
 
@@ -246,7 +246,7 @@ export function DesignSystemGuide({ onSelectPresetForGenerator }: DesignSystemGu
                           '3px 6px 12px rgba(56, 33, 120, 0.32), inset 2px 2px 4px rgba(255, 255, 255, 0.98), inset -2px -3px 5px rgba(212, 198, 180, 0.65)',
                       }}
                     >
-                      <img src={UPLOADED_CLAY_ASSETS[0].path} alt="Star" className="w-8 h-8 object-contain clay-icon-3d" />
+                      <img src={resolveClayAssetPath(UPLOADED_CLAY_ASSETS[0].path)} alt="Star" className="w-8 h-8 object-contain clay-icon-3d" />
                     </div>
                     <div>
                       <div className="text-sm font-black tracking-tight clay-sidebar-text-3d">

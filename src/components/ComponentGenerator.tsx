@@ -769,7 +769,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                     }}
                   >
                     <ClayAvatar
-                      src={selectedAsset.path}
+                      src={resolveClayAssetPath(selectedAsset.path)}
                       alt={selectedAsset.ruName}
                       size="xl"
                       presetId={config.physics.presetId}
