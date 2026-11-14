@@ -464,7 +464,7 @@ export function generateComponentCode(
     if (!sources) throw new Error('Sticker Notch export requires the component, math and CSS sources.');
     if (format === 'css') return sources.css;
     const component = sources.source.replace(/^import .*from '\.\.\/utils\/notchMath';\r?\n/m, '');
-    return `// Requires react, motion and lucide-react. Save the CSS tab as sticker-notch-nav.css.\n${sources.math}\n${component}\nexport default StickerNotchNavDemo;\n`;
+    return `// Requires react and motion. Save the CSS tab as sticker-notch-nav.css.\n// Copy the four PNG files referenced in STICKER_TABS into public/assets/aistudio/.\n${sources.math}\n${component}\nexport default StickerNotchNavDemo;\n`;
   }
 
   if (format === 'css') {

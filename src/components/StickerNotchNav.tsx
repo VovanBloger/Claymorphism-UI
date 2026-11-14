@@ -1,16 +1,15 @@
 import React, { useId, useLayoutEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
-import { Sparkles, Layers, MessageCircle, Compass } from 'lucide-react';
 import { buildSymmetricalNotch, getTabCenterX, calculateTransitDuration, computeFramePhysics } from '../utils/notchMath';
 import './sticker-notch-nav.css';
 
 // Visual/physics source: TG_Sticker_Studio/components/AdaptiveNotchNav.tsx,
 // clay-lavender theme. No Telegram, sound, or haptics dependency in this adapter.
 const STICKER_TABS = [
-  { id: 'create', label: 'Создать', icon: Sparkles },
-  { id: 'packs', label: 'Мои паки', icon: Layers, badge: 3 },
-  { id: 'chat', label: 'Чат', icon: MessageCircle },
-  { id: 'explore', label: 'Лента', icon: Compass },
+  { id: 'create', label: 'Создать', icon: './assets/aistudio/icon_magic_wand_7de955e9.png' },
+  { id: 'packs', label: 'Мои паки', icon: './assets/aistudio/welcome_gift_d09e2000.png', badge: 3 },
+  { id: 'chat', label: 'Чат', icon: './assets/aistudio/icon_speech_bubbles_62f65106.png' },
+  { id: 'explore', label: 'Лента', icon: './assets/aistudio/icon_telegram_plane_dd1b14fc.png' },
 ] as const;
 
 export type StickerTabId = typeof STICKER_TABS[number]['id'];
@@ -35,7 +34,6 @@ export function StickerNotchNav({activeId, onSelect, speed = .6}: {
   const [displayedId, setDisplayedId] = useState(activeId);
   const activeIndex = Math.max(0, STICKER_TABS.findIndex(tab => tab.id === activeId));
   const displayedTab = STICKER_TABS.find(tab => tab.id === displayedId) || STICKER_TABS[0];
-  const OrbIcon = displayedTab.icon;
   const target = getTabCenterX(activeIndex, width, STICKER_TABS.length);
   // Keep the first/last cradle centered even inside narrow generator previews.
   const gap = Math.max(3, Math.min(8.5, getTabCenterX(0,width,STICKER_TABS.length)-29));
@@ -118,10 +116,10 @@ export function StickerNotchNav({activeId, onSelect, speed = .6}: {
       <path ref={rim} d={path(target)} transform="translate(0 3.5)" fill="#8A67CC" opacity=".82"/>
       <path ref={panel} d={path(target)} fill={`url(#${uid}-fill)`} filter={`url(#${uid}-bevel)`}/>
     </svg>
-    <div ref={orb} className="sticker-notch-orb" style={{left:target}} aria-hidden="true"><div ref={orbIcon} className="sticker-notch-orb-icon"><OrbIcon size={23} strokeWidth={2.2}/>{'badge' in displayedTab && <span className="sticker-notch-badge">{displayedTab.badge}</span>}</div></div>
+    <div ref={orb} className="sticker-notch-orb" style={{left:target}} aria-hidden="true"><div ref={orbIcon} className="sticker-notch-orb-icon"><img className="sticker-notch-clay-icon" src={displayedTab.icon} alt="" draggable={false}/>{'badge' in displayedTab && <span className="sticker-notch-badge">{displayedTab.badge}</span>}</div></div>
     <div className="sticker-notch-items">
-      {STICKER_TABS.map((tab,index) => { const Icon = tab.icon; const active = activeId===tab.id; return <button key={tab.id} type="button" aria-label={tab.label} aria-current={active?'page':undefined} tabIndex={active?0:-1} onKeyDown={event=>onKey(event,index)} onClick={()=>onSelect(tab.id)}>
-        <span className="sticker-notch-dock-icon" style={{opacity:active?0:1}} aria-hidden="true"><Icon size={21} strokeWidth={2}/>{'badge' in tab && <span className="sticker-notch-badge">{tab.badge}</span>}</span>
+      {STICKER_TABS.map((tab,index) => { const active = activeId===tab.id; return <button key={tab.id} type="button" aria-label={tab.label} aria-current={active?'page':undefined} tabIndex={active?0:-1} onKeyDown={event=>onKey(event,index)} onClick={()=>onSelect(tab.id)}>
+        <span className="sticker-notch-dock-icon" style={{opacity:active?0:1}} aria-hidden="true"><img className="sticker-notch-clay-icon" src={tab.icon} alt="" draggable={false}/>{'badge' in tab && <span className="sticker-notch-badge">{tab.badge}</span>}</span>
         <span className="sticker-notch-label" style={{opacity:active?1:0}}>{tab.label}</span>
       </button>;})}
     </div>
