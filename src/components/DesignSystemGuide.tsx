@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { CLAY_COLOR_PRESETS, ClayColorPresetId, UPLOADED_CLAY_ASSETS } from '../utils/clayEngine';
 import { ClayBottomNav, ClayNavItem } from './ClayBottomNav';
+import { StickerNotchNavDemo } from './StickerNotchNav';
 
 const PHYSICS_DEMO_ITEMS: ClayNavItem[] = [
   {
@@ -86,6 +87,13 @@ export function DesignSystemGuide({ onSelectPresetForGenerator }: DesignSystemGu
 }
 /* Градиенты, фаски и состояния — в src/index.css. */
 /* Реальная нативная полоса, без подмены отдельным div. */`}</code></pre>
+      </section>
+
+      <section className="clay-card-cream rounded-[30px] p-6 sm:p-8 space-y-5">
+        <div><span className="text-xs font-extrabold tracking-wider text-[#8C6AAB]">ВАРИАНТ НИЖНЕГО МЕНЮ · ИЗ ГЕНЕРАТОРА СТИКЕРОВ</span><h2 className="text-2xl font-black mt-3">Sticker Notch · пластилиновая выемка</h2><p className="text-sm text-[#796A88] mt-2 leading-relaxed">Белый медальон перелетает между вкладками, а лавандовая панель подстраивает выемку под него. Нажмите соседнюю вкладку или сразу перескочите через несколько.</p></div>
+        <div className="rounded-[26px] bg-[#EDE4FA] p-5 sm:p-8 flex justify-center"><StickerNotchNavDemo/></div>
+        <div className="grid sm:grid-cols-3 gap-4 text-sm text-[#796A88] leading-relaxed"><p><b className="text-[#413054]">Одна траектория.</b> Шар и SVG-выемка получают одну координату в каждом кадре, поэтому остаются совмещены даже при быстром переключении.</p><p><b className="text-[#413054]">Мягкая физика.</b> Подъём до 4.5 px, небольшое растяжение в полёте и сжатие при приземлении. Иконка затухает и меняется в середине пути.</p><p><b className="text-[#413054]">Доступность.</b> Стрелки, Home/End и обычные нажатия. При reduced-motion переход мгновенный. Ширина и выемка адаптируются через ResizeObserver.</p></div>
+        <p className="text-xs text-[#8B799C]">Математика перенесена из AdaptiveNotchNav проекта «Генератор стикеров». В ClayCraft этот вариант доступен отдельным архетипом генератора с React/TSX, CSS и JSON-экспортом; прежний Clay Dock сохранён.</p>
       </section>
 
       {/* HERO BANNER */}

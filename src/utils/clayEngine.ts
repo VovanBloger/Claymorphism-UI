@@ -428,6 +428,7 @@ export type GeneratorComponentType =
   | 'pill-button'
   | 'peeking-card'
   | 'bottom-nav'
+  | 'sticker-notch-nav'
   | 'clay-slider'
   | 'clay-toggle'
   | 'bar-chart-card'
@@ -449,13 +450,22 @@ export interface GeneratorConfig {
 export function generateComponentCode(
   config: GeneratorConfig,
   format: 'react' | 'css' | 'tokens',
-  referenceExports?: { source: string; css: string }
+  referenceExports?: { source: string; css: string; notch?: {source: string; math: string; css: string} }
 ): string {
   const styles = computeClayStyles(config.physics);
   const preset = CLAY_COLOR_PRESETS[config.physics.presetId] || CLAY_COLOR_PRESETS.cream;
   const asset =
     UPLOADED_CLAY_ASSETS.find((a) => a.id === config.selectedAssetId) ||
     UPLOADED_CLAY_ASSETS[0];
+
+  if (config.componentType === 'sticker-notch-nav') {
+    if (format === 'tokens') return JSON.stringify({component:'sticker-notch-nav',source:'TG_Sticker_Studio/AdaptiveNotchNav',theme:'clay-lavender',geometry:{panelHeight:90,orbSize:50,bottomRadius:28},motion:{speedMultiplier:.6,maxHopPx:4.5,baseDurationMs:300,maxIntrinsicMs:480,iconFadeOutEnd:.22,iconFadeInStart:.66,landingStart:.82,reducedMotion:'instant'},accessibility:{keyboard:['ArrowLeft','ArrowRight','Home','End'],rovingTabIndex:true},palette:{panel:['#C7ACF0','#AA86DF'],orb:['#FFFEFE','#FAF6F9','#ECE1F8'],icon:'#6D49C8'}},null,2);
+    const sources = referenceExports?.notch;
+    if (!sources) throw new Error('Sticker Notch export requires the component, math and CSS sources.');
+    if (format === 'css') return sources.css;
+    const component = sources.source.replace(/^import .*from '\.\.\/utils\/notchMath';\r?\n/m, '');
+    return `// Requires react, motion and lucide-react. Save the CSS tab as sticker-notch-nav.css.\n${sources.math}\n${component}\nexport default StickerNotchNavDemo;\n`;
+  }
 
   if (format === 'css') {
     if (referenceKinds.includes(config.componentType)) return `${styles.cssString}\n\n${referenceExports?.css || '/* Pass the reference CSS source to export this component. */'}`;

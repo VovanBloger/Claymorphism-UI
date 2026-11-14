@@ -1,3 +1,6 @@
+import notchSource from './StickerNotchNav.tsx?raw';
+import notchMathSource from '../utils/notchMath.ts?raw';
+import notchCss from './sticker-notch-nav.css?raw';
 import referenceSource from './ReferenceElements.tsx?raw';
 import referenceCss from './reference-clay.css?raw';
 import React, { useEffect, useRef, useState } from 'react';
@@ -14,6 +17,7 @@ import {
 } from '../utils/clayEngine';
 import { ClaySlider } from './ClaySlider';
 import { ClayBottomNav } from './ClayBottomNav';
+import { StickerNotchNavDemo } from './StickerNotchNav';
 import { ClayToggle } from './ClayToggle';
 import { ClayAvatar } from './ClayAvatar';
 import { REFERENCE_ELEMENTS, ReferenceElement, ReferenceElementKind } from './ReferenceElements';
@@ -36,6 +40,7 @@ interface ArchetypeItem {
 }
 
 const COMPONENT_ARCHETYPES: ArchetypeItem[] = [
+  {id:'sticker-notch-nav',label:'Нижнее меню · Sticker Notch',desc:'Меню из генератора стикеров: летающий шар и плавная пластилиновая выемка',defaultPreset:'lavender',defaultAsset:'magic_wand',defaultMode:'raised',defaultRadius:28},
   ...REFERENCE_ELEMENTS.map(item => ({id:item.id,label:item.label,desc:item.description,defaultPreset:'lavender' as const,defaultAsset:'star_mascot',defaultMode:'raised' as const,defaultRadius:28})),
   {id:'pill-button',label:'Кнопка-капсула',desc:'Пухлая кнопка с короткой контактной тенью',defaultPreset:'rose',defaultAsset:'telegram_plane',defaultMode:'floating-pill',defaultRadius:999},
   {
@@ -315,7 +320,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
 
   const selectableAssets = UPLOADED_CLAY_ASSETS.filter((a) => a.category !== 'reference');
 
-  const generatedCode = generateComponentCode(config, codeTab, {source:referenceSource,css:referenceCss});
+  const generatedCode = generateComponentCode(config, codeTab, {source:referenceSource,css:referenceCss,notch:{source:notchSource,math:notchMathSource,css:notchCss}});
 
   const handleSelectArchetype = (arch: ArchetypeItem) => {
     onChangeConfig((prev) => ({
@@ -826,6 +831,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                 )}
 
                 {/* 2. 3D CLAY BOTTOM NAVIGATION DOCK SAMPLE */}
+                {config.componentType === 'sticker-notch-nav' && <StickerNotchNavDemo/>}
                 {config.componentType === 'bottom-nav' && (
                   <div className="w-full max-w-3xl">
                     <ClayBottomNav

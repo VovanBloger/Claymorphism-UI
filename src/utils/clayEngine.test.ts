@@ -17,6 +17,25 @@ test('computeConcentricRadius calculates nested radius accurately and enforces m
   assert.equal(computeConcentricRadius(9999, 16), 9999);
 });
 
+test('Sticker Notch exports standalone TSX, its live CSS, and the original flight parameters', () => {
+  const config: GeneratorConfig = {
+    componentType:'sticker-notch-nav',
+    physics:{presetId:'lavender',surfaceMode:'raised',borderRadius:28,depth:9,blurSoftness:18,specularIntensity:.9,padding:20},
+    titleText:'',subtitleText:'',metricValue:'',metricDelta:'',ctaLabel:'',selectedAssetId:'magic_wand',
+  };
+  const notch = {
+    source:readFileSync(new URL('../components/StickerNotchNav.tsx',import.meta.url),'utf8'),
+    math:readFileSync(new URL('./notchMath.ts',import.meta.url),'utf8'),
+    css:readFileSync(new URL('../components/sticker-notch-nav.css',import.meta.url),'utf8'),
+  };
+  const sources = {source:'',css:'',notch};
+  const exported = generateComponentCode(config,'react',sources);
+  assert.ok(!exported.includes("from '../utils/notchMath'"), 'geometry must be included in the exported module');
+  assert.ok(transformSync(exported,{loader:'tsx',format:'esm'}).code.includes('StickerNotchNavDemo'));
+  assert.equal(generateComponentCode(config,'css',sources),notch.css);
+  assert.equal(JSON.parse(generateComponentCode(config,'tokens')).motion.maxHopPx,4.5);
+});
+
 test('every new reference component exports compilable TSX with working CSS and escaped content', () => {
   const source = readFileSync(new URL('../components/ReferenceElements.tsx', import.meta.url), 'utf8');
   const css = readFileSync(new URL('../components/reference-clay.css', import.meta.url), 'utf8');

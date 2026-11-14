@@ -1,0 +1,14 @@
+.sticker-notch-demo{width:100%;max-width:480px;padding-top:22px;font-family:var(--font-display,Arial,sans-serif)}
+.sticker-notch-demo>p{font-size:11px;text-align:center;color:#8a739f;margin:20px 0 0;min-height:16px}
+.sticker-notch{position:relative;width:100%;height:90px;isolation:isolate;overflow:visible;user-select:none}
+.sticker-notch-panel{position:absolute;inset:0;width:100%;height:90px;overflow:visible;pointer-events:none;filter:drop-shadow(0 12px 22px #6c4ec23d) drop-shadow(0 3px 8px #6c4ec21f)}
+.sticker-notch-orb{position:absolute;top:22px;width:50px;height:50px;border-radius:50%;display:grid;place-items:center;transform:translate(-50%,-50%);z-index:2;pointer-events:none;background:radial-gradient(circle at 30% 26%,#fffefe,#faf6f9 54%,#ece1f8);box-shadow:2px 4px 8px -2px #69568a24,10px 16px 28px -6px #6044a457,inset 4px 5px 10px #fffffffa,inset -4px -6px 11px #927aca52;will-change:transform;}
+.sticker-notch-orb-icon{position:relative;display:grid;place-items:center;color:#6d49c8}
+.sticker-notch-items{position:absolute;left:12px;right:12px;top:22px;bottom:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));z-index:3}
+.sticker-notch-items button{position:relative;display:flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:18px;padding:0;cursor:pointer;font:inherit;color:#ffffffe6;min-width:0;-webkit-tap-highlight-color:transparent}
+.sticker-notch-items button:focus-visible{outline:3px solid #624599;outline-offset:3px}
+.sticker-notch-dock-icon{position:relative;display:grid;place-items:center;transition:opacity 180ms ease,transform 220ms ease}
+.sticker-notch-items button:hover .sticker-notch-dock-icon{transform:translateY(-2px)}
+.sticker-notch-label{position:absolute;bottom:7px;color:white;font-size:10.5px;line-height:14px;font-weight:700;white-space:nowrap;text-shadow:0 1px 4px #482a914d;transition:opacity 190ms ease;pointer-events:none}
+.sticker-notch-badge{position:absolute;top:-9px;right:-11px;min-width:17px;height:17px;padding:0 3px;border-radius:99px;background:#f17fa3;box-shadow:inset 0 1px 2px #ffffff73,0 2px 4px #6b42852e;color:white;display:grid;place-items:center;font-size:10px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums}
+@media(prefers-reduced-motion:reduce){.sticker-notch *{transition:none!important;animation:none!important}}

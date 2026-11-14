@@ -30,3 +30,11 @@ npm run build
 Подробные заметки для Obsidian: `docs/obsidian/ClayCraft UI/`. Основная база знаний: `D:\Projects\Vault\ClayCraft UI`.
 
 Текущий проект — клиентская демонстрация и генератор. Backend, реальные платежи, авторизация и API генерации изображений не реализованы.
+
+## Нижнее меню из генератора стикеров
+
+В генераторе выберите **Нижнее меню · Sticker Notch**. Живой стенд также доступен в дизайн-системе. Белый медальон перелетает вместе с SVG-выемкой; сохранены исходные формулы `TG_Sticker_Studio/AdaptiveNotchNav` и его чистой библиотеки `notch-math`.
+
+Вариант экспортируется как автономный TSX + CSS + JSON-токены. Нужны `react`, `motion`, `lucide-react`; Telegram/Next.js не нужны. Поддерживаются быстрые переключения, resize, стрелки/Home/End и reduced-motion. Прежний Clay Dock сохранён.
+
+![Sticker Notch](docs/assets/sticker-notch.jpg)
