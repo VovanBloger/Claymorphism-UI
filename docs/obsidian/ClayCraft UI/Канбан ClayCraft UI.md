@@ -17,6 +17,8 @@ kanban-plugin: board
 
 ## Готово
 
+- [x] Заменить контурные иконки Sticker Notch общими 3D Clay-ассетами; сохранить медальон, badge и анимацию.
+
 - [x] Объединить Clay Dock и Sticker Notch в блок BottomNavExamples библиотеки, удалить демо из дизайн-системы; проверить desktop/mobile.
 
 - [x] Обновить GitHub Pages со Sticker Notch (aa2da91), проверить публичный сайт и исправить оставшиеся пути превью под /Claymorphism-UI/.
