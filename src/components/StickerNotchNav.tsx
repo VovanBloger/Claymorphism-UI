@@ -82,8 +82,8 @@ export function StickerNotchNav({activeId, onSelect, speed = .6}: {
     const step = (now: number) => {
       const t = Math.min(1, (now-began)/duration);
       const state = computeFramePhysics(t, start, target-start);
-      // Begin the same 260ms growth during the final 18% of the flight.
-      const grow = Math.max(0, Math.min(1, (now-began-duration*.82)/260));
+      // Begin the same 260ms growth halfway through the flight.
+      const grow = Math.max(0, Math.min(1, (now-began-duration*.5)/260));
       const eased = 1-Math.pow(1-grow,3);
       if (t < 1) {
         paint(state.x,state.arcY,state.scaleX,state.scaleY,state.shouldSwitchIcon?Math.min(1,grow*3):state.iconOpacity,state.shouldSwitchIcon?eased:state.iconScale);
