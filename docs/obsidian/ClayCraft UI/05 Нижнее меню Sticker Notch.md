@@ -51,3 +51,7 @@ Clay Dock и Sticker Notch объединены в `src/components/BottomNavExam
 ## Иконки Clay · 2026-11-15
 
 `1311969`: вместо lucide — PNG общего набора: magic_wand / welcome_gift / speech_bubbles / telegram_plane. Размер 30px в панели и 32px в шаре, исходные пропорции через object-fit:contain, прозрачный фон и короткая тень, без дополнительных плиток. Пути ./assets/aistudio/ работают и локально, и под /Claymorphism-UI/. RAF продолжает менять содержимое иконки в середине перелёта; badge 3 остаётся у «Мои паки». Экспорт требует переноса этих четырёх файлов.
+
+## Размеры и локальная реакция · 2026-11-15
+
+`5badcfb`: иконки панели 36px, шара 42px. Корпус 90px и шар 50px, RAF-траектория без изменений. Generic button hover/active библиотеки переопределены только в Sticker Notch: кнопка прозрачна, без сдвига/тени; реакция на img. Hover scale1.12/rotate-6deg (в шаре 1.08/-5deg), press .9/3deg, выбранный dock-icon scale0 за 220ms и opacity0 за 140ms с задержкой70ms. Keyboard focus — круг, mouse не рисует рамку. Reduced-motion отключает переходы и наклон.
