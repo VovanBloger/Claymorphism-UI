@@ -1,0 +1,6 @@
+{
+  "name": "ClayCraft UI — Дизайн-система и Генератор Soft 3D Claymorphism",
+  "description": "Полная спецификация дизайн-системы мягкого 3D-пластилина (Soft Matte Claymorphism) и интерактивный кодогенератор всех UI-компонентов с паком 3D-иконок.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
