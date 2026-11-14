@@ -82,10 +82,20 @@ export function StickerNotchNav({activeId, onSelect, speed = .6}: {
     const step = (now: number) => {
       const t = Math.min(1, (now-began)/duration);
       const state = computeFramePhysics(t, start, target-start);
-      paint(state.x,state.arcY,state.scaleX,state.scaleY,state.iconOpacity,state.iconScale);
-      if (state.shouldSwitchIcon && !switched) { switched = true; setDisplayedId(activeId); }
-      if (t < 1) frame.current = requestAnimationFrame(step);
-      else { paint(target); setDisplayedId(activeId); host.current?.setAttribute('data-phase', 'idle'); }
+      // Keep the incoming icon tucked away until the medallion lands.
+      if (t < 1) {
+        paint(state.x,state.arcY,state.scaleX,state.scaleY,state.shouldSwitchIcon?0:state.iconOpacity,state.shouldSwitchIcon?0:state.iconScale);
+        if (state.shouldSwitchIcon && !switched) { switched = true; setDisplayedId(activeId); }
+        frame.current = requestAnimationFrame(step);
+      } else {
+        host.current?.setAttribute('data-phase', 'settling');
+        const grow = Math.min(1, (now-began-duration)/260);
+        const eased = 1-Math.pow(1-grow,3);
+        paint(target,0,1,1,Math.min(1,grow*3),eased);
+        setDisplayedId(activeId);
+        if (grow < 1) frame.current = requestAnimationFrame(step);
+        else { paint(target); host.current?.setAttribute('data-phase', 'idle'); }
+      }
     };
     frame.current = requestAnimationFrame(step);
     return () => { if (frame.current !== null) cancelAnimationFrame(frame.current); };
