@@ -1,4 +1,5 @@
 import { materialBackground, materialShadow } from '../utils/materialStyle';
+import { computeLayerShadow } from '../utils/clayLayers';
 import React, { useState, useEffect } from 'react';
 
 export type ClayThumbVariant = 'pink' | 'blue' | 'mint' | 'lavender' | 'butter';
@@ -30,7 +31,7 @@ const THUMB_STYLES: Record<
     thumbBgSphere: 'radial-gradient(circle at 32% 28%, #FFE0E8 0%, #F7A3B8 52%, #E37892 100%)',
     thumbBgAngular: 'linear-gradient(145deg, #FFD8E2 0%, #F7A3B8 55%, #E37892 100%)',
     thumbShadow:
-      '0 10px 18px -3px rgba(184, 78, 104, 0.45), 0 4px 7px rgba(184, 78, 104, 0.26), inset 0 4px 6px rgba(255, 255, 255, 0.92), inset 0 -5px 8px #C25570',
+      computeLayerShadow('detail', {shadowRgb:'184,78,104',edge:'#C25570'}),
     fillBg: 'linear-gradient(180deg, #FFE8EE 0%, #F9C2D0 100%)',
     fillBevel: '#E59EB0',
   },
@@ -38,7 +39,7 @@ const THUMB_STYLES: Record<
     thumbBgSphere: 'radial-gradient(circle at 32% 28%, #D6E6FF 0%, #85ACF7 52%, #648BE0 100%)',
     thumbBgAngular: 'linear-gradient(145deg, #D2E4FF 0%, #85ACF7 55%, #648BE0 100%)',
     thumbShadow:
-      '0 10px 18px -3px rgba(72, 105, 184, 0.45), 0 4px 7px rgba(72, 105, 184, 0.26), inset 0 4px 6px rgba(255, 255, 255, 0.92), inset 0 -5px 8px #476EC2',
+      computeLayerShadow('detail', {shadowRgb:'72,105,184',edge:'#476EC2'}),
     fillBg: 'linear-gradient(180deg, #E3EEFF 0%, #BDD4FA 100%)',
     fillBevel: '#96B5E8',
   },
@@ -46,7 +47,7 @@ const THUMB_STYLES: Record<
     thumbBgSphere: 'radial-gradient(circle at 32% 28%, #D4FAF0 0%, #7ED9C6 52%, #58B8A4 100%)',
     thumbBgAngular: 'linear-gradient(145deg, #CFF8EE 0%, #7ED9C6 55%, #58B8A4 100%)',
     thumbShadow:
-      '0 10px 18px -3px rgba(56, 145, 128, 0.45), 0 4px 7px rgba(56, 145, 128, 0.26), inset 0 4px 6px rgba(255, 255, 255, 0.92), inset 0 -5px 8px #3B9683',
+      computeLayerShadow('detail', {shadowRgb:'56,145,128',edge:'#3B9683'}),
     fillBg: 'linear-gradient(180deg, #E3FBF5 0%, #B6EDE0 100%)',
     fillBevel: '#8CD1C1',
   },
@@ -54,7 +55,7 @@ const THUMB_STYLES: Record<
     thumbBgSphere: 'radial-gradient(circle at 32% 28%, #EAE0FF 0%, #AC92FA 52%, #8768E3 100%)',
     thumbBgAngular: 'linear-gradient(145deg, #E6DAFF 0%, #AC92FA 55%, #8768E3 100%)',
     thumbShadow:
-      '0 10px 18px -3px rgba(104, 78, 168, 0.45), 0 4px 7px rgba(104, 78, 168, 0.26), inset 0 4px 6px rgba(255, 255, 255, 0.92), inset 0 -5px 8px #6445C2',
+      computeLayerShadow('detail', {shadowRgb:'104,78,168',edge:'#6445C2'}),
     fillBg: 'linear-gradient(180deg, #F0E8FF 0%, #D5C4FA 100%)',
     fillBevel: '#B39CE8',
   },
@@ -62,7 +63,7 @@ const THUMB_STYLES: Record<
     thumbBgSphere: 'radial-gradient(circle at 32% 28%, #FFF3C4 0%, #F7CE68 52%, #E3B03B 100%)',
     thumbBgAngular: 'linear-gradient(145deg, #FFF1BA 0%, #F7CE68 55%, #E3B03B 100%)',
     thumbShadow:
-      '0 10px 18px -3px rgba(166, 134, 68, 0.45), 0 4px 7px rgba(166, 134, 68, 0.26), inset 0 4px 6px rgba(255, 255, 255, 0.92), inset 0 -5px 8px #C28F1F',
+      computeLayerShadow('detail', {shadowRgb:'166,134,68',edge:'#C28F1F'}),
     fillBg: 'linear-gradient(180deg, #FFF8DE 0%, #FCE29C 100%)',
     fillBevel: '#E3C376',
   },
@@ -133,11 +134,12 @@ export function ClaySlider({
       >
         {/* Plump 3D Cylindrical Cream Clay Track */}
         <div
+          data-clay-layer="control"
           className="w-full h-4 rounded-full relative overflow-hidden"
           style={{
             background: materialBackground('linear-gradient(180deg, #FFFFFF 0%, #F7EFE6 58%, #E6DBD0 100%)'),
             boxShadow:
-              materialShadow('0 6px 12px -2px rgba(95, 75, 140, 0.18), 0 2px 4px rgba(95, 75, 140, 0.10), inset 0 3px 4px rgba(255, 255, 255, 1), inset 0 -3px 5px #D5C7B8'),
+              computeLayerShadow('control', {shadowRgb:'95,75,140',edge:'#D5C7B8'}, .65),
           }}
         >
           {/* Lockstep Pastel Clay Progress Fill (zero lag behind thumb) */}
@@ -154,6 +156,8 @@ export function ClaySlider({
 
         {/* 3D Clay Thumb with Customizable Corner Rounding (from Angular Cube 4px to Sphere 18px) */}
         <div
+          data-clay-layer="detail"
+          data-clay-shape="disc"
           aria-hidden="true"
           className="absolute top-1/2 pointer-events-none"
           style={{

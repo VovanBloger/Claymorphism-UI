@@ -1,4 +1,6 @@
 import { materialBackground, materialShadow, materialStylesheet } from './materialStyle';
+import { CLAY_LAYERS, computeLayerShadow, computeLayerShadowLayers, getClayLayer, type ClayLayerId } from './clayLayers';
+import { DEFAULT_CLAY_TEXTURE_IMAGE } from './clayTexture';
 
 const referenceKinds = ['status-pills','action-rows','clay-calendar','product-card','workout-card','activity-rings','filter-chips'];
 
@@ -303,6 +305,7 @@ export const CLAY_COLOR_PRESETS: Record<ClayColorPresetId, ClayColorPreset> = {
 };
 
 export interface ClayPhysicsParams {
+  layer?: ClayLayerId; // omitted: infer the outer surface role from the component archetype
   presetId: ClayColorPresetId;
   surfaceMode: 'raised' | 'recessed' | 'floating-pill';
   borderRadius: number; // px, e.g. 28
@@ -310,11 +313,14 @@ export interface ClayPhysicsParams {
   blurSoftness: number; // 8 to 48
   specularIntensity: number; // 0.3 to 1.0 (top-left white highlight)
   padding: number; // px, e.g. 24
-  thumbRadius?: number; // px, 4 (angular squircle) to 18 (sphere)
+  thumbRadius?: number; // px, 4 (angular squircle) to 18 (round disc)
 }
 
 export interface ComputedClayStyles {
+  physicalLayer: ClayLayerId;
+  materialTokens: { '--clay-layer-scale': number; '--clay-relief-specular': number };
   background: string;
+  backgroundBlendMode: 'soft-light, normal' | 'normal';
   boxShadow: string;
   shadowLayers: string[];
   borderRadius: string;
@@ -336,17 +342,20 @@ export function computeConcentricRadius(outerRadius: number, padding: number): n
 }
 
 /**
- * Generates the signature 4-layer Soft 3D Claymorphism shadow stack:
- * 1. Outer Ambient Drop Shadow (soft diffused colored shadow below/right)
- * 2. Outer Contact Shadow (tighter shadow right under the rim)
- * 3. Top-Left Inner Specular Rim Highlight (white marshmallow reflection)
- * 4. Bottom-Right Inner Volume Bevel (darker clay shade giving 3D thickness)
+ * Six layers preserve four physical roles: ambient, contact, light and volume.
+ * Light uses a narrow crest plus a broad shoulder; volume uses a small bottom
+ * lip plus a soft falloff. Separate scales keep the face clean and the rim round.
  */
-export function computeClayStyles(params: ClayPhysicsParams): ComputedClayStyles {
+export function computeClayStyles(params: ClayPhysicsParams, layer: ClayLayerId = params.layer ?? 'control'): ComputedClayStyles {
   const preset = CLAY_COLOR_PRESETS[params.presetId] || CLAY_COLOR_PRESETS.cream;
+  const profile = getClayLayer(layer);
   const d = Math.max(1, Math.min(32, params.depth));
   const blur = Math.max(4, Math.min(64, params.blurSoftness));
   const spec = Math.max(0.1, Math.min(1, params.specularIntensity));
+  // Local controls use the same nominal values as the CSS fallback. Global
+  // volume is applied once by the material adapter, never baked into these tokens.
+  const localScale = Math.max(.45, d / 12) * (params.surfaceMode === 'floating-pill' ? 1.1 : 1);
+  const materialTokens = { '--clay-layer-scale': localScale, '--clay-relief-specular': spec / .9 };
 
   const radiusPx = params.borderRadius >= 999 ? '9999px' : `${params.borderRadius}px`;
   const innerChildRadius = computeConcentricRadius(params.borderRadius, params.padding);
@@ -361,48 +370,40 @@ export function computeClayStyles(params: ClayPhysicsParams): ComputedClayStyles
     const insetTopY = Math.max(3, Math.round(d * 0.48));
     const insetTopBlur = Math.max(4, Math.round(blur * 0.42));
     const insetBottomY = Math.max(2, Math.round(d * 0.35));
+    // Keep the three-layer socket, matching its cavity to its physical level.
+    const socketPx = (value: number) => `${Number((value * profile.crest.blur / CLAY_LAYERS.control.crest.blur).toFixed(3))}px`;
     shadowLayers = [
-      `inset ${insetTopX}px ${insetTopY}px ${insetTopBlur}px rgba(${preset.outerShadowRgb}, 0.34)`,
-      `inset -2px -${insetBottomY}px ${Math.round(insetTopBlur * 0.8)}px rgba(255, 255, 255, ${spec.toFixed(2)})`,
-      `0 2px 5px rgba(255, 255, 255, 0.82)`,
+      `inset ${socketPx(insetTopX)} ${socketPx(insetTopY)} ${socketPx(insetTopBlur)} rgba(${preset.outerShadowRgb}, 0.34)`,
+      `inset ${socketPx(-2)} ${socketPx(-insetBottomY)} ${socketPx(Math.round(insetTopBlur * 0.8))} rgba(255, 255, 255, ${spec.toFixed(2)})`,
+      `0 ${socketPx(2)} ${socketPx(5)} rgba(255, 255, 255, 0.82)`,
     ];
   } else {
-    // Raised 3D Clay Card or Floating Pill with crisp directional 135deg lighting
-    const dropX1 = Math.max(3, Math.round(d * 0.42));
-    const dropY1 = Math.round(d * 0.78);
-    const dropBlur1 = Math.round(blur * 0.7);
-    const dropSpread1 = -Math.round(d * 0.25);
-    const dropAlpha1 = params.surfaceMode === 'floating-pill' ? 0.34 : 0.26;
-
-    const dropX2 = Math.max(2, Math.round(d * 0.2));
-    const dropY2 = Math.max(3, Math.round(d * 0.46));
-    const dropBlur2 = Math.max(5, Math.round(blur * 0.38));
-    const dropAlpha2 = params.surfaceMode === 'floating-pill' ? 0.24 : 0.14;
-
-    const insetLightX = Math.max(2, Math.round(d * 0.24));
-    const insetLightY = Math.max(2, Math.round(d * 0.38));
-    const insetLightBlur = Math.max(3, Math.round(d * 0.58));
-
-    const insetDarkX = Math.max(2, Math.round(d * 0.28));
-    const insetDarkY = Math.max(3, Math.round(d * 0.42));
-    const insetDarkBlur = Math.max(4, Math.round(d * 0.58));
-
-    shadowLayers = [
-      `${dropX1}px ${dropY1}px ${dropBlur1}px ${dropSpread1}px rgba(${preset.outerShadowRgb}, ${dropAlpha1})`,
-      `${dropX2}px ${dropY2}px ${dropBlur2}px -1px rgba(${preset.outerShadowRgb}, ${dropAlpha2})`,
-      `inset ${insetLightX}px ${insetLightY}px ${insetLightBlur}px rgba(255, 255, 255, ${spec.toFixed(2)})`,
-      `inset -${insetDarkX}px -${insetDarkY}px ${insetDarkBlur}px ${preset.innerDarkHex}`,
-    ];
+    // Local depth scales the chosen physical role, never replaces that hierarchy.
+    shadowLayers = computeLayerShadowLayers(profile.id, { shadowRgb: preset.outerShadowRgb, edge: preset.innerDarkHex }, localScale, { softness: blur / 24, specular: materialTokens['--clay-relief-specular'] });
   }
 
   // Bake CSS variables into the returned strings, so standalone exports need no helper import.
   background = materialBackground(background);
-  if (params.surfaceMode !== 'recessed') background = `radial-gradient(ellipse at var(--clay-light-origin-x, 0%) var(--clay-light-origin-y, 0%), #ffffff52, transparent 56%), ${background}`;
+  const textured = profile.id !== 'detail' && params.surfaceMode !== 'recessed';
+  const backgroundBlendMode = textured ? 'soft-light, normal' : 'normal';
+  if (textured) background = `var(--clay-texture-image, ${DEFAULT_CLAY_TEXTURE_IMAGE}), ${background}`;
   shadowLayers = shadowLayers.map(materialShadow);
   const boxShadow = shadowLayers.join(', ');
 
   const cssString = `.clay-element {
+  /* Physical level ${profile.level}: ${profile.id}. Placement values are guidance, not forced layout. */
+  --clay-layer-level: ${profile.level};
+  --clay-layer-scale: ${materialTokens['--clay-layer-scale']};
+  --clay-relief-specular: ${materialTokens['--clay-relief-specular']};
+  --clay-layer-inset: ${profile.placement.inset}px;
+  --clay-layer-gap: ${profile.placement.gap}px;
+  --clay-layer-radius: ${profile.placement.radius}px;
+  --clay-layer-min-target: ${profile.placement.minTouchTarget}px;
+  --clay-bevel-width: ${profile.surface.bevelWidth}px;
+  --clay-rise: ${profile.surface.rise}px;
+  --clay-face-top-mix: ${profile.surface.faceTopMix};
   background: ${background};
+  background-blend-mode: ${backgroundBlendMode};
   border-radius: ${radiusPx};
   padding: ${params.padding}px;
   color: ${preset.textHex};
@@ -414,7 +415,10 @@ export function computeClayStyles(params: ClayPhysicsParams): ComputedClayStyles
   const tailwindArbitraryShadow = `shadow-[${boxShadow.replace(/\s+/g, '_')}]`;
 
   return {
+    physicalLayer: profile.id,
+    materialTokens,
     background,
+    backgroundBlendMode,
     boxShadow,
     shadowLayers,
     borderRadius: radiusPx,
@@ -453,19 +457,92 @@ export interface GeneratorConfig {
   ctaLabel: string;
 }
 
+/** The preview's configurable outer surface; child objects retain their own level. */
+export function getComponentPhysicalLayer(component: GeneratorComponentType): ClayLayerId {
+  return ['pill-button', 'icon-input', 'status-pills', 'action-rows', 'activity-rings', 'filter-chips'].includes(component) ? 'control' : 'foundation';
+}
+
+export interface ClayExportSources {
+  source: string;
+  css: string;
+  notch?: { source: string; math: string; css: string };
+  relief?: { renderer: string; adapter: string; css: string };
+}
+
+const generatedComponentNames: Partial<Record<GeneratorComponentType, string>> = {
+  'clay-avatar': 'ClayPopOutAvatarCard', 'clay-toggle': 'ClayPhysicalToggle',
+  'bottom-nav': 'ClayBottomNavDock', 'clay-slider': 'Clay3DSlider',
+  'kpi-card': 'ClayKpiCard', 'icon-input': 'ClayBadgeInput', 'peeking-card': 'ClayPeekingMascotCard',
+};
+
+const withExportTextureFallback = (source: string) => source.replace(
+  /var\(--clay-texture-image,\s*none\)/g,
+  () => `var(--clay-texture-image,${DEFAULT_CLAY_TEXTURE_IMAGE})`,
+);
+
+/** Raw modules are embedded with their small shared profile dependency, never project imports. */
+function withStandaloneRelief(source: string, component: GeneratorComponentType, relief: NonNullable<ClayExportSources['relief']>): string {
+  const name = referenceKinds.includes(component) ? 'GeneratedClayComponent' : generatedComponentNames[component] ?? 'ClayCustomComponent';
+  const defaultExport = referenceKinds.includes(component);
+  const declaration = `export ${defaultExport ? 'default ' : ''}function ${name}()`;
+  if (!source.includes(declaration)) throw new Error(`Missing generated component ${name}.`);
+  const content = source.replace(declaration, `function ${name}Content()`);
+  const stripProjectImports = (code: string) => code.replace(/^import\s+(?:type\s+)?\{[\s\S]*?\}\s+from\s+['"]\.\/(?:clayLayers|clayReliefRenderer)['"];?\r?\n/gm, '');
+  const profiles = Object.fromEntries(Object.entries(CLAY_LAYERS).map(([id, profile]) => [id, { surface: profile.surface }]));
+  return `${content}\n
+// Standalone background-only relief. The original CSS remains the fallback.
+type ClayLayerId = 'foundation' | 'control' | 'detail';
+const CLAY_LAYERS = ${JSON.stringify(profiles)};
+${stripProjectImports(relief.renderer)}
+${withExportTextureFallback(stripProjectImports(relief.adapter))}
+
+export ${defaultExport ? 'default ' : ''}function ${name}() {
+  const reliefRoot = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    const root = reliefRoot.current;
+    if (!root) return;
+    const controller = installClayRelief(root, { render: renderClayRelief });
+    return () => controller.dispose();
+  }, []);
+  return <div ref={reliefRoot} data-clay-export-root="" style={{display:'contents'}}><${name}Content /></div>;
+}
+`;
+}
+
 export function generateComponentCode(
   config: GeneratorConfig,
   format: 'react' | 'css' | 'tokens',
-  referenceExports?: { source: string; css: string; notch?: {source: string; math: string; css: string} }
+  referenceExports?: ClayExportSources,
 ): string {
-  const styles = computeClayStyles(config.physics);
+  const source = generateBaseComponentCode(config, format, referenceExports);
+  // Sticker Notch retains its own SVG and flight model without a second renderer.
+  if (config.componentType === 'sticker-notch-nav' || !referenceExports?.relief) return source;
+  if (format === 'react') return withStandaloneRelief(source, config.componentType, referenceExports.relief);
+  if (format === 'css') return `${source}\n\n/* Background-only relief; installed by the React export. */\n${withExportTextureFallback(referenceExports.relief.css)}\n`;
+  return source;
+}
+
+function generateBaseComponentCode(
+  config: GeneratorConfig,
+  format: 'react' | 'css' | 'tokens',
+  referenceExports?: ClayExportSources
+): string {
+  const builtInComposition = config.componentType === 'sticker-notch-nav' || config.componentType === 'bottom-nav';
+  const styles = computeClayStyles(config.physics, builtInComposition ? 'foundation' : config.physics.layer ?? getComponentPhysicalLayer(config.componentType));
   const preset = CLAY_COLOR_PRESETS[config.physics.presetId] || CLAY_COLOR_PRESETS.cream;
   const asset =
     UPLOADED_CLAY_ASSETS.find((a) => a.id === config.selectedAssetId) ||
     UPLOADED_CLAY_ASSETS[0];
 
   if (config.componentType === 'sticker-notch-nav') {
-    if (format === 'tokens') return JSON.stringify({component:'sticker-notch-nav',source:'TG_Sticker_Studio/AdaptiveNotchNav',theme:'clay-lavender',geometry:{panelHeight:90,orbSize:50,bottomRadius:28},motion:{speedMultiplier:.6,maxHopPx:4.5,baseDurationMs:300,maxIntrinsicMs:480,iconFadeOutEnd:.22,iconFadeInStart:.66,landingStart:.82,reducedMotion:'instant'},accessibility:{keyboard:['ArrowLeft','ArrowRight','Home','End'],rovingTabIndex:true},palette:{panel:['#C7ACF0','#AA86DF'],orb:['#FFFEFE','#FAF6F9','#ECE1F8'],icon:'#6D49C8'}},null,2);
+    if (format === 'tokens') return JSON.stringify({
+      component: 'sticker-notch-nav', source: 'TG_Sticker_Studio/AdaptiveNotchNav', theme: 'clay-lavender',
+      physicalLayers: { selection: 'built-in-composition', panel: getClayLayer('foundation'), medallion: getClayLayer('control'), icon: getClayLayer('detail') },
+      geometry: { panelHeight: 90, orbSize: 50, bottomRadius: 28 },
+      motion: { speedMultiplier: .6, maxHopPx: 4.5, baseDurationMs: 300, maxIntrinsicMs: 480, iconFadeOutEnd: .22, iconFadeInStart: .66, landingStart: .82, reducedMotion: 'instant' },
+      accessibility: { keyboard: ['ArrowLeft', 'ArrowRight', 'Home', 'End'], rovingTabIndex: true },
+      palette: { panel: ['#C7ACF0', '#AA86DF'], orb: ['#FFFEFE', '#FAF6F9', '#ECE1F8'], icon: '#6D49C8' },
+    }, null, 2);
     const sources = referenceExports?.notch;
     if (!sources) throw new Error('Sticker Notch export requires the component, math and CSS sources.');
     if (format === 'css') return sources.css;
@@ -478,7 +555,7 @@ export function generateComponentCode(
     return materialStylesheet(`/* ==========================================================
  * Soft 3D Claymorphism — Сгенерированный CSS (${config.componentType})
  * Палитра: ${preset.ruName} (${preset.gradStart} -> ${preset.gradEnd})
- * Формула 4-слойного объёма + Неоднородная тягучая Clay-анимация
+ * 6 слоёв светотени / 4 физические роли + Неоднородная тягучая Clay-анимация
  * ========================================================== */
 
 ${styles.cssString}
@@ -516,10 +593,7 @@ ${styles.cssString}
   height: 16px;
   border-radius: 9999px;
   background: linear-gradient(180deg, #FFFFFF 0%, #F7EFE6 58%, #E6DBD0 100%);
-  box-shadow:
-    0 6px 12px -2px rgba(95, 75, 140, 0.18),
-    inset 0 3px 4px rgba(255, 255, 255, 1),
-    inset 0 -3px 5px #D5C7B8;
+  box-shadow: ${computeLayerShadow('control', {shadowRgb:'95,75,140',edge:'#D5C7B8'}, .65)};
 }
 
 .clay-slider-thumb-pink {
@@ -527,10 +601,7 @@ ${styles.cssString}
   height: 34px;
   border-radius: 9999px;
   background: radial-gradient(circle at 32% 28%, #FFE0E8 0%, #F7A3B8 52%, #E37892 100%);
-  box-shadow:
-    0 10px 18px -3px rgba(184, 78, 104, 0.45),
-    inset 0 4px 6px rgba(255, 255, 255, 0.9),
-    inset 0 -5px 8px #C25570;
+  box-shadow: ${computeLayerShadow('detail', {shadowRgb:'184,78,104',edge:'#C25570'})};
 }
 
 /* Физический 3D Clay Тумблер (ClayToggle — вдавливается и меняет цвет при включении) */
@@ -554,10 +625,7 @@ ${styles.cssString}
 .clay-icon-badge {
   background: linear-gradient(145deg, ${preset.badgeBgHex} 0%, ${preset.innerDarkHex} 100%);
   border-radius: ${styles.innerChildRadius}px;
-  box-shadow:
-    0 6px 14px -2px rgba(${preset.outerShadowRgb}, 0.32),
-    inset 0 3px 5px rgba(255, 255, 255, 0.65),
-    inset 0 -4px 6px rgba(0, 0, 0, 0.18);
+  box-shadow: ${computeLayerShadow('detail', {shadowRgb:preset.outerShadowRgb,edge:preset.innerDarkHex})};
 }`);
   }
 
@@ -566,6 +634,11 @@ ${styles.cssString}
       {
         designSystem: 'Soft 3D Tactile Claymorphism',
         component: config.componentType,
+        physicalLayer: {
+          ...getClayLayer(styles.physicalLayer),
+          selection: builtInComposition ? 'built-in-composition' : config.physics.layer ? 'explicit' : 'archetype',
+          scope: 'outer-surface',
+        },
         palette: {
           id: preset.id,
           name: preset.ruName,
@@ -593,6 +666,7 @@ ${styles.cssString}
           extrusionDepth: config.physics.depth,
         },
         shadowLayers: styles.shadowLayers,
+        materialTokens: styles.materialTokens,
         asset: {
           id: asset.id,
           name: asset.ruName,
@@ -606,15 +680,9 @@ ${styles.cssString}
 
   // React + Tailwind JSX generator
   if (referenceKinds.includes(config.componentType)) {
-    return `// Requires react and lucide-react. Save the CSS tab as reference-clay.css.\nimport './reference-clay.css';\n${referenceExports?.source || ''}\n\nexport default function GeneratedClayComponent() {\n  return <div className="ref-element-wrapper" style={${JSON.stringify({background:styles.background,borderRadius:styles.borderRadius,padding:config.physics.padding,boxShadow:styles.boxShadow})}}><ReferenceElement kind=${JSON.stringify(config.componentType)} title={${JSON.stringify(config.titleText || undefined)}} /></div>;\n}`;
+    return `// Requires react and lucide-react. Save the CSS tab as reference-clay.css.\nimport './reference-clay.css';\n${referenceExports?.source || ''}\n\nexport default function GeneratedClayComponent() {\n  return <div data-clay-layer="${styles.physicalLayer}" data-clay-surface="${config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}" className="ref-element-wrapper" style={${JSON.stringify({...styles.materialTokens,background:styles.background,backgroundBlendMode:styles.backgroundBlendMode,borderRadius:styles.borderRadius,padding:config.physics.padding,boxShadow:styles.boxShadow})} as React.CSSProperties}><ReferenceElement kind=${JSON.stringify(config.componentType)} title={${JSON.stringify(config.titleText || undefined)}} /></div>;\n}`;
   }
-  const styleObjCode = `{{
-        background: '${styles.background}',
-        borderRadius: '${styles.borderRadius}',
-        padding: '${config.physics.padding}px',
-        color: '${styles.textColor}',
-        boxShadow: '${styles.boxShadow}',
-      }}`;
+  const styleObjCode = `{${JSON.stringify({...styles.materialTokens,background:styles.background,backgroundBlendMode:styles.backgroundBlendMode,borderRadius:styles.borderRadius,padding:`${config.physics.padding}px`,color:styles.textColor,boxShadow:styles.boxShadow})} as React.CSSProperties}`;
 
   switch (config.componentType) {
     case 'clay-avatar':
@@ -624,25 +692,26 @@ export function ClayPopOutAvatarCard() {
   return (
     <div
       className="flex flex-col items-center text-center gap-4 max-w-sm mx-auto select-none"
-      style=${styleObjCode}
+      data-clay-layer="${styles.physicalLayer}" data-clay-surface="${config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}" style=${styleObjCode}
     >
       {/* 3D Avatar Substrate with Raised Outer Frame, Deep Inset Well & Unclipped Overhang */}
       <div className="relative pt-11 pb-2 inline-flex justify-center overflow-visible">
         <div
-          className="relative w-[248px] h-[172px] p-[15px] rounded-t-[64px] rounded-b-[38px] flex items-center justify-center overflow-visible"
+          data-clay-layer="foundation" className="relative w-[248px] h-[172px] p-[15px] rounded-t-[64px] rounded-b-[38px] flex items-center justify-center overflow-visible"
           style={{
-            background: '${materialBackground(`linear-gradient(145deg, #F5EEFF 0%, #B89EFA 44%, #7A58DE 100%)`)}',
+            background: 'var(--clay-texture-image, ${DEFAULT_CLAY_TEXTURE_IMAGE}), ${materialBackground(config.physics.presetId === 'purple-cta' ? 'linear-gradient(145deg, #F5EEFF 0%, #B89EFA 44%, #7A58DE 100%)' : `linear-gradient(145deg, ${preset.gradStart} 0%, ${preset.gradEnd} 100%)`)}',
+            backgroundBlendMode: 'soft-light, normal',
             boxShadow:
-              '${materialShadow(`8px 18px 30px -4px rgba(58, 34, 128, 0.30), 3px 6px 12px -1px rgba(58, 34, 128, 0.16), inset 3.5px 4.5px 7px rgba(255, 255, 255, 0.94), inset -4px -7px 12px #5E3EC4`)}',
+              '${computeLayerShadow('foundation', {shadowRgb:preset.outerShadowRgb,edge:preset.innerDarkHex}, Math.max(.6, Math.min(1.5, config.physics.depth / 12)))}',
           }}
         >
           {/* Recessed Inner Well with Deep Inset Shadow */}
           <div
-            className="w-full h-full rounded-t-[49px] rounded-b-[23px]"
+            data-clay-layer="control" data-clay-surface="recessed" className="w-full h-full rounded-t-[49px] rounded-b-[23px]"
             style={{
               background: '${materialBackground(`linear-gradient(155deg, #CFBBEF 0%, #E7DAFF 42%, #FCF9FF 100%)`)}',
               boxShadow:
-                '${materialShadow(`inset 11px 15px 24px rgba(38, 16, 102, 0.28), inset 3px 5px 9px rgba(38, 16, 102, 0.14), inset -5px -6px 12px rgba(255, 255, 255, 0.96)`)}',
+                '${materialShadow(`inset ${Math.max(8, Math.round(config.physics.depth * .78))}px ${Math.max(8, Math.round(config.physics.depth * .78)) + 4}px ${Math.round(Math.max(8, Math.round(config.physics.depth * .78)) * 2.2)}px rgba(38, 16, 102, 0.28), inset 3px 5px 9px rgba(38, 16, 102, 0.14), inset -5px -6px 12px rgba(255, 255, 255, 0.96)`)}',
               border: '1.5px solid rgba(255, 255, 255, 0.68)',
             }}
           />
@@ -675,7 +744,7 @@ export function ClayPhysicalToggle() {
   return (
     <div
       className="flex items-center justify-between gap-4 max-w-md mx-auto select-none"
-      style=${styleObjCode}
+      data-clay-layer="${styles.physicalLayer}" data-clay-surface="${config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}" style=${styleObjCode}
     >
       <div className="flex items-center gap-3.5">
         <img
@@ -697,27 +766,27 @@ export function ClayPhysicalToggle() {
         role="switch"
         aria-checked={checked}
         onClick={() => setChecked((v) => !v)}
-        className="relative w-[84px] h-[44px] rounded-full p-1.5 transition-colors duration-300 cursor-pointer shrink-0 flex items-center"
+        data-clay-layer="control" data-clay-surface="recessed" className="relative w-[84px] h-[44px] rounded-full p-1.5 transition-colors duration-300 cursor-pointer shrink-0 flex items-center"
         style={{
           background: checked
             ? '${materialBackground(`linear-gradient(145deg, #62C4B2 0%, #8FE3D3 100%)`)}'
             : '${materialBackground(`linear-gradient(145deg, #E8DFD6 0%, #F9F3EC 100%)`)}',
           boxShadow: checked
-            ? '${materialShadow(`inset 0 5px 10px rgba(36, 110, 96, 0.5), inset 0 -3px 6px rgba(255,255,255,0.7)`)}'
-            : '${materialShadow(`inset 0 5px 9px rgba(156, 140, 128, 0.48), inset 0 -3px 6px rgba(255,255,255,0.92)`)}',
+            ? '${materialShadow(`inset 0 5px 10px rgba(36, 110, 96, 0.5), inset 0 -3px 6px rgba(255,255,255,0.7), 0 2px 4px rgba(255,255,255,0.8)`)}'
+            : '${materialShadow(`inset 0 5px 9px rgba(156, 140, 128, 0.48), inset 0 -3px 6px rgba(255,255,255,0.92), 0 2px 4px rgba(255,255,255,0.85)`)}',
         }}
       >
         <motion.div
           animate={{ x: checked ? 40 : 0 }}
           transition={{ type: 'spring', stiffness: 340, damping: 24, mass: 0.9 }}
-          className="w-8 h-8 rounded-full shrink-0"
+          data-clay-layer="detail" data-clay-shape="disc" className="w-8 h-8 rounded-full shrink-0"
           style={{
             background: checked
               ? '${materialBackground(`radial-gradient(circle at 32% 28%, #FFFFFF 0%, #EBFBF7 58%, #A0DFC7 100%)`)}'
               : '${materialBackground(`radial-gradient(circle at 32% 28%, #FFFFFF 0%, #F7EFE6 55%, #E0D3C5 100%)`)}',
             boxShadow: checked
-              ? '${materialShadow(`0 6px 12px -2px rgba(42, 122, 108, 0.42), inset 0 4px 6px #FFF, inset 0 -5px 8px #88C5AD`)}'
-              : '${materialShadow(`0 6px 12px -2px rgba(95, 75, 140, 0.32), inset 0 4px 5px #FFF, inset 0 -5px 7px #C9B9A8`)}',
+              ? '${computeLayerShadow('detail', {shadowRgb:'42,122,108',edge:'#9FD9CA'}, 1.3)}'
+              : '${computeLayerShadow('detail', {shadowRgb:'95,75,140',edge:'#C9B9A8'}, 1.3)}',
           }}
         />
       </button>
@@ -741,7 +810,7 @@ export function ClayBottomNavDock() {
     <nav
       aria-label="Нижнее меню Clay"
       className="relative grid grid-cols-2 md:grid-cols-4 items-center gap-2 sm:gap-3 w-full max-w-4xl mx-auto"
-      style=${styleObjCode}
+      data-clay-layer="${styles.physicalLayer}" data-clay-surface="${config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}" style=${styleObjCode}
     >
       {items.map((item) => {
         const active = activeId === item.id;
@@ -767,11 +836,11 @@ export function ClayBottomNavDock() {
               initial={false}
               animate={{ opacity: active ? 1 : 0 }}
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-0 rounded-full -z-10 pointer-events-none"
+              data-clay-layer="control" className="absolute inset-0 rounded-full -z-10 pointer-events-none"
               style={{
                 background: '${materialBackground(`linear-gradient(145deg, #C5A8EE 0%, #AC89DF 100%)`)}',
                 boxShadow:
-                  '${materialShadow(`0 10px 18px -4px rgba(98, 66, 189, 0.48), inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -5px 8px #5E3EC4`)}',
+                  '${computeLayerShadow('control', {shadowRgb:'98,66,189',edge:'#5B3BC0'})}',
               }}
             />
             <span>{item.label}</span>
@@ -791,7 +860,7 @@ export function Clay3DSlider() {
   const thumbRadius = ${config.physics.thumbRadius ?? 18};
 
   return (
-    <div className="w-full max-w-md space-y-5" style=${styleObjCode}>
+    <div className="w-full max-w-md space-y-5" data-clay-layer="${styles.physicalLayer}" data-clay-surface="${config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}" style=${styleObjCode}>
       <div className="flex justify-between text-sm font-black">
         <span>${config.titleText}</span>
         <span className="font-mono">{Math.round(val)}%</span>
@@ -800,11 +869,11 @@ export function Clay3DSlider() {
       {/* 3D Cylindrical Clay Track + Customizable Thumb Rounding (\${thumbRadius}px) */}
       <div className="relative h-10 flex items-center">
         <div
-          className="w-full h-4 rounded-full overflow-hidden"
+          data-clay-layer="control" className="w-full h-4 rounded-full overflow-hidden"
           style={{
             background: '${materialBackground(`linear-gradient(180deg, #FFFFFF 0%, #F7EFE6 58%, #E6DBD0 100%)`)}',
             boxShadow:
-              '${materialShadow(`0 6px 12px -2px rgba(95,75,140,0.18), inset 0 3px 4px #FFF, inset 0 -3px 5px #D5C7B8`)}',
+              '${computeLayerShadow('control', {shadowRgb:'95,75,140',edge:'#D5C7B8'}, .65)}',
           }}
         >
           <div
@@ -817,7 +886,7 @@ export function Clay3DSlider() {
         </div>
 
         <div
-          className="absolute top-1/2 pointer-events-none"
+          data-clay-layer="detail" data-clay-shape={thumbRadius >= 17 ? 'disc' : 'cushion'} className="absolute top-1/2 pointer-events-none"
           style={{
             width: '34px',
             height: '34px',
@@ -828,7 +897,7 @@ export function Clay3DSlider() {
                 ? '${materialBackground(`linear-gradient(145deg, #FFD8E2 0%, #F7A3B8 55%, #E37892 100%)`)}'
                 : '${materialBackground(`radial-gradient(circle at 32% 28%, #FFE0E8 0%, #F7A3B8 52%, #E37892 100%)`)}',
             boxShadow:
-              '${materialShadow(`0 10px 18px -3px rgba(184,78,104,0.45), inset 0 4px 6px rgba(255,255,255,0.92), inset 0 -5px 8px #C25570`)}',
+              '${computeLayerShadow('detail', {shadowRgb:'184,78,104',edge:'#C25570'})}',
             transform: pressed
               ? 'translate3d(0, -50%, 0) scaleX(1.12) scaleY(0.975)'
               : 'translate3d(0, -50%, 0) scaleX(1) scaleY(1)',
@@ -860,15 +929,15 @@ export function ClayKpiCard() {
   return (
     <div
       className="relative flex flex-col justify-between transition-transform duration-150 hover:-translate-y-1 clay-squish"
-      style=${styleObjCode}
+      data-clay-layer="${styles.physicalLayer}" data-clay-surface="${config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}" style=${styleObjCode}
     >
       {/* 3D Clay Squircle Icon Badge */}
       <div
-        className="w-14 h-14 flex items-center justify-center mb-4"
+        data-clay-layer="detail" className="w-14 h-14 flex items-center justify-center mb-4"
         style={{
           background: '${materialBackground(`linear-gradient(145deg, ${preset.badgeBgHex} 0%, ${preset.innerDarkHex} 100%)`)}',
           borderRadius: '${Math.min(18, styles.innerChildRadius)}px',
-          boxShadow: '${materialShadow(`0 8px 16px -3px rgba(${preset.outerShadowRgb}, 0.35), inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -4px 6px rgba(0,0,0,0.16)`)}',
+          boxShadow: '${computeLayerShadow('detail', {shadowRgb:preset.outerShadowRgb,edge:preset.innerDarkHex})}',
         }}
       >
         <img
@@ -898,7 +967,7 @@ export function ClayBadgeInput() {
       {/* Recessed Input Track */}
       <div
         className="w-full flex items-center pl-16 pr-5 py-4"
-        style=${styleObjCode}
+        data-clay-layer="${styles.physicalLayer}" data-clay-surface="${config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}" style=${styleObjCode}
       >
         <input
           type="text"
@@ -910,10 +979,10 @@ export function ClayBadgeInput() {
 
       {/* Overlapping 3D Circular Icon Medallion (Left Edge) */}
       <div
-        className="absolute left-1.5 w-12 h-12 rounded-full flex items-center justify-center pointer-events-none"
+        data-clay-layer="detail" data-clay-shape="disc" className="absolute left-1.5 w-12 h-12 rounded-full flex items-center justify-center pointer-events-none"
         style={{
           background: '${materialBackground(`linear-gradient(145deg, #B298FA 0%, #8C6DE6 100%)`)}',
-          boxShadow: '${materialShadow(`0 6px 12px -2px rgba(98, 66, 189, 0.45), inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -4px 6px rgba(79, 49, 166, 0.7)`)}',
+          boxShadow: '${computeLayerShadow('detail', {shadowRgb:'98,66,189',edge:'#5E3EC4'})}',
         }}
       >
         <img
@@ -935,7 +1004,7 @@ export function ClayPeekingMascotCard() {
       {/* Raised Clay Card Body withMascot Paws Overhanging the Bottom/Top Edge */}
       <div
         className="relative z-10 flex flex-col gap-4 overflow-visible"
-        style=${styleObjCode}
+        data-clay-layer="${styles.physicalLayer}" data-clay-surface="${config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}" style=${styleObjCode}
       >
         {/* Z-Layer 30: Enlarged Mascot whose hands & paws hang over the edge (-mb-10) */}
         <div className="relative z-30 flex justify-center -mt-20 -mb-6 pointer-events-none">
@@ -969,7 +1038,7 @@ export function ClayCustomComponent() {
   return (
     <div
       className="flex items-center justify-between gap-4 transition-all duration-150 clay-squish"
-      style=${styleObjCode}
+      data-clay-layer="${styles.physicalLayer}" data-clay-surface="${config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}" style=${styleObjCode}
     >
       <div className="flex items-center gap-4">
         <img

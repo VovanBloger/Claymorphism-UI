@@ -54,13 +54,16 @@ export function ClaySculptedIcon({ name, size = 32, className = '', style }: {
 }) {
   const id = `clay-icon-${useId().replace(/:/g, '')}`;
   const { volume, softness, strength, x, y } = useClaySvgMaterial();
+  const hasDomeHighlight = name === 'heart' || name === 'bell';
+  const highlightX = 32 - (name === 'heart' ? 10 : 8) * x;
+  const highlightY = name === 'heart' ? (y > 0 ? 17 : 40) : (y > 0 ? 20 : 41);
   const palette = name === 'bell'
     ? ['#DEC9FF', '#B58CF0', '#9569D3', '#7950B4', '#7145A7']
     : name === 'heart'
       ? ['#FFFFFF', '#FFFDF8', '#F7EEE7', '#EBD9D0', '#CEAAA2']
       : ['#939DD1', '#626FA9', '#414F88', '#2A3566', '#222B55'];
 
-  return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 64 64" overflow="visible" aria-hidden="true" focusable="false" className={`ref-sculpted-icon ref-sculpted-icon--${name} ${className}`.trim()} style={style}>
+  return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 64 64" overflow="visible" aria-hidden="true" focusable="false" data-clay-layer="detail" className={`ref-sculpted-icon ref-sculpted-icon--${name} ${className}`.trim()} style={style}>
     <defs>
       <path id={`${id}-shape`} d={CLAY_ICON_SHAPES[name]} fillRule="evenodd" clipRule="evenodd" stroke="none"/>
       <clipPath id={`${id}-clip`}><use href={`#${id}-shape`}/></clipPath>
@@ -68,20 +71,23 @@ export function ClaySculptedIcon({ name, size = 32, className = '', style }: {
         <stop stopColor={clayMaterialColor(palette[2], palette[0], volume)}/><stop offset=".24" stopColor={clayMaterialColor(palette[2], palette[1], volume)}/><stop offset=".63" stopColor={palette[2]}/><stop offset="1" stopColor={clayMaterialColor(palette[2], palette[3], volume)}/>
       </linearGradient>
       <radialGradient id={`${id}-shine`} cx={.5 - .15 * x} cy={.5 - .4 * y} r=".75">
-        <stop stopColor="#FFFFFF" stopOpacity={Math.min(1, (name === 'heart' ? .7 : .32) * volume)}/><stop offset="1" stopColor="#FFFFFF" stopOpacity="0"/>
+        <stop stopColor="#FFFFFF" stopOpacity={Math.min(1, (name === 'heart' ? .18 : name === 'bell' ? .22 : .32) * volume)}/><stop offset="1" stopColor="#FFFFFF" stopOpacity="0"/>
       </radialGradient>
+      {hasDomeHighlight && <filter id={`${id}-catchlight`} x="-45%" y="-25%" width="190%" height="150%">
+        <feGaussianBlur stdDeviation={.5 * Math.min(1.15, Math.max(.8, softness))}/>
+      </filter>}
       <filter id={`${id}-contact`} x="-35%" y="-30%" width="180%" height="190%" colorInterpolationFilters="sRGB">
         <feDropShadow dx={x * volume} dy={3 * y * volume} stdDeviation={1.9 * softness} floodColor={name === 'heart' ? '#AD6265' : '#342D60'} floodOpacity={.3 * strength * volume}/>
       </filter>
       <filter id={`${id}-soft-edge`} x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
-        <feGaussianBlur in="SourceAlpha" stdDeviation={1.6 * softness} result="softShape"/>
-        <feOffset in="softShape" dx={1.4 * x * volume} dy={2 * y * volume} result="lightShift"/>
+        <feGaussianBlur in="SourceAlpha" stdDeviation={(hasDomeHighlight ? 2.2 : 1.6) * softness} result="softShape"/>
+        <feOffset in="softShape" dx={1.4 * x * volume} dy={(hasDomeHighlight ? 2.5 : 2) * y * volume} result="lightShift"/>
         <feComposite in="SourceAlpha" in2="lightShift" operator="out" result="upperEdge"/>
-        <feFlood floodColor="#FFFFFF" floodOpacity={.48 * volume} result="lightColor"/>
+        <feFlood floodColor="#FFFFFF" floodOpacity={(hasDomeHighlight ? .35 : .48) * volume} result="lightColor"/>
         <feComposite in="lightColor" in2="upperEdge" operator="in" result="upperLight"/>
-        <feOffset in="softShape" dx={-x * volume} dy={-2 * y * volume} result="shadeShift"/>
+        <feOffset in="softShape" dx={-x * volume} dy={-(hasDomeHighlight ? 3.4 : 2) * y * volume} result="shadeShift"/>
         <feComposite in="SourceAlpha" in2="shadeShift" operator="out" result="lowerEdge"/>
-        <feFlood floodColor={palette[4]} floodOpacity={.4 * strength * volume} result="shadeColor"/>
+        <feFlood floodColor={palette[4]} floodOpacity={(hasDomeHighlight ? .32 : .4) * strength * volume} result="shadeColor"/>
         <feComposite in="shadeColor" in2="lowerEdge" operator="in" result="lowerShade"/>
         <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="lowerShade"/><feMergeNode in="upperLight"/></feMerge>
       </filter>
@@ -90,6 +96,9 @@ export function ClaySculptedIcon({ name, size = 32, className = '', style }: {
       <use href={`#${id}-shape`} fill={palette[4]} transform={`translate(${.5 * x * volume} ${1.2 * y * volume})`}/>
       <use href={`#${id}-shape`} fill={`url(#${id}-material)`} filter={`url(#${id}-soft-edge)`}/>
       <ellipse cx={32 - 8 * x} cy={32 - 14 * y} rx="24" ry="19" fill={`url(#${id}-shine)`} clipPath={`url(#${id}-clip)`}/>
+      {hasDomeHighlight && <g clipPath={`url(#${id}-clip)`}>
+        <ellipse cx={highlightX} cy={highlightY} rx={name === 'heart' ? 3.3 : 2.4} ry={name === 'heart' ? 6 : 6.5} transform={`rotate(${35 * x * y} ${highlightX} ${highlightY})`} fill="#FFFFFF" opacity={Math.min(.88, .76 * volume)} filter={`url(#${id}-catchlight)`}/>
+      </g>}
     </g>
   </svg>;
 }
@@ -125,11 +134,11 @@ export function ReferenceElement({ kind, title }: { kind: ReferenceElementKind; 
   };
 
   if (kind === 'status-pills') return <div className="ref-status-stack" aria-label="Статусы">
-    {['Active', 'Pending', 'Archived'].map((status, i) => <span className={`ref-surface ref-status ${['mint', 'butter', 'lavender'][i]}`} key={status}><i aria-hidden="true" />{status}</span>)}
+    {['Active', 'Pending', 'Archived'].map((status, i) => <span data-clay-layer="control" data-clay-text="raised" className={`ref-surface ref-status ${['mint', 'butter', 'lavender'][i]}`} key={status}><i data-clay-layer="detail" data-clay-shape="sphere" aria-hidden="true" />{status}</span>)}
   </div>;
 
   if (kind === 'action-rows') return <div className="ref-action-stack">
-    {([{ label: 'Messages', icon: 'mail', color: 'butter', text: 'You’re all caught up · 3 messages' }, { label: 'Bookmarks', icon: 'bookmark', color: 'butter', text: 'Your collection · 12 bookmarks' }, { label: 'Download', icon: 'download', color: 'mint', text: 'Your clay kit is ready to export in the generator' }] as const).map(({ label, icon, color, text }) => <button type="button" className={`ref-surface ref-action ${color}`} key={label} onClick={() => setMessage(text)}><span className={`ref-surface ref-medallion ${color}`}><ClaySculptedIcon name={icon}/></span><b>{label}</b><ChevronRight size={22}/></button>)}
+    {([{ label: 'Messages', icon: 'mail', color: 'butter', text: 'You’re all caught up · 3 messages' }, { label: 'Bookmarks', icon: 'bookmark', color: 'butter', text: 'Your collection · 12 bookmarks' }, { label: 'Download', icon: 'download', color: 'mint', text: 'Your clay kit is ready to export in the generator' }] as const).map(({ label, icon, color, text }) => <button type="button" data-clay-layer="control" className={`ref-surface ref-action ${color}`} key={label} onClick={() => setMessage(text)}><span data-clay-layer="detail" data-clay-shape="disc" className={`ref-surface ref-medallion ${color}`}><ClaySculptedIcon name={icon}/></span><b data-clay-text="raised">{label}</b><ChevronRight data-clay-layer="detail" size={22}/></button>)}
     <span role="status" className="ref-feedback">{message || 'A little order. A lot of softness.'}</span>
   </div>;
 
@@ -137,26 +146,26 @@ export function ReferenceElement({ kind, title }: { kind: ReferenceElementKind; 
     const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
     const days = new Date(year, month + 1, 0).getDate();
     const monthName = new Date(year, month, 1).toLocaleDateString('en', { month: 'long', year: 'numeric' });
-    return <section className="ref-surface cream ref-calendar">
+    return <section data-clay-layer="foundation" className="ref-surface cream ref-calendar">
       <div className="ref-between"><h3>{title || monthName}</h3><div className="ref-inline"><button type="button" className="ref-icon-button" aria-label="Предыдущий месяц" onClick={() => changeMonth(-1)}><ChevronLeft size={18}/></button><button type="button" className="ref-icon-button" aria-label="Следующий месяц" onClick={() => changeMonth(1)}><ChevronRight size={18}/></button></div></div>
-      <div className="ref-days">{['M','T','W','T','F','S','S'].map((d,i)=><span key={`week-${i}`} className="ref-weekday">{d}</span>)}{Array.from({length:firstDay},(_,i)=><span key={`blank-${i}`}/>)}{Array.from({length:days},(_,i)=>{ const key = `${year}-${String(month+1).padStart(2,'0')}-${String(i+1).padStart(2,'0')}`; return <button type="button" aria-label={key} aria-pressed={selectedDay===key} key={key} className={selectedDay===key ? 'ref-surface coral' : ''} onClick={()=>setSelectedDay(key)}>{i+1}</button>; })}</div>
+      <div className="ref-days">{['M','T','W','T','F','S','S'].map((d,i)=><span key={`week-${i}`} className="ref-weekday">{d}</span>)}{Array.from({length:firstDay},(_,i)=><span key={`blank-${i}`}/>)}{Array.from({length:days},(_,i)=>{ const key = `${year}-${String(month+1).padStart(2,'0')}-${String(i+1).padStart(2,'0')}`; return <button type="button" aria-label={key} aria-pressed={selectedDay===key} key={key} data-clay-layer={selectedDay===key ? 'control' : undefined} data-clay-text={selectedDay===key ? 'raised' : undefined} className={selectedDay===key ? 'ref-surface coral' : ''} onClick={()=>setSelectedDay(key)}>{i+1}</button>; })}</div>
       <div className="ref-calendar-note"><i/> <span role="status">Selected · {selectedDay}</span></div>
     </section>;
   }
 
-  if (kind === 'product-card') return <article className="ref-surface mint ref-product">
-    <div className="ref-between"><span className="ref-eyebrow">THE SOFT COLLECTION</span><button type="button" className="ref-surface cream ref-icon-button" aria-label="Добавить в избранное" aria-pressed={liked} onClick={()=>setLiked(!liked)}><Heart size={19} fill={liked ? '#a18bd9' : 'none'}/></button></div>
+  if (kind === 'product-card') return <article data-clay-layer="foundation" className="ref-surface mint ref-product">
+    <div className="ref-between"><span className="ref-eyebrow">THE SOFT COLLECTION</span><button type="button" data-clay-layer="control" className="ref-surface cream ref-icon-button" aria-label="Добавить в избранное" aria-pressed={liked} onClick={()=>setLiked(!liked)}><Heart data-clay-layer="detail" size={19} fill={liked ? '#a18bd9' : 'none'}/></button></div>
     <div className="ref-bag" role="img" aria-label="Объёмная персиковая сумка"><div className="ref-bag-handle"/><div className="ref-bag-body"><i/><i/></div></div>
     <h3>{title || 'Clay Tote'}</h3><div className="ref-rating" aria-label="Рейтинг 4 из 5">{[0,1,2,3,4].map(i=><Star key={i} size={15} fill={i<4?'#ffe17c':'#fff'} strokeWidth={0}/>)}<span>(98)</span></div>
-    <div className="ref-between"><strong className="ref-price">$67 <del>$110</del></strong><button type="button" className="ref-surface cream ref-small-button" aria-pressed={added} onClick={()=>setAdded(!added)}>{added?<Check size={15}/>:<Plus size={15}/>} {added?'Added':'Add'}</button></div>
+    <div className="ref-between"><strong className="ref-price">$67 <del>$110</del></strong><button type="button" data-clay-layer="control" data-clay-text="raised" className="ref-surface cream ref-small-button" aria-pressed={added} onClick={()=>setAdded(!added)}>{added?<Check data-clay-layer="detail" size={15}/>:<Plus data-clay-layer="detail" size={15}/>} {added?'Added':'Add'}</button></div>
     <span className="ref-sr-only" role="status">{added ? 'Товар добавлен в демо-корзину' : ''}</span>
   </article>;
 
-  if (kind === 'workout-card') return <article className="ref-surface lavender ref-workout">
-    <div className="ref-between"><span className="ref-eyebrow">A LITTLE STRONGER</span><span className="ref-surface cream ref-time"><Clock size={13}/> 35 min</span></div>
+  if (kind === 'workout-card') return <article data-clay-layer="foundation" className="ref-surface lavender ref-workout">
+    <div className="ref-between"><span className="ref-eyebrow">A LITTLE STRONGER</span><span data-clay-layer="control" data-clay-text="raised" className="ref-surface cream ref-time"><Clock data-clay-layer="detail" size={13}/> 35 min</span></div>
     <div className="ref-dumbbell" role="img" aria-label="Объёмная сиреневая гантель"><i/><i/><i/><i/><i/></div>
     <h3>{title || 'Upper body'}</h3><p>Find your strength.<br/>At your own pace.</p>
-    <button type="button" className="ref-surface coral ref-button" aria-pressed={running} onClick={()=>setRunning(!running)}>{running?<Check size={17}/>:<Dumbbell size={17}/>} {running ? 'Session started' : 'Start workout'}</button>
+    <button type="button" data-clay-layer="control" data-clay-text="raised" className="ref-surface coral ref-button" aria-pressed={running} onClick={()=>setRunning(!running)}>{running?<Check data-clay-layer="detail" size={17}/>:<Dumbbell data-clay-layer="detail" size={17}/>} {running ? 'Session started' : 'Start workout'}</button>
     <span className="ref-sr-only" role="status">{running ? 'Демонстрация тренировки запущена' : ''}</span>
   </article>;
 
@@ -223,15 +232,15 @@ export function ReferenceElement({ kind, title }: { kind: ReferenceElementKind; 
         </svg>
       </div>
       <div className="ref-ring-legend"><span><i className="coral"/>Move {goal?'100':'78'}%</span><span><i className="mint"/>Exercise 52%</span><span><i className="sky"/>Stand 90%</span></div>
-      <button type="button" className="ref-surface cream ref-small-button" onClick={()=>setGoal(!goal)}>{goal?'Reset demo':'Complete daily goal'}<Check size={14}/></button>
+      <button type="button" data-clay-layer="control" data-clay-text="raised" className="ref-surface cream ref-small-button" onClick={()=>setGoal(!goal)}>{goal?'Reset demo':'Complete daily goal'}<Check data-clay-layer="detail" size={14}/></button>
     </section>;
   }
 
   if (kind === 'filter-chips') return <section className="ref-filter">
-    <label className="ref-surface sky ref-search"><Search size={22}/><input aria-label="Поиск категории" placeholder="Find your soft spot…" value={query} onChange={e=>setQuery(e.target.value)}/>{query&&<button type="button" className="ref-icon-button" aria-label="Очистить поиск" onClick={()=>setQuery('')}><X size={16}/></button>}</label>
-    <div className="ref-chips">{['All','Shoes','Bags','Accessories'].filter(c=>c==='All'||c.toLowerCase().includes(query.toLowerCase())).map((c,i)=><button type="button" key={c} aria-pressed={c===category} onClick={()=>setCategory(c)} className={`ref-surface ref-small-button ${c===category?'coral':['cream','lavender','mint','butter'][i]}`}>{c}</button>)}</div>
+    <label data-clay-layer="control" className="ref-surface sky ref-search"><Search data-clay-layer="detail" size={22}/><input aria-label="Поиск категории" placeholder="Find your soft spot…" value={query} onChange={e=>setQuery(e.target.value)}/>{query&&<button type="button" className="ref-icon-button" aria-label="Очистить поиск" onClick={()=>setQuery('')}><X data-clay-layer="detail" size={16}/></button>}</label>
+    <div className="ref-chips">{['All','Shoes','Bags','Accessories'].filter(c=>c==='All'||c.toLowerCase().includes(query.toLowerCase())).map((c,i)=><button type="button" data-clay-layer="control" data-clay-text="raised" key={c} aria-pressed={c===category} onClick={()=>setCategory(c)} className={`ref-surface ref-small-button ${c===category?'coral':['cream','lavender','mint','butter'][i]}`}>{c}</button>)}</div>
     <div className="ref-between"><b>Price range</b><output htmlFor="ref-price">$20 — ${price}</output></div><input id="ref-price" aria-label="Максимальная цена" className="ref-range" type="range" min="20" max="180" value={price} onChange={e=>setPrice(Number(e.target.value))}/>
-    <button type="button" className="ref-surface coral ref-button" onClick={()=>setMessage(`${category} · up to $${price}`)}>Apply filters <Check size={16}/></button><span className="ref-feedback" role="status">{message || 'Pick a color. Find a favorite.'}</span>
+    <button type="button" data-clay-layer="control" data-clay-text="raised" className="ref-surface coral ref-button" onClick={()=>setMessage(`${category} · up to $${price}`)}>Apply filters <Check data-clay-layer="detail" size={16}/></button><span className="ref-feedback" role="status">{message || 'Pick a color. Find a favorite.'}</span>
   </section>;
   return null;
 }
@@ -245,11 +254,11 @@ export function ClayControlBoard() {
   const [bell,setBell]=useState(false);
   const [settings,setSettings]=useState(false);
   return <div className="ref-control-board">
-    <label className="ref-surface peach ref-search ref-main-search"><Search/><input aria-label="Поиск по демо-панели" placeholder="Search…"/></label>
-    <div className="ref-left-controls"><button type="button" aria-label="Нравится" aria-pressed={liked} className={`ref-surface coral ref-heart ${liked?'is-liked':''}`} onClick={()=>setLiked(!liked)}><ClaySculptedIcon name="heart"/></button><label className="ref-surface mint ref-vertical-control"><input aria-label="Громкость" type="range" min="0" max="100" value={volume} onChange={e=>setVolume(Number(e.target.value))}/></label></div>
-    <div className="ref-surface lavender ref-confirm-card"><div className="ref-profile"><span className="ref-surface mint ref-profile-dot"/><div><i className="ref-surface lavender"/><i className="ref-surface lavender"/></div></div><button type="button" className="ref-surface coral ref-confirm" onClick={()=>setConfirmed(!confirmed)}>{confirmed?<><Check/> Confirmed</>:'Confirm'}</button><button type="button" role="switch" aria-label="Включить уведомления" aria-checked={enabled} className={`ref-surface sky ref-switch ${enabled?'is-on':''}`} onClick={()=>setEnabled(!enabled)}><span className="ref-surface cream"/></button></div>
-    <div className="ref-utility-buttons"><button type="button" aria-label="Уведомления" aria-pressed={bell} className={`ref-surface cream ref-square ${bell?'ref-bell-active':''}`} onClick={()=>setBell(!bell)}><ClaySculptedIcon name="bell"/></button><button type="button" aria-label="Настройки" aria-pressed={settings} className="ref-surface lavender ref-square" onClick={()=>setSettings(!settings)}><ClaySculptedIcon name="settings" style={{transform:`rotate(${settings?90:0}deg)`}}/></button></div>
-    <nav className="ref-surface cream ref-segmented" aria-label="Демо-навигация">{([{label:'Home',icon:'home'},{label:'Stats',icon:'stats'},{label:'Profile',icon:'profile'}] as const).map(({label,icon})=><button type="button" key={label} aria-current={tab===label?'page':undefined} onClick={()=>setTab(label)} className={tab===label?'ref-surface sky':'ref-surface cream'}><ClaySculptedIcon name={icon}/><span>{label}</span></button>)}</nav>
+    <label data-clay-layer="control" className="ref-surface peach ref-search ref-main-search"><Search data-clay-layer="detail"/><input aria-label="Поиск по демо-панели" placeholder="Search…"/></label>
+    <div className="ref-left-controls"><button type="button" data-clay-layer="control" aria-label="Нравится" aria-pressed={liked} className={`ref-surface coral ref-heart ${liked?'is-liked':''}`} onClick={()=>setLiked(!liked)}><ClaySculptedIcon name="heart"/></button><label data-clay-layer="control" className="ref-surface mint ref-vertical-control"><input aria-label="Громкость" type="range" min="0" max="100" value={volume} onChange={e=>setVolume(Number(e.target.value))}/></label></div>
+    <div data-clay-layer="foundation" className="ref-surface lavender ref-confirm-card"><div className="ref-profile"><span data-clay-layer="detail" data-clay-shape="disc" className="ref-surface mint ref-profile-dot"/><div><i data-clay-layer="detail" className="ref-surface lavender"/><i data-clay-layer="detail" className="ref-surface lavender"/></div></div><button type="button" data-clay-layer="control" data-clay-text="raised" className="ref-surface coral ref-confirm" onClick={()=>setConfirmed(!confirmed)}>{confirmed?<><Check data-clay-layer="detail"/> Confirmed</>:'Confirm'}</button><button type="button" data-clay-layer="control" role="switch" aria-label="Включить уведомления" aria-checked={enabled} className={`ref-surface sky ref-switch ${enabled?'is-on':''}`} onClick={()=>setEnabled(!enabled)}><span data-clay-layer="detail" data-clay-shape="disc" className="ref-surface cream"/></button></div>
+    <div className="ref-utility-buttons"><button type="button" data-clay-layer="control" aria-label="Уведомления" aria-pressed={bell} className={`ref-surface cream ref-square ${bell?'ref-bell-active':''}`} onClick={()=>setBell(!bell)}><ClaySculptedIcon name="bell"/></button><button type="button" data-clay-layer="control" aria-label="Настройки" aria-pressed={settings} className="ref-surface lavender ref-square" onClick={()=>setSettings(!settings)}><ClaySculptedIcon name="settings" style={{transform:`rotate(${settings?90:0}deg)`}}/></button></div>
+    <nav data-clay-layer="foundation" className="ref-surface cream ref-segmented" aria-label="Демо-навигация">{([{label:'Home',icon:'home'},{label:'Stats',icon:'stats'},{label:'Profile',icon:'profile'}] as const).map(({label,icon})=><button type="button" data-clay-layer="control" key={label} aria-current={tab===label?'page':undefined} onClick={()=>setTab(label)} className={tab===label?'ref-surface sky':'ref-surface cream'}><ClaySculptedIcon name={icon}/><span data-clay-text="raised">{label}</span></button>)}</nav>
     <div className="ref-board-feedback" role="status">{settings ? 'Settings are open · try the generator to customize this kit' : bell ? 'You’re all caught up. Have a lovely day!' : `${tab} · ${enabled?'Notifications on':'Quiet mode'}`}</div>
   </div>;
 }

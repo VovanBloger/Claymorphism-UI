@@ -1,9 +1,13 @@
 import { materialBackground, materialShadow } from '../utils/materialStyle';
+import { CLAY_LAYER_IDS, computeLayerShadow, getClayLayer, type ClayLayerId } from '../utils/clayLayers';
 import notchSource from './StickerNotchNav.tsx?raw';
 import notchMathSource from '../utils/notchMath.ts?raw';
 import notchCss from './sticker-notch-nav.css?raw';
 import referenceSource from './ReferenceElements.tsx?raw';
 import referenceCss from './reference-clay.css?raw';
+import reliefRendererSource from '../utils/clayReliefRenderer.ts?raw';
+import reliefAdapterSource from '../utils/clayRelief.ts?raw';
+import { CLAY_RELIEF_CSS } from '../utils/clayRelief';
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import {
@@ -14,6 +18,7 @@ import {
   UPLOADED_CLAY_ASSETS,
   computeClayStyles,
   generateComponentCode,
+  getComponentPhysicalLayer,
   resolveClayAssetPath,
 } from '../utils/clayEngine';
 import { ClaySlider } from './ClaySlider';
@@ -183,18 +188,18 @@ function ClayArchetypeTile({
       }}
     >
       {/* Base Warm Cream 3D Clay Surface */}
-      <div
+      <div data-clay-layer="control"
         className="absolute inset-0 rounded-[22px] -z-20 transition-opacity duration-300"
         style={{
           opacity: active ? 0 : 1,
           background: materialBackground('linear-gradient(145deg, #FFFDFB 0%, #F5EDE4 100%)'),
           boxShadow:
-            materialShadow('3px 8px 16px -4px rgba(95, 75, 140, 0.18), inset 2px 3px 5px rgba(255,255,255,0.98), inset -3px -4px 7px #DACBBE'),
+            computeLayerShadow('control', {shadowRgb:'95,75,140',edge:'#DACBBE'}, 1),
         }}
       />
 
       {/* Active Rich Purple 3D Clay Surface (Morphs in place) */}
-      <motion.div
+      <motion.div data-clay-layer="control"
         initial={false}
         animate={{
           opacity: active ? 1 : 0,
@@ -207,7 +212,7 @@ function ClayArchetypeTile({
         style={{
           background: materialBackground('linear-gradient(145deg, #B49BF9 0%, #8E6FE8 100%)'),
           boxShadow:
-            materialShadow('5px 14px 24px -5px rgba(98, 66, 189, 0.48), 2px 5px 10px rgba(98, 66, 189, 0.28), inset 3px 3.5px 6px rgba(255,255,255,0.74), inset -4px -5px 8px #6343C4'),
+            computeLayerShadow('control', {shadowRgb:'98,66,189',edge:'#6343C4'}, 1),
         }}
       />
 
@@ -279,6 +284,7 @@ function ClayInPlaceTabButton({
       }}
     >
       <motion.span
+        data-clay-layer="control"
         initial={false}
         animate={{
           opacity: active ? 1 : 0,
@@ -291,7 +297,7 @@ function ClayInPlaceTabButton({
         style={{
           background: materialBackground('linear-gradient(145deg, #AD94F9 0%, #8E6FE8 100%)'),
           boxShadow:
-            materialShadow('3px 8px 16px -3px rgba(114, 82, 209, 0.48), inset 2px 3px 5px rgba(255,255,255,0.7), inset -3px -4px 7px #5E3EBA'),
+            computeLayerShadow('control', {shadowRgb:'114,82,209',edge:'#5E3EBA'}, 1),
         }}
       />
       <span className={active ? 'clay-sidebar-text-3d' : ''}>{label}</span>
@@ -313,7 +319,10 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
   const [toggleButtonPressed, setToggleButtonPressed] = useState<boolean>(true);
 
   const currentThumbRadius = config.physics.thumbRadius ?? 18;
-  const computed = computeClayStyles(config.physics);
+  const builtInComposition = config.componentType === 'sticker-notch-nav' || config.componentType === 'bottom-nav';
+  const selectedLayer = builtInComposition ? 'foundation' : config.physics.layer ?? getComponentPhysicalLayer(config.componentType);
+  const layerProfile = getClayLayer(selectedLayer);
+  const computed = computeClayStyles(config.physics, selectedLayer);
   const activePreset = CLAY_COLOR_PRESETS[config.physics.presetId] || CLAY_COLOR_PRESETS.cream;
   const selectedAsset =
     UPLOADED_CLAY_ASSETS.find((a) => a.id === config.selectedAssetId) ||
@@ -321,7 +330,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
 
   const selectableAssets = UPLOADED_CLAY_ASSETS.filter((a) => a.category !== 'reference');
 
-  const generatedCode = generateComponentCode(config, codeTab, {source:referenceSource,css:referenceCss,notch:{source:notchSource,math:notchMathSource,css:notchCss}});
+  const generatedCode = generateComponentCode(config, codeTab, {source:referenceSource,css:referenceCss,notch:{source:notchSource,math:notchMathSource,css:notchCss},relief:{renderer:reliefRendererSource,adapter:reliefAdapterSource,css:CLAY_RELIEF_CSS}});
 
   const handleSelectArchetype = (arch: ArchetypeItem) => {
     onChangeConfig((prev) => ({
@@ -418,7 +427,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                 const p = CLAY_COLOR_PRESETS[presetKey];
                 const isSelected = config.physics.presetId === presetKey;
                 return (
-                  <motion.button
+                  <motion.button data-clay-layer="control"
                     key={presetKey}
                     type="button"
                     animate={
@@ -442,15 +451,15 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                     style={{
                       background: materialBackground(`linear-gradient(145deg, ${p.gradStart} 0%, ${p.gradEnd} 100%)`),
                       color: p.textHex,
-                      boxShadow: materialShadow(`3px 8px 16px -3px rgba(${p.outerShadowRgb}, 0.28), inset 2px 2.5px 4px ${p.innerLightRgba}, inset -2px -3px 6px ${p.innerDarkHex}`),
+                      boxShadow: computeLayerShadow('control', {shadowRgb:p.outerShadowRgb,edge:p.innerDarkHex}),
                     }}
                   >
                     <div className="flex items-center justify-between">
                       <div
-                        className="w-5 h-5 rounded-full"
+                        data-clay-layer="detail" className="w-5 h-5 rounded-full"
                         style={{
                           background: materialBackground(p.badgeBgHex),
-                          boxShadow: materialShadow('inset 1px 1.5px 2px rgba(255,255,255,0.7), 1px 2px 4px rgba(0,0,0,0.15)'),
+                          boxShadow: computeLayerShadow('detail', {shadowRgb:p.outerShadowRgb,edge:p.innerDarkHex}, .6),
                         }}
                       />
                       {isSelected && (
@@ -464,6 +473,31 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                 );
               })}
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="generator-physical-layer" className="text-xs font-extrabold text-[#7B5CE6] block">
+              Физический уровень внешней поверхности
+            </label>
+            <select
+              id="generator-physical-layer"
+              value={builtInComposition ? 'auto' : config.physics.layer ?? 'auto'}
+              disabled={builtInComposition}
+              onChange={(event) => onChangeConfig((prev) => ({
+                ...prev,
+                physics: { ...prev.physics, layer: event.target.value === 'auto' ? undefined : event.target.value as ClayLayerId },
+              }))}
+              aria-describedby="generator-layer-description"
+              className="w-full min-h-[44px] px-4 py-2 rounded-[18px] clay-recessed-input text-sm font-bold text-[#4D3F6B] disabled:opacity-75"
+            >
+              <option value="auto">Авто · {getClayLayer(getComponentPhysicalLayer(config.componentType)).label}</option>
+              {CLAY_LAYER_IDS.map((id) => <option key={id} value={id}>{getClayLayer(id).level}. {getClayLayer(id).label}</option>)}
+            </select>
+            <p id="generator-layer-description" className="text-xs leading-relaxed text-[#7A6F8E]">
+              {builtInComposition
+                ? 'В этом меню уровни встроены: основа, кнопки и медальоны, затем иконки. Геометрия и анимация сохраняются.'
+                : `${layerProfile.purpose}. ${layerProfile.placement.guidance}`}
+            </p>
           </div>
 
           {/* Surface Relief Mode */}
@@ -756,13 +790,15 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
               }}
             >
               <div className="w-full flex justify-center">
-                {REFERENCE_ELEMENTS.some(item=>item.id===config.componentType) && <div className="ref-element-wrapper" style={{background:materialBackground(computed.background),borderRadius:computed.borderRadius,padding:config.physics.padding,boxShadow:materialShadow(computed.boxShadow)}}><ReferenceElement key={config.componentType} kind={config.componentType as ReferenceElementKind} title={config.titleText || undefined}/></div>}
+                {REFERENCE_ELEMENTS.some(item=>item.id===config.componentType) && <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'} className="ref-element-wrapper" style={{...computed.materialTokens,background:materialBackground(computed.background),backgroundBlendMode:computed.backgroundBlendMode,borderRadius:computed.borderRadius,padding:config.physics.padding,boxShadow:materialShadow(computed.boxShadow)}}><ReferenceElement key={config.componentType} kind={config.componentType as ReferenceElementKind} title={config.titleText || undefined}/></div>}
                 {/* 0. 3D CLAY AVATAR WITH RECESSED INSET SUBSTRATE & POP-OUT OVERHANG */}
                 {config.componentType === 'clay-avatar' && (
-                  <div
+                  <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}
                     className="w-full max-w-sm flex flex-col items-center text-center gap-3 select-none overflow-visible"
                     style={{
+                      ...computed.materialTokens,
                       background: materialBackground(computed.background),
+                      backgroundBlendMode: computed.backgroundBlendMode,
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
@@ -792,10 +828,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                 {/* 1. PEEKING / OVERHANGING PAWS CARD WITH 3D AVATAR SUBSTRATE */}
                 {config.componentType === 'peeking-card' && (
                   <div className="w-full max-w-lg pb-6 pt-4">
-                    <div
+                    <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}
                       className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6 overflow-visible"
                       style={{
+                        ...computed.materialTokens,
                         background: materialBackground(computed.background),
+                      backgroundBlendMode: computed.backgroundBlendMode,
                         borderRadius: computed.borderRadius,
                         padding: `${config.physics.padding}px`,
                         color: computed.textColor,
@@ -872,10 +910,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
 
                 {/* 3. 3D CLAY SLIDERS / PROGRESS BARS SAMPLE */}
                 {config.componentType === 'clay-slider' && (
-                  <div
+                  <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}
                     className="w-full max-w-md space-y-5"
                     style={{
-                      background: materialBackground('linear-gradient(145deg, #FCEFF3 0%, #EFE8FA 100%)'),
+                      ...computed.materialTokens,
+                      background: materialBackground(computed.background),
+                      backgroundBlendMode: computed.backgroundBlendMode,
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
@@ -940,10 +980,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
 
                 {/* 3B. 3D CLAY TOGGLE SWITCH & DEPRESSING BUTTON SAMPLE */}
                 {config.componentType === 'clay-toggle' && (
-                  <div
+                  <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}
                     className="w-full max-w-lg space-y-3.5"
                     style={{
+                      ...computed.materialTokens,
                       background: materialBackground(computed.background),
+                      backgroundBlendMode: computed.backgroundBlendMode,
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
@@ -983,10 +1025,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
 
                 {/* 4. KPI STAT CARD — Crisp 3D Square Tile & Dropped 3D Icon */}
                 {config.componentType === 'kpi-card' && (
-                  <div
+                  <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}
                     className="w-full max-w-[240px] select-none"
                     style={{
+                      ...computed.materialTokens,
                       background: materialBackground(computed.background),
+                      backgroundBlendMode: computed.backgroundBlendMode,
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
@@ -994,11 +1038,11 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                     }}
                   >
                     <div
-                      className="w-14 h-14 flex items-center justify-center mb-4"
+                      data-clay-layer="detail" className="w-14 h-14 flex items-center justify-center mb-4"
                       style={{
                         background: materialBackground(`linear-gradient(145deg, ${activePreset.badgeBgHex} 0%, ${activePreset.innerDarkHex} 100%)`),
                         borderRadius: `${Math.min(18, computed.innerChildRadius)}px`,
-                        boxShadow: materialShadow(`4px 10px 18px -3px rgba(${activePreset.outerShadowRgb}, 0.42), 2px 4px 8px rgba(${activePreset.outerShadowRgb}, 0.24), inset 2.5px 3px 5px rgba(255,255,255,0.78), inset -3px -4px 7px rgba(0,0,0,0.2)`),
+                        boxShadow: computeLayerShadow('detail', {shadowRgb:activePreset.outerShadowRgb,edge:activePreset.innerDarkHex}),
                       }}
                     >
                       <img
@@ -1020,10 +1064,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                 {config.componentType === 'icon-input' && (
                   <div className="w-full max-w-md">
                     <label className="relative flex items-center w-full cursor-text">
-                      <div
+                      <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}
                         className="w-full flex items-center pl-16 pr-5 py-4"
                         style={{
+                          ...computed.materialTokens,
                           background: materialBackground(computed.background),
+                      backgroundBlendMode: computed.backgroundBlendMode,
                           borderRadius: computed.borderRadius,
                           color: computed.textColor,
                           boxShadow: materialShadow(computed.boxShadow),
@@ -1038,12 +1084,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                           style={{ color: computed.textColor }}
                         />
                       </div>
-                      <div
+                      <div data-clay-layer="detail"
                         className="absolute left-1.5 w-12 h-12 rounded-full flex items-center justify-center pointer-events-none"
                         style={{
                           background: materialBackground('linear-gradient(145deg, #B298FA 0%, #8C6DE6 100%)'),
                           boxShadow:
-                            materialShadow('3px 8px 14px -2px rgba(98, 66, 189, 0.48), inset 2px 3px 5px rgba(255,255,255,0.75), inset -3px -4px 6px rgba(79, 49, 166, 0.72)'),
+                            computeLayerShadow('detail', {shadowRgb:'98,66,189',edge:'#5E3EC4'}, 1),
                         }}
                       >
                         <img
@@ -1059,10 +1105,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
 
                 {/* 6. BAR CHART CARD */}
                 {config.componentType === 'bar-chart-card' && (
-                  <div
+                  <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}
                     className="w-full max-w-md"
                     style={{
+                      ...computed.materialTokens,
                       background: materialBackground(computed.background),
+                      backgroundBlendMode: computed.backgroundBlendMode,
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
@@ -1100,14 +1148,14 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                           className="flex flex-col items-center h-full justify-end group focus:outline-none cursor-pointer"
                         >
                           <div className="w-full h-full rounded-full p-1 clay-recessed-input flex items-end">
-                            <div
+                            <div data-clay-layer="control"
                               className={`w-full rounded-full ${
                                 activeBarIndex === idx ? 'ring-2 ring-[#6D4CE3]' : ''
                               }`}
                               style={{
                                 height: bar.h,
                                 background: materialBackground(bar.grad),
-                                boxShadow: materialShadow(`2px 6px 10px -2px rgba(90,70,130,0.3), inset 2px 3px 4px rgba(255,255,255,0.8), inset -2px -4px 6px ${bar.shadow}`),
+                                boxShadow: computeLayerShadow('control', {shadowRgb:'90,70,130',edge:bar.shadow}, .65),
                               }}
                             />
                           </div>
@@ -1120,10 +1168,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
 
                 {/* 7. DONUT CHART CARD */}
                 {config.componentType === 'donut-chart-card' && (
-                  <div
+                  <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}
                     className="w-full max-w-md"
                     style={{
+                      ...computed.materialTokens,
                       background: materialBackground(computed.background),
+                      backgroundBlendMode: computed.backgroundBlendMode,
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
@@ -1139,13 +1189,13 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                       />
                     </div>
                     <div className="flex items-center justify-around gap-6">
-                      <div
+                      <div data-clay-layer="control"
                         className="w-36 h-36 rounded-full flex items-center justify-center relative shrink-0"
                         style={{
                           background:
                             materialBackground('conic-gradient(#9D82F2 0% 45%, #F294A8 45% 70%, #F7CE68 70% 85%, #95D17B 85% 95%, #79B4EC 95% 100%)'),
                           boxShadow:
-                            materialShadow('6px 14px 24px -4px rgba(95, 75, 140, 0.34), inset 4px 5px 8px rgba(255, 255, 255, 0.8), inset -4px -7px 10px rgba(70, 50, 120, 0.38)'),
+                            computeLayerShadow('control', {shadowRgb:'95,75,140',edge:'#6E5590'}, 1),
                         }}
                       >
                         <div
@@ -1154,6 +1204,7 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                             width: '72px',
                             height: '72px',
                             background: materialBackground(computed.background),
+                            backgroundBlendMode: computed.backgroundBlendMode,
                             boxShadow:
                               materialShadow('inset 3px 5px 8px rgba(95, 75, 140, 0.28), 0 3px 6px rgba(255, 255, 255, 0.9)'),
                           }}
@@ -1172,12 +1223,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                         ].map((g) => (
                           <div key={g.label} className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <span
+                              <span data-clay-layer="detail"
                                 className="w-3.5 h-3.5 rounded-full inline-block"
                                 style={{
                                   background: materialBackground(g.color),
                                   boxShadow:
-                                    materialShadow('1px 2px 4px rgba(0,0,0,0.18), inset 1px 1.5px 2px rgba(255,255,255,0.85), inset -1px -2px 3px rgba(0,0,0,0.22)'),
+                                    computeLayerShadow('detail', {shadowRgb:'95,75,140',edge:'#68577A'}, 0.6),
                                 }}
                               />
                               <span>{g.label}</span>
@@ -1193,10 +1244,12 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                 {(config.componentType === 'promo-banner' ||
                   config.componentType === 'track-list-card' ||
                   config.componentType === 'pill-button') && (
-                  <div
+                  <div data-clay-layer={computed.physicalLayer} data-clay-surface={config.physics.surfaceMode === 'recessed' ? 'recessed' : 'raised'}
                     className="w-full max-w-md flex items-center justify-between gap-4"
                     style={{
+                      ...computed.materialTokens,
                       background: materialBackground(computed.background),
+                      backgroundBlendMode: computed.backgroundBlendMode,
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,

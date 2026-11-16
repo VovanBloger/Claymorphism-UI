@@ -50,7 +50,7 @@ test('drop-shadow conversion handles nested rgba and keeps neighboring filters u
 test('generator material and standalone exports carry CSS tokens without requiring the converter', () => {
   const physics = { presetId: 'lavender', surfaceMode: 'raised', borderRadius: 28, depth: 12, blurSoftness: 24, specularIntensity: .9, padding: 20 } as const;
   const styles = computeClayStyles(physics);
-  assert.equal(styles.shadowLayers.length, 4);
+  assert.equal(styles.shadowLayers.length, 6);
   assert.ok(styles.background.includes('--clay-light-angle'));
   assert.ok(styles.boxShadow.includes('--clay-volume'));
   const config: Parameters<typeof generateComponentCode>[0] = { physics, componentType: 'kpi-card', titleText: 'Clay', subtitleText: '', metricValue: '', metricDelta: '', ctaLabel: 'Go', selectedAssetId: 'star_mascot' };

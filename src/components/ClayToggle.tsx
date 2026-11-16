@@ -1,4 +1,5 @@
 import { materialBackground, materialShadow } from '../utils/materialStyle';
+import { computeLayerShadow } from '../utils/clayLayers';
 import React from 'react';
 import { motion } from 'motion/react';
 import { resolveClayAssetPath } from '../utils/clayEngine';
@@ -34,7 +35,7 @@ const ACCENT_PALETTES: Record<
       'inset 0 5px 10px rgba(74, 46, 156, 0.55), inset 0 -3px 6px rgba(255, 255, 255, 0.65), 0 2px 4px rgba(255, 255, 255, 0.8)',
     knobOnBg: 'radial-gradient(circle at 32% 28%, #FFFFFF 0%, #F5EEFF 58%, #DFD1FA 100%)',
     knobOnShadow:
-      '0 6px 12px -2px rgba(68, 42, 148, 0.45), inset 0 4px 6px #FFFFFF, inset 0 -5px 8px #C2ADEB',
+      computeLayerShadow('detail', {shadowRgb:'68,42,148',edge:'#C2ADEB'}, 1.3),
     buttonLatchedBg: 'linear-gradient(145deg, #8E6FE8 0%, #A98FF7 100%)',
     buttonLatchedShadow:
       '0 2px 4px rgba(98, 66, 189, 0.25), inset 0 5px 10px rgba(58, 34, 130, 0.62), inset 0 -3px 6px rgba(255, 255, 255, 0.5)',
@@ -46,7 +47,7 @@ const ACCENT_PALETTES: Record<
       'inset 0 5px 10px rgba(36, 110, 96, 0.5), inset 0 -3px 6px rgba(255, 255, 255, 0.7), 0 2px 4px rgba(255, 255, 255, 0.8)',
     knobOnBg: 'radial-gradient(circle at 32% 28%, #FFFFFF 0%, #EBFBF7 58%, #C6EFE4 100%)',
     knobOnShadow:
-      '0 6px 12px -2px rgba(42, 122, 108, 0.42), inset 0 4px 6px #FFFFFF, inset 0 -5px 8px #9FD9CA',
+      computeLayerShadow('detail', {shadowRgb:'42,122,108',edge:'#9FD9CA'}, 1.3),
     buttonLatchedBg: 'linear-gradient(145deg, #5BBAA7 0%, #82DEC9 100%)',
     buttonLatchedShadow:
       '0 2px 4px rgba(56, 145, 128, 0.25), inset 0 5px 10px rgba(30, 96, 84, 0.58), inset 0 -3px 6px rgba(255, 255, 255, 0.55)',
@@ -58,7 +59,7 @@ const ACCENT_PALETTES: Record<
       'inset 0 5px 10px rgba(156, 52, 76, 0.5), inset 0 -3px 6px rgba(255, 255, 255, 0.7), 0 2px 4px rgba(255, 255, 255, 0.8)',
     knobOnBg: 'radial-gradient(circle at 32% 28%, #FFFFFF 0%, #FFF0F3 58%, #FAD4DD 100%)',
     knobOnShadow:
-      '0 6px 12px -2px rgba(168, 62, 86, 0.42), inset 0 4px 6px #FFFFFF, inset 0 -5px 8px #E6AEBC',
+      computeLayerShadow('detail', {shadowRgb:'168,62,86',edge:'#E6AEBC'}, 1.3),
     buttonLatchedBg: 'linear-gradient(145deg, #E36B86 0%, #F794AA 100%)',
     buttonLatchedShadow:
       '0 2px 4px rgba(184, 78, 104, 0.25), inset 0 5px 10px rgba(138, 42, 65, 0.58), inset 0 -3px 6px rgba(255, 255, 255, 0.55)',
@@ -70,7 +71,7 @@ const ACCENT_PALETTES: Record<
       'inset 0 5px 10px rgba(140, 102, 24, 0.48), inset 0 -3px 6px rgba(255, 255, 255, 0.75), 0 2px 4px rgba(255, 255, 255, 0.8)',
     knobOnBg: 'radial-gradient(circle at 32% 28%, #FFFFFF 0%, #FFF9E6 58%, #FCE8BC 100%)',
     knobOnShadow:
-      '0 6px 12px -2px rgba(150, 114, 38, 0.4), inset 0 4px 6px #FFFFFF, inset 0 -5px 8px #E6CB92',
+      computeLayerShadow('detail', {shadowRgb:'150,114,38',edge:'#E6CB92'}, 1.3),
     buttonLatchedBg: 'linear-gradient(145deg, #E3AD36 0%, #F7CC65 100%)',
     buttonLatchedShadow:
       '0 2px 4px rgba(166, 134, 68, 0.25), inset 0 5px 10px rgba(122, 88, 18, 0.55), inset 0 -3px 6px rgba(255, 255, 255, 0.55)',
@@ -97,7 +98,7 @@ export function ClayToggle({
   if (mode === 'push-button') {
     // Physical Latching 3D Clay Button Switch: constant button & socket dimensions in both states
     return (
-      <div className="flex items-center justify-between gap-4 p-3.5 rounded-[24px] clay-card-cream select-none min-h-[82px]">
+      <div data-clay-layer="control" className="flex items-center justify-between gap-4 p-3.5 rounded-[24px] clay-card-cream select-none min-h-[82px]">
         <div className="flex items-center gap-3.5 min-w-0 flex-1">
           {iconSrc && (
             <img
@@ -117,6 +118,8 @@ export function ClayToggle({
 
         {/* Fixed-Size Recessed Socket Framing the Fixed-Size Physical Clay Push-Button */}
         <div
+          data-clay-layer="control"
+          data-clay-surface="recessed"
           className="w-[156px] h-[52px] p-1.5 rounded-[20px] flex items-center justify-center shrink-0"
           style={{
             background: materialBackground('linear-gradient(145deg, #E8DFD5 0%, #F7F0E8 100%)'),
@@ -125,6 +128,7 @@ export function ClayToggle({
           }}
         >
           <motion.button
+            data-clay-layer="control"
             id={id}
             type="button"
             role="switch"
@@ -151,7 +155,7 @@ export function ClayToggle({
                     background: materialBackground('linear-gradient(145deg, #FFFDFB 0%, #F2EAE1 100%)'),
                     color: '#5A4D73',
                     boxShadow:
-                      materialShadow('3px 6px 12px -2px rgba(95, 75, 140, 0.28), inset 2px 3px 5px #FFFFFF, inset -2px -4px 7px #D6C7B8'),
+                      computeLayerShadow('control', {shadowRgb:'95,75,140',edge:'#D6C7B8'}),
                   }
             }
           >
@@ -166,7 +170,7 @@ export function ClayToggle({
 
   // Default: Tactile 3D Clay Switch Track with Constant Track & Spherical Thumb Size
   return (
-    <div className="flex items-center justify-between gap-4 p-3.5 rounded-[24px] clay-card-cream select-none min-h-[82px]">
+    <div data-clay-layer="control" className="flex items-center justify-between gap-4 p-3.5 rounded-[24px] clay-card-cream select-none min-h-[82px]">
       <div className="flex items-center gap-3.5 min-w-0 flex-1">
         {iconSrc && (
           <img
@@ -189,6 +193,8 @@ export function ClayToggle({
 
       {/* Fixed-Size Physical Clay Switch Well (84px x 44px) */}
       <button
+        data-clay-layer="control"
+        data-clay-surface="recessed"
         id={id}
         type="button"
         role="switch"
@@ -207,13 +213,15 @@ export function ClayToggle({
       >
         {/* Fixed-Size 3D Clay Spherical Thumb (32px x 32px) */}
         <motion.div
+          data-clay-layer="detail"
+          data-clay-shape="disc"
           style={{
             background: materialBackground(checked
               ? palette.knobOnBg
               : 'radial-gradient(circle at 32% 28%, #FFFFFF 0%, #F7EFE6 55%, #E0D3C5 100%)'),
             boxShadow: materialShadow(checked
               ? palette.knobOnShadow
-              : '0 6px 12px -2px rgba(95, 75, 140, 0.32), inset 0 4px 5px #FFFFFF, inset 0 -5px 7px #C9B9A8'),
+              : computeLayerShadow('detail', {shadowRgb:'95,75,140',edge:'#C9B9A8'}, 1.3)),
           }}
           animate={{
             x: checked ? 40 : 0,

@@ -1,5 +1,6 @@
+import { computeLayerShadow } from '../utils/clayLayers';
 import { materialBackground, materialShadow } from '../utils/materialStyle';
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { motion } from 'motion/react';
 import {
   Search,
@@ -37,6 +38,69 @@ import {
 import { ReferenceLibrary } from './ReferenceLibrary';
 import { ComponentGenerator } from './ComponentGenerator';
 import { DesignSystemGuide } from './DesignSystemGuide';
+import { useMaterialSettings } from './MaterialSettings';
+
+const DASHBOARD_GENRES = [
+  { label: 'Pop', pct: 45, face: '#C7A9ED', edge: '#AB8DCF' },
+  { label: 'Lo-fi', pct: 25, face: '#F2B2C2', edge: '#DC97AA' },
+  { label: 'Hip Hop', pct: 15, face: '#F4D78B', edge: '#DDBB6D' },
+  { label: 'Rock', pct: 10, face: '#B9D4A3', edge: '#9BB987' },
+  { label: 'Other', pct: 5, face: '#ADCEE8', edge: '#8EAFCC' },
+] as const;
+
+function dashboardDonutSlice(start: number, end: number) {
+  const point = (radius: number, angle: number) => [72 + radius * Math.cos(angle), 72 + radius * Math.sin(angle)].map(value => value.toFixed(3)).join(' ');
+  const large = end - start > Math.PI ? 1 : 0;
+  return `M${point(66, start)} A66 66 0 ${large} 1 ${point(66, end)} L${point(29, end)} A29 29 0 ${large} 0 ${point(29, start)} Z`;
+}
+
+/** Matte wedges: pigment, a short colored sidewall, then contact on the cream tray. */
+function DashboardGenreDonut() {
+  const id = `dashboard-genres-${useId().replace(/:/g, '')}`;
+  const { settings } = useMaterialSettings();
+  const x = settings.light.endsWith('right') ? -1 : 1;
+  const y = settings.light.startsWith('bottom') ? -1 : 1;
+  const volume = settings.volume;
+  let angle = -Math.PI / 2;
+  const slices = DASHBOARD_GENRES.map(genre => {
+    const start = angle;
+    angle += Math.PI * 2 * genre.pct / 100;
+    return { ...genre, path: dashboardDonutSlice(start + .004, angle - .004) };
+  });
+  return <svg className="w-36 h-36 shrink-0" viewBox="0 0 144 144" overflow="visible" role="img" aria-label="Жанры: Pop 45%, Lo-fi 25%, Hip Hop 15%, Rock 10%, Other 5%" data-clay-layer="control" data-clay-shape="disc" style={{ boxShadow: 'none' }}>
+    <defs>
+      <filter id={`${id}-contact`} x="-12%" y="-12%" width="124%" height="128%" colorInterpolationFilters="sRGB">
+        <feDropShadow dx={.6 * x * volume} dy={2.2 * y * volume} stdDeviation={2 * volume * settings.shadowSoftness} floodColor="#8F768E" floodOpacity={.18 * settings.shadowStrength}/>
+      </filter>
+      {slices.map((genre, index) => <React.Fragment key={genre.label}>
+        <linearGradient id={`${id}-face-${index}`} x1={x > 0 ? '0%' : '100%'} y1={y > 0 ? '0%' : '100%'} x2={x > 0 ? '100%' : '0%'} y2={y > 0 ? '100%' : '0%'}>
+          <stop offset="0" stopColor={genre.face}/><stop offset=".7" stopColor={genre.face}/><stop offset="1" stopColor={genre.edge} stopOpacity=".84"/>
+        </linearGradient>
+        <filter id={`${id}-soft-edge-${index}`} x="-8%" y="-8%" width="116%" height="116%" colorInterpolationFilters="sRGB">
+          <feMorphology in="SourceAlpha" operator="erode" radius={1.2 * volume} result="inset"/>
+          <feGaussianBlur in="inset" stdDeviation={1.2 * volume} result="shoulder"/>
+          <feOffset in="shoulder" dx={1.5 * x * volume} dy={1.8 * y * volume} result="light-shift"/>
+          <feComposite in="shoulder" in2="light-shift" operator="out" result="light-band"/>
+          <feFlood floodColor="#FFFFFF" floodOpacity=".48" result="light"/>
+          <feComposite in="light" in2="light-band" operator="in" result="lit-shoulder"/>
+          <feOffset in="shoulder" dx={-2 * x * volume} dy={-2.5 * y * volume} result="shade-shift"/>
+          <feComposite in="shoulder" in2="shade-shift" operator="out" result="shade-band"/>
+          <feGaussianBlur in="shade-band" stdDeviation={1.8 * volume} result="soft-shade"/>
+          <feFlood floodColor={genre.edge} floodOpacity=".15" result="shade"/>
+          <feComposite in="shade" in2="soft-shade" operator="in" result="colored-shoulder"/>
+          <feMerge result="rounded"><feMergeNode in="SourceGraphic"/><feMergeNode in="colored-shoulder"/><feMergeNode in="lit-shoulder"/></feMerge>
+          <feComposite in="rounded" in2="SourceAlpha" operator="in"/>
+        </filter>
+      </React.Fragment>)}
+    </defs>
+    <g filter={`url(#${id}-contact)`}>
+      <g transform={`translate(${volume} ${2.8 * volume})`}>
+        {slices.map(genre => <path key={genre.label} d={genre.path} fill={genre.edge}/>)}
+      </g>
+      {slices.map((genre, index) => <path key={genre.label} d={genre.path} fill={`url(#${id}-face-${index})`} filter={`url(#${id}-soft-edge-${index})`}/>)}
+    </g>
+  </svg>;
+}
 
 export type DashboardSection = 'dashboard' | 'login' | 'icons' | 'library' | 'generator' | 'design-system';
 
@@ -101,13 +165,13 @@ export function ReferenceShowcases({
   ];
 
   const weeklyBars = [
-    { day: 'Mon', heightPct: 56, grad: 'linear-gradient(180deg, #B9A2FA 0%, #9476EE 100%)', shadow: '#7C5CE0', glow: 'rgba(148,118,238,0.34)' },
-    { day: 'Tue', heightPct: 76, grad: 'linear-gradient(180deg, #FFC6BA 0%, #F79D8C 100%)', shadow: '#E07D6B', glow: 'rgba(247,157,140,0.34)' },
-    { day: 'Wed', heightPct: 58, grad: 'linear-gradient(180deg, #FCD29F 0%, #F5AA67 100%)', shadow: '#DC8C47', glow: 'rgba(245,170,103,0.34)' },
-    { day: 'Thu', heightPct: 86, grad: 'linear-gradient(180deg, #FFE8A3 0%, #F7CA65 100%)', shadow: '#DFB048', glow: 'rgba(247,202,101,0.34)' },
-    { day: 'Fri', heightPct: 54, grad: 'linear-gradient(180deg, #BCE8B5 0%, #8FD186 100%)', shadow: '#6FB865', glow: 'rgba(143,209,134,0.34)' },
-    { day: 'Sat', heightPct: 72, grad: 'linear-gradient(180deg, #A8D4FA 0%, #7BB6EE 100%)', shadow: '#5C98D4', glow: 'rgba(123,182,238,0.34)' },
-    { day: 'Sun', heightPct: 60, grad: 'linear-gradient(180deg, #C9B3FA 0%, #A387F0 100%)', shadow: '#8668D9', glow: 'rgba(163,135,240,0.34)' },
+    { day: 'Mon', heightPct: 56, face: '#C9AFE4', edge: '#AD91CA' },
+    { day: 'Tue', heightPct: 76, face: '#F1B8C2', edge: '#DB9AA6' },
+    { day: 'Wed', heightPct: 58, face: '#F5C58E', edge: '#DFA972' },
+    { day: 'Thu', heightPct: 86, face: '#F6D994', edge: '#DFBF77' },
+    { day: 'Fri', heightPct: 54, face: '#BDD5A4', edge: '#A3BB8B' },
+    { day: 'Sat', heightPct: 72, face: '#ACCEE8', edge: '#91B4D1' },
+    { day: 'Sun', heightPct: 60, face: '#CDB4E5', edge: '#B097CC' },
   ];
 
   const recentTracks = [
@@ -129,8 +193,8 @@ export function ReferenceShowcases({
   ];
 
   return (
-    <div className="clay-board rounded-[46px] p-2.5 sm:p-3.5 lg:p-4 grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-4 relative">
-            <aside className="dashboard-sidebar lg:col-span-3 rounded-[38px] p-6 flex flex-col justify-between text-white relative z-20">
+    <div data-clay-layer="foundation" className="clay-board rounded-[46px] p-2.5 sm:p-3.5 lg:p-4 grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-4 relative">
+            <aside data-clay-layer="foundation" className="dashboard-sidebar lg:col-span-3 rounded-[38px] p-6 flex flex-col justify-between text-white relative z-20">
               <div>
                 {/* Circular portrait on a shallow peach-clay medallion, as in the reference. */}
                 <div className="dashboard-profile flex flex-col items-center text-center pt-1 mb-6">
@@ -181,6 +245,7 @@ export function ReferenceShowcases({
                       >
                         {/* Active Marshmallow Cream Pill */}
                         <motion.span
+                          data-clay-layer="control"
                           initial={false}
                           animate={{ opacity: active ? 1 : 0 }}
                           transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
@@ -188,7 +253,7 @@ export function ReferenceShowcases({
                           style={{
                             background: materialBackground('linear-gradient(150deg, #FFFDF8 0%, #F5EDE9 100%)'),
                             boxShadow:
-                              materialShadow('1px 4px 6px -2px rgba(73, 50, 112, 0.25), inset 1px 2px 3px rgba(255,255,255,0.9), inset -1px -2px 3px #E5D8DC'),
+                              computeLayerShadow('control', {shadowRgb:'73,50,112',edge:'#E5D8DC'}, 0.8),
                           }}
                         />
 
@@ -231,7 +296,7 @@ export function ReferenceShowcases({
       {activeScene === 'dashboard' && (
         <div className="space-y-6">
           {showOriginalOverlay && (
-            <div className="clay-board rounded-[32px] p-5">
+            <div data-clay-layer="foundation" className="clay-board rounded-[32px] p-5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-black uppercase tracking-wider text-[#6A56A6]">
                   Оригинальный референс
@@ -281,12 +346,12 @@ export function ReferenceShowcases({
                     className="relative w-12 h-12 rounded-full clay-card-cream flex items-center justify-center cursor-pointer clay-squish"
                   >
                     <Bell className="w-5 h-5 text-[#7C63D8] fill-[#9B82F3] clay-icon-3d" />
-                    <span
+                    <span data-clay-layer="detail"
                       className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] font-black text-white flex items-center justify-center"
                       style={{
                         background: materialBackground('linear-gradient(145deg, #FA9CB0 0%, #E36582 100%)'),
                         boxShadow:
-                          materialShadow('2px 4px 8px rgba(184, 78, 104, 0.45), inset 1px 1.5px 2px rgba(255, 255, 255, 0.8)'),
+                          computeLayerShadow('detail', {shadowRgb:'184,78,104',edge:'#C9546C'}, 0.7),
                       }}
                     >
                       3
@@ -359,12 +424,12 @@ export function ReferenceShowcases({
                   onClick={() => triggerInspect('kpi-card', 'magic_wand')}
                   className="clay-card-lavender rounded-[28px] p-5 flex flex-col justify-between cursor-pointer transition-transform hover:-translate-y-1 clay-squish"
                 >
-                  <div
+                  <div data-clay-layer="detail"
                     className="w-12 h-12 rounded-[16px] flex items-center justify-center mb-3"
                     style={{
                       background: materialBackground('linear-gradient(145deg, #B59BF9 0%, #8C6DE6 100%)'),
                       boxShadow:
-                        materialShadow('4px 10px 18px -3px rgba(98, 66, 189, 0.48), 2px 4px 8px rgba(98, 66, 189, 0.28), inset 2.5px 3px 5px rgba(255, 255, 255, 0.78), inset -3px -4px 7px #6242C4'),
+                        computeLayerShadow('detail', {shadowRgb:'98,66,189',edge:'#6242C4'}, 1),
                     }}
                   >
                     <Music className="w-6 h-6 text-white clay-icon-3d" />
@@ -381,12 +446,12 @@ export function ReferenceShowcases({
                   onClick={() => triggerInspect('kpi-card', 'welcome_gift')}
                   className="clay-card-peach rounded-[28px] p-5 flex flex-col justify-between cursor-pointer transition-transform hover:-translate-y-1 clay-squish"
                 >
-                  <div
+                  <div data-clay-layer="detail"
                     className="w-12 h-12 rounded-[16px] flex items-center justify-center mb-3"
                     style={{
                       background: materialBackground('linear-gradient(145deg, #FFA299 0%, #ED766C 100%)'),
                       boxShadow:
-                        materialShadow('4px 10px 18px -3px rgba(204, 88, 78, 0.46), 2px 4px 8px rgba(204, 88, 78, 0.28), inset 2.5px 3px 5px rgba(255, 255, 255, 0.78), inset -3px -4px 7px #C95247'),
+                        computeLayerShadow('detail', {shadowRgb:'204,88,78',edge:'#C95247'}, 1),
                     }}
                   >
                     <Heart className="w-6 h-6 text-white fill-white clay-icon-3d" />
@@ -403,12 +468,12 @@ export function ReferenceShowcases({
                   onClick={() => triggerInspect('kpi-card', 'star_mascot')}
                   className="clay-card-butter rounded-[28px] p-5 flex flex-col justify-between cursor-pointer transition-transform hover:-translate-y-1 clay-squish"
                 >
-                  <div
+                  <div data-clay-layer="detail"
                     className="w-12 h-12 rounded-[16px] flex items-center justify-center mb-3"
                     style={{
                       background: materialBackground('linear-gradient(145deg, #FFE08C 0%, #F2BA49 100%)'),
                       boxShadow:
-                        materialShadow('4px 10px 18px -3px rgba(196, 144, 42, 0.45), 2px 4px 8px rgba(196, 144, 42, 0.26), inset 2.5px 3px 5px rgba(255, 255, 255, 0.85), inset -3px -4px 7px #CE9424'),
+                        computeLayerShadow('detail', {shadowRgb:'196,144,42',edge:'#CE9424'}, 1),
                     }}
                   >
                     <Clock className="w-6 h-6 text-[#4A3810] clay-icon-3d" />
@@ -425,12 +490,12 @@ export function ReferenceShowcases({
                   onClick={() => triggerInspect('kpi-card', 'check_badge')}
                   className="clay-card-sky rounded-[28px] p-5 flex flex-col justify-between cursor-pointer transition-transform hover:-translate-y-1 clay-squish"
                 >
-                  <div
+                  <div data-clay-layer="detail"
                     className="w-12 h-12 rounded-[16px] flex items-center justify-center mb-3"
                     style={{
                       background: materialBackground('linear-gradient(145deg, #9CC8FA 0%, #6FA4E8 100%)'),
                       boxShadow:
-                        materialShadow('4px 10px 18px -3px rgba(82, 132, 196, 0.46), 2px 4px 8px rgba(82, 132, 196, 0.26), inset 2.5px 3px 5px rgba(255, 255, 255, 0.78), inset -3px -4px 7px #4B7EC2'),
+                        computeLayerShadow('detail', {shadowRgb:'82,132,196',edge:'#4B7EC2'}, 1),
                     }}
                   >
                     <Flame className="w-6 h-6 text-white fill-white clay-icon-3d" />
@@ -468,18 +533,20 @@ export function ReferenceShowcases({
                       <span>0</span>
                     </div>
 
-                    {/* 7 Recessed Bar Wells with 3D Cylindrical Pastel Bars */}
-                    <div className="flex-1 grid grid-cols-7 gap-2.5 sm:gap-3.5 h-full items-end">
+                    {/* Independent clay columns stand directly on the cream chart tray. */}
+                    <div className="flex-1 min-w-0 grid grid-cols-7 gap-2 sm:gap-3 h-full items-end">
                       {weeklyBars.map((bar) => (
-                        <div key={bar.day} className="flex flex-col items-center h-full justify-end gap-2">
-                          <div className="w-full max-w-[30px] h-full rounded-full clay-recessed-input p-1 flex items-end">
-                            <div
-                              className="w-full rounded-full transition-all duration-500 hover:brightness-105"
+                        <div key={bar.day} className="flex flex-col items-center min-w-0 h-full justify-end gap-2">
+                          <div className="w-full max-w-[34px] flex-1 min-h-0 flex items-end">
+                            <div data-clay-layer="control" data-clay-shape="cushion"
+                              className="w-full rounded-[11px] transition-[filter] duration-300 hover:brightness-[1.025]"
                               style={{
                                 height: `${bar.heightPct}%`,
-                                background: materialBackground(bar.grad),
-                                boxShadow: materialShadow(`3px 6px 12px -2px ${bar.glow}, inset 2px 3px 4px rgba(255,255,255,0.82), inset -2px -4px 6px ${bar.shadow}`),
-                              }}
+                                background: materialBackground(`linear-gradient(145deg, ${bar.face}, ${bar.edge})`),
+                                boxShadow: computeLayerShadow('control', {shadowRgb:'132,108,128',edge:bar.edge}, .65),
+                                '--clay-relief-face': bar.face,
+                                '--clay-relief-edge': bar.edge,
+                              } as React.CSSProperties}
                             />
                           </div>
                           <span className="text-[11px] font-extrabold text-[#7A6F8E]">{bar.day}</span>
@@ -499,49 +566,26 @@ export function ReferenceShowcases({
                   </h3>
 
                   <div className="flex items-center justify-between gap-4 my-auto">
-                    {/* 3D Clay Torus / Donut */}
-                    <div
-                      className="relative w-36 h-36 rounded-full flex items-center justify-center shrink-0"
-                      style={{
-                        background:
-                          materialBackground('conic-gradient(#9B80F0 0deg 162deg, #F5968E 162deg 252deg, #F7CB68 252deg 306deg, #8FD186 306deg 342deg, #7BB6EE 342deg 360deg)'),
-                        boxShadow:
-                          materialShadow('6px 14px 26px -4px rgba(95, 75, 140, 0.34), 2px 5px 10px rgba(95, 75, 140, 0.2), inset 4px 5px 8px rgba(255, 255, 255, 0.78), inset -4px -6px 10px rgba(72, 52, 117, 0.36)'),
-                      }}
-                    >
-                      {/* Inner Recessed Donut Hole */}
-                      <div
-                        className="w-16 h-16 rounded-full"
-                        style={{
-                          background: materialBackground('linear-gradient(145deg, #EDE4DA 0%, #FFFDFB 100%)'),
-                          boxShadow:
-                            materialShadow('inset 3px 5px 9px rgba(95, 75, 140, 0.28), 0 2px 4px rgba(255, 255, 255, 0.9)'),
-                        }}
-                      />
-                    </div>
+                    <DashboardGenreDonut />
 
                     {/* Genre Legend with 3D Clay Dots */}
                     <div className="flex-1 space-y-2.5">
-                      {[
-                        { label: 'Pop', pct: '45%', color: '#9B80F0' },
-                        { label: 'Lo-fi', pct: '25%', color: '#F5968E' },
-                        { label: 'Hip Hop', pct: '15%', color: '#F7CB68' },
-                        { label: 'Rock', pct: '10%', color: '#8FD186' },
-                        { label: 'Other', pct: '5%', color: '#7BB6EE' },
-                      ].map((g) => (
+                      {DASHBOARD_GENRES.map((g) => (
                         <div key={g.label} className="flex items-center justify-between text-xs">
                           <div className="flex items-center gap-2 font-bold text-[#4E416B]">
-                            <span
+                            <span data-clay-layer="detail" data-clay-shape="disc"
                               className="w-3.5 h-3.5 rounded-full inline-block"
                               style={{
-                                background: materialBackground(g.color),
+                                background: materialBackground(g.face),
                                 boxShadow:
-                                  materialShadow('1px 2px 4px rgba(0,0,0,0.18), inset 1px 1.5px 2px rgba(255,255,255,0.85), inset -1px -2px 3px rgba(0,0,0,0.22)'),
-                              }}
+                                  computeLayerShadow('detail', {shadowRgb:'132,108,128',edge:g.edge}, 0.6),
+                                '--clay-relief-face': g.face,
+                                '--clay-relief-edge': g.edge,
+                              } as React.CSSProperties}
                             />
                             {g.label}
                           </div>
-                          <span className="font-black text-[#2E2540] tabular-nums">{g.pct}</span>
+                          <span className="font-black text-[#2E2540] tabular-nums">{g.pct}%</span>
                         </div>
                       ))}
                     </div>
@@ -572,12 +616,12 @@ export function ReferenceShowcases({
                           className="flex items-center justify-between p-2.5 rounded-[20px] hover:bg-[#F7EFE6]/70 transition-colors cursor-pointer"
                         >
                           <div className="flex items-center gap-3.5">
-                            <div
+                            <div data-clay-layer="detail"
                               className="w-12 h-12 rounded-[16px] shrink-0"
                               style={{
                                 background: materialBackground(track.coverGrad),
                                 boxShadow:
-                                  materialShadow('3px 6px 12px -2px rgba(95,75,140,0.28), inset 2px 2px 4px rgba(255,255,255,0.65), inset -2px -3px 5px rgba(0,0,0,0.2)'),
+                                  computeLayerShadow('detail', {shadowRgb:'95,75,140',edge:'#80718B'}, 1),
                               }}
                             />
                             <div>
@@ -613,13 +657,13 @@ export function ReferenceShowcases({
                   </div>
 
                   {/* Cozy 3D Clay Room Scene Card */}
-                  <div
+                  <div data-clay-layer="control"
                     className="relative h-48 rounded-[24px] p-5 flex flex-col justify-end overflow-hidden"
                     style={{
                       background:
                         materialBackground('linear-gradient(135deg, #7A5896 0%, #9E7BB8 45%, #E0A98B 100%)'),
                       boxShadow:
-                        materialShadow('inset 2px 3px 6px rgba(255,255,255,0.5), inset -3px -6px 12px rgba(45,28,64,0.45), 4px 10px 20px -4px rgba(95,75,140,0.32)'),
+                        computeLayerShadow('control', {shadowRgb:'95,75,140',edge:'#775780'}, 1),
                     }}
                   >
                     <div className="absolute top-4 right-5 w-24 h-24 rounded-full bg-[#FFE8B5]/40 blur-xl pointer-events-none" />
@@ -649,13 +693,14 @@ export function ReferenceShowcases({
               </div>
 
               {/* BOTTOM PROMO BANNER: Discover new music (Uses uploaded 11111.png Star Mascot) */}
-              <div
+              <div data-clay-layer="foundation"
                 onClick={() => triggerInspect('promo-banner', 'star_mascot')}
                 className="rounded-[30px] px-6 py-4 flex flex-wrap items-center justify-between gap-4 cursor-pointer transition-transform hover:-translate-y-0.5"
                 style={{
-                  background: materialBackground('linear-gradient(145deg, #B59BF9 0%, #9374ED 100%)'),
+                  background: `var(--clay-texture-image, none), ${materialBackground('linear-gradient(145deg, #B59BF9 0%, #9374ED 100%)')}`,
+                  backgroundBlendMode: 'soft-light, normal',
                   boxShadow:
-                    materialShadow('6px 16px 28px -4px rgba(102, 71, 194, 0.44), 2px 6px 12px rgba(102, 71, 194, 0.25), inset 3px 4px 7px rgba(255, 255, 255, 0.65), inset -4px -6px 10px #6A49C9'),
+                    computeLayerShadow('foundation', {shadowRgb:'102,71,194',edge:'#6A49C9'}, 1),
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -674,13 +719,13 @@ export function ReferenceShowcases({
                   </div>
                 </div>
 
-                <button
+                <button data-clay-layer="control"
                   type="button"
                   className="px-6 py-2.5 rounded-full text-xs font-extrabold text-white cursor-pointer clay-squish clay-sidebar-text-3d"
                   style={{
                     background: materialBackground('linear-gradient(145deg, #C7B2FC 0%, #A488F5 100%)'),
                     boxShadow:
-                      materialShadow('3px 8px 16px -2px rgba(58, 35, 128, 0.45), inset 2px 3px 5px rgba(255, 255, 255, 0.72), inset -2px -4px 6px #7858D6'),
+                      computeLayerShadow('control', {shadowRgb:'58,35,128',edge:'#7858D6'}, 1),
                   }}
                 >
                   Explore Now
@@ -696,7 +741,7 @@ export function ReferenceShowcases({
       {activeScene === 'login' && (
         <div className="space-y-6">
           {showOriginalOverlay && (
-            <div className="clay-board rounded-[32px] p-5">
+            <div data-clay-layer="foundation" className="clay-board rounded-[32px] p-5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-black uppercase tracking-wider text-[#6A56A6]">
                   Оригинальный референс
@@ -727,14 +772,14 @@ export function ReferenceShowcases({
             />
 
             {/* Main Vertical Phone Slab (Z-Layer 10) */}
-            <div className="w-full max-w-[440px] clay-board rounded-[46px] p-6 sm:p-8 flex flex-col items-center relative z-10">
+            <div data-clay-layer="foundation" className="w-full max-w-[440px] clay-board rounded-[46px] p-6 sm:p-8 flex flex-col items-center relative z-10">
               {/* Top Pink 3D Clay Heart */}
-              <div
+              <div data-clay-layer="detail"
                 className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
                 style={{
                   background: materialBackground('linear-gradient(145deg, #FFB5C2 0%, #F07D94 100%)'),
                   boxShadow:
-                    materialShadow('3px 8px 14px -2px rgba(204, 88, 112, 0.42), inset 2px 2.5px 4px rgba(255,255,255,0.82), inset -2px -3px 5px #C9546C'),
+                    computeLayerShadow('detail', {shadowRgb:'204,88,112',edge:'#C9546C'}, 1),
                 }}
               >
                 <Heart className="w-5 h-5 text-white fill-white clay-icon-3d" />
@@ -774,12 +819,12 @@ export function ReferenceShowcases({
                       className="w-full bg-transparent border-none outline-none text-sm font-bold text-[#2E2540] placeholder:text-[#9689AD]"
                     />
                   </div>
-                  <div
+                  <div data-clay-layer="detail"
                     className="absolute left-1.5 w-11 h-11 rounded-full flex items-center justify-center"
                     style={{
                       background: materialBackground('linear-gradient(145deg, #B59BF9 0%, #8E6FE8 100%)'),
                       boxShadow:
-                        materialShadow('3px 6px 12px -2px rgba(98, 66, 189, 0.48), inset 2px 3px 4px rgba(255,255,255,0.75), inset -2px -4px 6px #5E3EC4'),
+                        computeLayerShadow('detail', {shadowRgb:'98,66,189',edge:'#5E3EC4'}, 1),
                     }}
                   >
                     <User className="w-5 h-5 text-white fill-white clay-icon-3d" />
@@ -798,12 +843,12 @@ export function ReferenceShowcases({
                       className="w-full bg-transparent border-none outline-none text-sm font-bold text-[#2E2540] placeholder:text-[#9689AD]"
                     />
                   </div>
-                  <div
+                  <div data-clay-layer="detail"
                     className="absolute left-1.5 w-11 h-11 rounded-full flex items-center justify-center"
                     style={{
                       background: materialBackground('linear-gradient(145deg, #B59BF9 0%, #8E6FE8 100%)'),
                       boxShadow:
-                        materialShadow('3px 6px 12px -2px rgba(98, 66, 189, 0.48), inset 2px 3px 4px rgba(255,255,255,0.75), inset -2px -4px 6px #5E3EC4'),
+                        computeLayerShadow('detail', {shadowRgb:'98,66,189',edge:'#5E3EC4'}, 1),
                     }}
                   >
                     <img
@@ -881,7 +926,7 @@ export function ReferenceShowcases({
           SCENE 3: 3D CLAY ICON & MASCOT ASSET PACK STUDIO
          ===================================================================== */}
       {activeScene === 'icons' && (
-        <div className="clay-board rounded-[36px] p-6 sm:p-8 space-y-6">
+        <div data-clay-layer="foundation" className="clay-board rounded-[36px] p-6 sm:p-8 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#7C5CE0]">
@@ -916,12 +961,12 @@ export function ReferenceShowcases({
                 </div>
 
                 {/* Sculpted 3D Clay Square Tile holding the PNG with crisp 3D shadow */}
-                <div
+                <div data-clay-layer="control"
                   className="w-28 h-28 rounded-[26px] flex items-center justify-center my-3 transition-transform duration-300 group-hover:scale-105"
                   style={{
                     background: materialBackground('linear-gradient(145deg, #F6F0FF 0%, #E2D4FA 100%)'),
                     boxShadow:
-                      materialShadow('4px 10px 20px -4px rgba(104, 78, 168, 0.28), 2px 4px 8px rgba(104, 78, 168, 0.16), inset 3px 3px 6px rgba(255, 255, 255, 0.92), inset -3px -5px 9px #C7B4EE'),
+                      computeLayerShadow('control', {shadowRgb:'104,78,168',edge:'#C7B4EE'}, 1),
                   }}
                 >
                   <img

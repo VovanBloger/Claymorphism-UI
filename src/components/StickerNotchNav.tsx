@@ -134,14 +134,34 @@ export function StickerNotchNav({activeId, onSelect, speed = .6}: {
   return <nav ref={host} className="sticker-notch" aria-label="Нижнее меню с пластилиновой выемкой" style={{opacity:ready?1:0}}>
     <svg className="sticker-notch-panel" viewBox={`0 0 ${width} 90`} preserveAspectRatio="none" aria-hidden="true">
       <defs>
-        <linearGradient id={`${uid}-fill`} x1={material.x > 0 ? 0 : width} y1={material.y > 0 ? 22 : 90} x2={width*(material.x > 0 ? .28 : .72)} y2={material.y > 0 ? 90 : 22} gradientUnits="userSpaceOnUse"><stop stopColor="#C7ACF0"/><stop offset="1" stopColor="#AA86DF"/></linearGradient>
-        <filter id={`${uid}-bevel`} x="-10%" y="-20%" width="120%" height="150%" colorInterpolationFilters="sRGB">
-          <feGaussianBlur in="SourceAlpha" stdDeviation={3*material.volume*material.softness} result="lightBlur"/><feOffset in="lightBlur" dx={2*material.x*material.volume} dy={4*material.y*material.volume} result="lightOffset"/><feComposite in="SourceAlpha" in2="lightOffset" operator="out" result="lightMask"/><feFlood floodColor="#FFFFFF" floodOpacity={Math.min(.85,.6*material.volume)} result="lightColor"/><feComposite in="lightColor" in2="lightMask" operator="in" result="light"/>
-          <feGaussianBlur in="SourceAlpha" stdDeviation={3.6*material.volume*material.softness} result="shadeBlur"/><feOffset in="shadeBlur" dx={-2*material.x*material.volume} dy={-5*material.y*material.volume} result="shadeOffset"/><feComposite in="SourceAlpha" in2="shadeOffset" operator="out" result="shadeMask"/><feFlood floodColor="#6947AE" floodOpacity={.34*material.volume} result="shadeColor"/><feComposite in="shadeColor" in2="shadeMask" operator="in" result="shade"/>
-          <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="shade"/><feMergeNode in="light"/></feMerge>
+        <linearGradient id={`${uid}-fill`} x1={material.x > 0 ? 0 : width} y1={material.y > 0 ? 22 : 90} x2={width*(material.x > 0 ? .28 : .72)} y2={material.y > 0 ? 90 : 22} gradientUnits="userSpaceOnUse"><stop stopColor="#BFA0E9"/><stop offset=".55" stopColor="#BB9DE6"/><stop offset="1" stopColor="#B79BE2"/></linearGradient>
+        <linearGradient id={`${uid}-side`} x1="0" y1="22" x2="0" y2="94" gradientUnits="userSpaceOnUse"><stop stopColor="#AE8DD9"/><stop offset="1" stopColor="#9270C6"/></linearGradient>
+        <filter id={`${uid}-bevel`} x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+          {/* The unblurred silhouette stays pigmented; the rounded light crest sits inside it. */}
+          <feMorphology in="SourceAlpha" operator="erode" radius={.8*material.volume} result="edgeGuard"/>
+          <feMorphology in="SourceAlpha" operator="erode" radius={4*material.volume} result="faceCore"/>
+          <feGaussianBlur in="faceCore" stdDeviation={1.8*material.volume*material.softness} result="shoulderBlur"/>
+          <feOffset in="shoulderBlur" dx={2.5*material.x*material.volume} dy={3.8*material.y*material.volume} result="shoulderOffset"/>
+          <feComposite in="shoulderBlur" in2="shoulderOffset" operator="out" result="shoulderBand"/>
+          <feComposite in="shoulderBand" in2="edgeGuard" operator="in" result="shoulderMask"/>
+          <feFlood floodColor="#FFFFFF" floodOpacity=".28" result="shoulderColor"/>
+          <feComposite in="shoulderColor" in2="shoulderMask" operator="in" result="shoulder"/>
+          <feGaussianBlur in="faceCore" stdDeviation={1.2*material.volume*Math.sqrt(material.softness)} result="crestBlur"/>
+          <feOffset in="crestBlur" dx={1.4*material.x*material.volume} dy={2.2*material.y*material.volume} result="crestOffset"/>
+          <feComposite in="crestBlur" in2="crestOffset" operator="out" result="crestBand"/>
+          <feComposite in="crestBand" in2="edgeGuard" operator="in" result="crestMask"/>
+          <feFlood floodColor="#FFF9FF" floodOpacity=".35" result="crestColor"/>
+          <feComposite in="crestColor" in2="crestMask" operator="in" result="crest"/>
+          <feOffset in="shoulderBlur" dx={-2*material.x*material.volume} dy={-3.5*material.y*material.volume} result="shadeOffset"/>
+          <feComposite in="shoulderBlur" in2="shadeOffset" operator="out" result="shadeBand"/>
+          <feComposite in="shadeBand" in2="edgeGuard" operator="in" result="shadeMask"/>
+          <feFlood floodColor="#7852B6" floodOpacity=".2" result="shadeColor"/>
+          <feComposite in="shadeColor" in2="shadeMask" operator="in" result="shade"/>
+          <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="shade"/><feMergeNode in="shoulder"/><feMergeNode in="crest"/></feMerge>
         </filter>
       </defs>
-      <path ref={rim} d={path(target)} transform={`translate(0 ${3.5*material.y*material.volume})`} fill="#8A67CC" opacity=".82"/>
+      {/* Extrusion follows the fixed camera, while illumination follows the shared light. */}
+      <path ref={rim} d={path(target)} transform={`translate(0 ${3.5*material.volume})`} fill={`url(#${uid}-side)`}/>
       <path ref={panel} d={path(target)} fill={`url(#${uid}-fill)`} filter={`url(#${uid}-bevel)`}/>
     </svg>
     <div ref={orb} className="sticker-notch-orb" style={{left:target}} aria-hidden="true"><div ref={orbIcon} className="sticker-notch-orb-icon"><img className="sticker-notch-clay-icon" src={displayedTab.icon} alt="" draggable={false}/>{'badge' in displayedTab && <span className="sticker-notch-badge">{displayedTab.badge}</span>}</div></div>

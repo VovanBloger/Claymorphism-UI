@@ -1,4 +1,5 @@
-import { materialBackground, materialShadow } from '../utils/materialStyle';
+import { materialBackground } from '../utils/materialStyle';
+import { computeLayerShadow, computeLayerShadowLayers } from '../utils/clayLayers';
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { resolveClayAssetPath } from '../utils/clayEngine';
@@ -39,6 +40,7 @@ function ClayBottomNavButton({
 
   return (
     <motion.button
+      data-clay-layer="control"
       type="button"
       onClick={onSelect}
       animate={
@@ -68,17 +70,19 @@ function ClayBottomNavButton({
     >
       {/* Inactive Subtle Hover/Base Layer */}
       <div
+        data-clay-layer="control"
         className="absolute inset-0 rounded-[26px] -z-20 transition-opacity duration-300"
         style={{
           opacity: active ? 0 : 1,
           background: materialBackground('linear-gradient(145deg, rgba(255,253,251,0.55) 0%, rgba(244,236,225,0.55) 100%)'),
           boxShadow:
-            materialShadow('inset 0 2px 4px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(216,200,184,0.45)'),
+            computeLayerShadowLayers('control', {shadowRgb:'95,75,140',edge:'#D8C8B8'}, .8).slice(2).join(', '),
         }}
       />
 
       {/* Active 3D Purple Clay Layer (Morphs in place without flying across buttons) */}
       <motion.div
+        data-clay-layer="control"
         initial={false}
         animate={{
           opacity: active ? 1 : 0,
@@ -92,12 +96,14 @@ function ClayBottomNavButton({
         style={{
           background: materialBackground('linear-gradient(145deg, #B49BF9 0%, #8B6CE6 58%, #7A58DB 100%)'),
           boxShadow:
-            materialShadow('0 5px 9px -3px rgba(98, 66, 189, 0.28), 0 2px 4px rgba(84, 54, 168, 0.15), inset 0 3.5px 6px rgba(255, 255, 255, 0.72), inset 0 -5px 9px #5B3BC0'),
+            computeLayerShadow('control', {shadowRgb:'98,66,189',edge:'#5B3BC0'}),
         }}
       />
 
       {/* 3D Clay Icon Medallion that squishes & morphs color in place */}
       <motion.div
+        data-clay-layer="detail"
+          data-clay-shape="disc"
         animate={
           phase === 'activating'
             ? {
@@ -122,9 +128,9 @@ function ClayBottomNavButton({
           background: materialBackground(active
             ? 'linear-gradient(145deg, #FFFDFB 0%, #F2E8DE 100%)'
             : `linear-gradient(145deg, ${item.badgeColor} 0%, #DECFFA 100%)`),
-          boxShadow: materialShadow(active
-            ? '3px 6px 12px -2px rgba(56, 34, 115, 0.42), inset 2px 2.5px 4px #FFFFFF, inset -2px -3px 5px #D8C7B8'
-            : '2px 5px 10px -2px rgba(95, 75, 140, 0.24), inset 2px 2px 3px rgba(255,255,255,0.9), inset -2px -2.5px 4px rgba(120,95,175,0.22)'),
+          boxShadow: computeLayerShadow('detail', active
+            ? {shadowRgb:'56,34,115',edge:'#D8C7B8'}
+            : {shadowRgb:'95,75,140',edge:'#BCA9D4'}),
         }}
       >
         <img
@@ -150,12 +156,14 @@ export function ClayBottomNav({
 }: ClayBottomNavProps) {
   return (
     <nav
+      data-clay-layer="foundation"
       aria-label={variant === 'floating-dock' ? 'Нижнее Clay-меню проекта' : 'Образец нижнего Clay-меню'}
       className={`relative grid ${items.length === 3 ? 'grid-cols-3' : 'grid-cols-2 md:grid-cols-4'} items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-[34px] select-none w-full max-w-4xl mx-auto`}
       style={{
-        background: materialBackground('linear-gradient(145deg, #FFFDFB 0%, #F4ECE1 100%)'),
+        background: `var(--clay-texture-image, none), ${materialBackground('linear-gradient(145deg, #FFFDFB 0%, #F4ECE1 100%)')}`,
+        backgroundBlendMode: 'soft-light, normal',
         boxShadow:
-          materialShadow('3px 8px 14px -4px rgba(105, 81, 130, 0.24), 1px 3px 5px -1px rgba(105, 81, 130, 0.12), inset 2px 3px 5px rgba(255, 255, 255, 0.98), inset -2px -4px 6px #E0D5E1'),
+          computeLayerShadow('foundation', {shadowRgb:'105,81,130',edge:'#E0D5E1'}, .85),
       }}
     >
       {items.map((item) => (

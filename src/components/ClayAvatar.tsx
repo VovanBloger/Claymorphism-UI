@@ -1,4 +1,5 @@
 import { materialBackground, materialFilter, materialShadow } from '../utils/materialStyle';
+import { computeLayerShadow } from '../utils/clayLayers';
 import React from 'react';
 import { CLAY_COLOR_PRESETS, ClayColorPresetId, resolveClayAssetPath } from '../utils/clayEngine';
 
@@ -77,9 +78,10 @@ export function ClayAvatar({
   const innerBottomR = Math.max(10, bottomR - cfg.rimPx);
   const innerBorderRadius = `${innerTopR}px ${innerTopR}px ${innerBottomR}px ${innerBottomR}px`;
 
-  const dropY = Math.round(depth * 1.3);
-  const dropBlur = Math.round(depth * 2.15);
   const insetDepth = Math.max(8, Math.round(depth * 0.78));
+  const frameBackground = materialBackground(presetId === 'purple-cta'
+    ? 'linear-gradient(145deg, #F5EEFF 0%, #B89EFA 44%, #7A58DE 100%)'
+    : `linear-gradient(145deg, ${preset.gradStart} 0%, ${preset.gradEnd} 100%)`);
 
   return (
     <div
@@ -89,8 +91,9 @@ export function ClayAvatar({
         onClick ? 'cursor-pointer group' : ''
       }`}
     >
-      {/* LAYER 1: Raised 3D Clay Outer Frame (Подложка-рамка с 4-слойным 3D-объёмом) */}
+      {/* Foundation: a broad frame around the separate recessed well. */}
       <div
+        data-clay-layer="foundation"
         className={`relative flex items-center justify-center transition-transform duration-300 overflow-visible ${
           onClick ? 'group-hover:scale-[1.03]' : ''
         }`}
@@ -99,20 +102,15 @@ export function ClayAvatar({
           height: `${cfg.frameH}px`,
           padding: `${cfg.rimPx}px`,
           borderRadius: outerBorderRadius,
-          background:
-            materialBackground(presetId === 'purple-cta'
-              ? 'linear-gradient(145deg, #F5EEFF 0%, #B89EFA 44%, #7A58DE 100%)'
-              : `linear-gradient(145deg, ${preset.gradStart} 0%, ${preset.gradEnd} 100%)`),
-          boxShadow: materialShadow(`
-            8px ${dropY}px ${dropBlur}px -4px rgba(${preset.outerShadowRgb}, 0.30),
-            3px 6px 12px -1px rgba(${preset.outerShadowRgb}, 0.16),
-            inset 3.5px 4.5px 7px rgba(255, 255, 255, 0.975),
-            inset -4px -7px 12px ${preset.innerDarkHex}
-          `),
+          background: `var(--clay-texture-image, none), ${frameBackground}`,
+          backgroundBlendMode: 'soft-light, normal',
+          boxShadow: computeLayerShadow('foundation', {shadowRgb: preset.outerShadowRgb, edge: preset.innerDarkHex}, Math.max(.6, Math.min(1.5, depth / 12))),
         }}
       >
         {/* LAYER 2: Deep Recessed Inner Substrate (Вдавленная подложка с глубокой внутренней тенью inset) */}
         <div
+          data-clay-layer="control"
+          data-clay-surface="recessed"
           className="w-full h-full relative overflow-hidden"
           style={{
             borderRadius: innerBorderRadius,
@@ -144,6 +142,7 @@ export function ClayAvatar({
           }}
         >
           <img
+            data-clay-layer="detail"
             src={resolveClayAssetPath(src)}
             alt={alt}
             referrerPolicy="no-referrer"
@@ -162,11 +161,12 @@ export function ClayAvatar({
         {/* Optional 3D Badge */}
         {badgeText && (
           <div
+            data-clay-layer="detail"
             className="absolute -bottom-2 -right-2 z-30 px-2.5 py-0.5 rounded-full text-[10px] font-black text-white tracking-wide"
             style={{
               background: materialBackground('linear-gradient(145deg, #62C4B2 0%, #46A896 100%)'),
               boxShadow:
-                materialShadow('2px 5px 10px rgba(32, 92, 80, 0.45), inset 1.5px 2px 3px rgba(255, 255, 255, 0.8), inset -2px -3px 4px #2E7D6E'),
+                computeLayerShadow('detail', {shadowRgb:'32,92,80',edge:'#2E7D6E'}),
             }}
           >
             {badgeText}

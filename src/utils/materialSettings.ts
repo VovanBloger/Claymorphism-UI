@@ -1,9 +1,12 @@
-export type ClayLightDirection = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+import { clayTextureBackground, DEFAULT_CLAY_TEXTURE_INTENSITY, MAX_CLAY_TEXTURE_INTENSITY, type ClayTextureDirection } from './clayTexture';
+
+export type ClayLightDirection = ClayTextureDirection;
 
 export interface MaterialSettings {
   volume: number;
   shadowSoftness: number;
   shadowStrength: number;
+  textureIntensity: number;
   light: ClayLightDirection;
 }
 
@@ -12,6 +15,7 @@ export const DEFAULT_MATERIAL_SETTINGS: Readonly<MaterialSettings> = Object.free
   volume: 1,
   shadowSoftness: 1,
   shadowStrength: 1,
+  textureIntensity: DEFAULT_CLAY_TEXTURE_INTENSITY,
   light: 'top-left',
 });
 
@@ -22,9 +26,9 @@ export const CLAY_LIGHT_DIRECTIONS: { value: ClayLightDirection; label: string; 
   { value: 'bottom-right', label: 'Снизу справа', arrow: '↘' },
 ];
 
-const bounded = (value: unknown, min: number, max: number, fallback: number) =>
+const bounded = (value: unknown, min: number, max: number, fallback: number, precision = 2) =>
   typeof value === 'number' && Number.isFinite(value)
-    ? Math.round(Math.min(max, Math.max(min, value)) * 100) / 100
+    ? Math.round(Math.min(max, Math.max(min, value)) * 10 ** precision) / 10 ** precision
     : fallback;
 
 /** Treat persisted preferences as untrusted data, including old or malformed schemas. */
@@ -36,6 +40,7 @@ export function normalizeMaterialSettings(value: unknown): MaterialSettings {
     volume: bounded(input.volume, 0.6, 1.5, 1),
     shadowSoftness: bounded(input.shadowSoftness, 0.6, 1.5, 1),
     shadowStrength: bounded(input.shadowStrength, 0.5, 1.5, 1),
+    textureIntensity: bounded(input.textureIntensity, 0, MAX_CLAY_TEXTURE_INTENSITY, DEFAULT_CLAY_TEXTURE_INTENSITY, 3),
     light: CLAY_LIGHT_DIRECTIONS.some(direction => direction.value === input.light)
       ? input.light as ClayLightDirection
       : 'top-left',
@@ -52,6 +57,7 @@ export function getMaterialVariables(value: MaterialSettings): Record<string, st
     '--clay-volume': String(settings.volume),
     '--clay-shadow-softness': String(settings.shadowSoftness),
     '--clay-shadow-strength': String(settings.shadowStrength),
+    '--clay-texture-image': clayTextureBackground(settings.light, settings.textureIntensity),
     '--clay-light-x': sourceRight ? '-1' : '1',
     '--clay-light-y': sourceBottom ? '-1' : '1',
     '--clay-light-angle': `${angle}deg`,

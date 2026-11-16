@@ -1,0 +1,158 @@
+{
+  "current": {
+    "image_size": [
+      574,
+      415
+    ],
+    "anchors": {
+      "path": "C:/Users/vovan/AppData/Local/Temp/codex-clipboard-8fc59830-ad56-473e-97a1-31128e349d98.png",
+      "board": [
+        102,
+        25,
+        443,
+        373
+      ],
+      "button": [
+        133,
+        174,
+        410,
+        259
+      ],
+      "left_y": [
+        152,
+        158
+      ],
+      "button_x": [
+        174,
+        184
+      ],
+      "bottom_x": [
+        354,
+        362
+      ]
+    },
+    "board_size": [
+      341,
+      348
+    ],
+    "button_size": [
+      277,
+      85
+    ],
+    "left_edge_luma": 244.83313333333334,
+    "left_crest_x": 102,
+    "left_crest_offset_px": 0,
+    "left_crest_offset_percent_board_width": 0.0,
+    "left_crest_luma": 244.83313333333334,
+    "left_face_luma": 200.61105416666666,
+    "left_crest_half_excess_width_px": 4,
+    "button_top_edge_luma": 244.6916,
+    "button_crest_y": 174,
+    "button_crest_offset_px": 0,
+    "button_crest_offset_percent_height": 0.0,
+    "button_crest_luma": 244.6916,
+    "button_crest_half_excess_width_px": 4,
+    "button_face_rgb": [
+      255,
+      159.6,
+      151.61333333333334
+    ],
+    "button_face_luma": 179.30540266666665,
+    "button_darkest_inner_y": 257,
+    "button_darkest_inner_luma": 141.802,
+    "board_face_upper_rgb": [
+      209.14,
+      176.16,
+      246.52
+    ],
+    "board_face_lower_rgb": [
+      198.78,
+      161.68,
+      242.03
+    ],
+    "board_face_upper_luma": 188.25153999999998,
+    "board_face_lower_luma": 175.36873,
+    "board_face_luma_change": -12.882809999999978,
+    "board_cast_darkest_y": 373,
+    "board_cast_darkest_luma": 219.7156,
+    "board_last_visible_cast_luma": 249.6032
+  },
+  "reference": {
+    "image_size": [
+      575,
+      420
+    ],
+    "anchors": {
+      "path": "C:/Users/vovan/AppData/Local/Temp/codex-clipboard-893c9e12-f001-480b-b0b7-3fe0f0b1cab1.png",
+      "board": [
+        184,
+        18,
+        545,
+        390
+      ],
+      "button": [
+        232,
+        183,
+        493,
+        272
+      ],
+      "left_y": [
+        169,
+        175
+      ],
+      "button_x": [
+        271,
+        279
+      ],
+      "bottom_x": [
+        450,
+        458
+      ]
+    },
+    "board_size": [
+      361,
+      372
+    ],
+    "button_size": [
+      261,
+      89
+    ],
+    "left_edge_luma": 207.08769999999998,
+    "left_crest_x": 194,
+    "left_crest_offset_px": 10,
+    "left_crest_offset_percent_board_width": 2.770083102493075,
+    "left_crest_luma": 250.35119999999998,
+    "left_face_luma": 211.7344,
+    "left_crest_half_excess_width_px": 11,
+    "button_top_edge_luma": 204.5975,
+    "button_crest_y": 189,
+    "button_crest_offset_px": 6,
+    "button_crest_offset_percent_height": 6.741573033707865,
+    "button_crest_luma": 243.120725,
+    "button_crest_half_excess_width_px": 8,
+    "button_face_rgb": [
+      254.65,
+      158.93333333333334,
+      152.05
+    ],
+    "button_face_luma": 178.78572,
+    "button_darkest_inner_y": 271,
+    "button_darkest_inner_luma": 146.3518,
+    "board_face_upper_rgb": [
+      221.94545454545454,
+      195.9909090909091,
+      254.87272727272727
+    ],
+    "board_face_lower_rgb": [
+      221.9090909090909,
+      196.25454545454545,
+      254.61818181818182
+    ],
+    "board_face_upper_luma": 205.76011272727274,
+    "board_face_lower_luma": 205.92255636363635,
+    "board_face_luma_change": 0.16244363636360504,
+    "board_cast_darkest_y": 390,
+    "board_cast_darkest_luma": 131.06905,
+    "board_last_visible_cast_luma": 250.935625
+  }
+}
