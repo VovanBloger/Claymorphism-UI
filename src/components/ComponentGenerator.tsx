@@ -1,3 +1,4 @@
+import { materialBackground, materialShadow } from '../utils/materialStyle';
 import notchSource from './StickerNotchNav.tsx?raw';
 import notchMathSource from '../utils/notchMath.ts?raw';
 import notchCss from './sticker-notch-nav.css?raw';
@@ -186,9 +187,9 @@ function ClayArchetypeTile({
         className="absolute inset-0 rounded-[22px] -z-20 transition-opacity duration-300"
         style={{
           opacity: active ? 0 : 1,
-          background: 'linear-gradient(145deg, #FFFDFB 0%, #F5EDE4 100%)',
+          background: materialBackground('linear-gradient(145deg, #FFFDFB 0%, #F5EDE4 100%)'),
           boxShadow:
-            '3px 8px 16px -4px rgba(95, 75, 140, 0.18), inset 2px 3px 5px rgba(255,255,255,0.98), inset -3px -4px 7px #DACBBE',
+            materialShadow('3px 8px 16px -4px rgba(95, 75, 140, 0.18), inset 2px 3px 5px rgba(255,255,255,0.98), inset -3px -4px 7px #DACBBE'),
         }}
       />
 
@@ -204,9 +205,9 @@ function ClayArchetypeTile({
         }}
         className="absolute inset-0 rounded-[22px] -z-10 pointer-events-none"
         style={{
-          background: 'linear-gradient(145deg, #B49BF9 0%, #8E6FE8 100%)',
+          background: materialBackground('linear-gradient(145deg, #B49BF9 0%, #8E6FE8 100%)'),
           boxShadow:
-            '5px 14px 24px -5px rgba(98, 66, 189, 0.48), 2px 5px 10px rgba(98, 66, 189, 0.28), inset 3px 3.5px 6px rgba(255,255,255,0.74), inset -4px -5px 8px #6343C4',
+            materialShadow('5px 14px 24px -5px rgba(98, 66, 189, 0.48), 2px 5px 10px rgba(98, 66, 189, 0.28), inset 3px 3.5px 6px rgba(255,255,255,0.74), inset -4px -5px 8px #6343C4'),
         }}
       />
 
@@ -288,9 +289,9 @@ function ClayInPlaceTabButton({
         }}
         className={`absolute inset-0 ${radiusClass} -z-10 pointer-events-none`}
         style={{
-          background: 'linear-gradient(145deg, #AD94F9 0%, #8E6FE8 100%)',
+          background: materialBackground('linear-gradient(145deg, #AD94F9 0%, #8E6FE8 100%)'),
           boxShadow:
-            '3px 8px 16px -3px rgba(114, 82, 209, 0.48), inset 2px 3px 5px rgba(255,255,255,0.7), inset -3px -4px 7px #5E3EBA',
+            materialShadow('3px 8px 16px -3px rgba(114, 82, 209, 0.48), inset 2px 3px 5px rgba(255,255,255,0.7), inset -3px -4px 7px #5E3EBA'),
         }}
       />
       <span className={active ? 'clay-sidebar-text-3d' : ''}>{label}</span>
@@ -439,17 +440,17 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                       isSelected ? 'ring-2 ring-[#6D4CE3]' : ''
                     }`}
                     style={{
-                      background: `linear-gradient(145deg, ${p.gradStart} 0%, ${p.gradEnd} 100%)`,
+                      background: materialBackground(`linear-gradient(145deg, ${p.gradStart} 0%, ${p.gradEnd} 100%)`),
                       color: p.textHex,
-                      boxShadow: `3px 8px 16px -3px rgba(${p.outerShadowRgb}, 0.28), inset 2px 2.5px 4px ${p.innerLightRgba}, inset -2px -3px 6px ${p.innerDarkHex}`,
+                      boxShadow: materialShadow(`3px 8px 16px -3px rgba(${p.outerShadowRgb}, 0.28), inset 2px 2.5px 4px ${p.innerLightRgba}, inset -2px -3px 6px ${p.innerDarkHex}`),
                     }}
                   >
                     <div className="flex items-center justify-between">
                       <div
                         className="w-5 h-5 rounded-full"
                         style={{
-                          background: p.badgeBgHex,
-                          boxShadow: 'inset 1px 1.5px 2px rgba(255,255,255,0.7), 1px 2px 4px rgba(0,0,0,0.15)',
+                          background: materialBackground(p.badgeBgHex),
+                          boxShadow: materialShadow('inset 1px 1.5px 2px rgba(255,255,255,0.7), 1px 2px 4px rgba(0,0,0,0.15)'),
                         }}
                       />
                       {isSelected && (
@@ -497,9 +498,9 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
           <div
             className="space-y-4 p-4 rounded-[26px]"
             style={{
-              background: 'linear-gradient(145deg, #FCF5F7 0%, #F2EBF8 100%)',
+              background: materialBackground('linear-gradient(145deg, #FCF5F7 0%, #F2EBF8 100%)'),
               boxShadow:
-                'inset 2px 3px 7px rgba(140, 110, 170, 0.18), inset -2px -3px 6px rgba(255, 255, 255, 0.9)',
+                materialShadow('inset 2px 3px 7px rgba(140, 110, 170, 0.18), inset -2px -3px 6px rgba(255, 255, 255, 0.9)'),
             }}
           >
             <span className="text-xs font-extrabold text-[#7B5CE6] block">
@@ -749,23 +750,23 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
             <div
               className="rounded-[28px] p-6 md:p-10 min-h-[360px] flex items-center justify-center relative"
               style={{
-                background: 'linear-gradient(145deg, #F6EFFA 0%, #E5DAFF 50%, #D5C4FA 100%)',
+                background: materialBackground('linear-gradient(145deg, #F6EFFA 0%, #E5DAFF 50%, #D5C4FA 100%)'),
                 boxShadow:
-                  'inset 3px 6px 14px rgba(96, 70, 166, 0.22), inset -3px -4px 10px rgba(255, 255, 255, 0.8)',
+                  materialShadow('inset 3px 6px 14px rgba(96, 70, 166, 0.22), inset -3px -4px 10px rgba(255, 255, 255, 0.8)'),
               }}
             >
               <div className="w-full flex justify-center">
-                {REFERENCE_ELEMENTS.some(item=>item.id===config.componentType) && <div className="ref-element-wrapper" style={{background:computed.background,borderRadius:computed.borderRadius,padding:config.physics.padding,boxShadow:computed.boxShadow}}><ReferenceElement key={config.componentType} kind={config.componentType as ReferenceElementKind} title={config.titleText || undefined}/></div>}
+                {REFERENCE_ELEMENTS.some(item=>item.id===config.componentType) && <div className="ref-element-wrapper" style={{background:materialBackground(computed.background),borderRadius:computed.borderRadius,padding:config.physics.padding,boxShadow:materialShadow(computed.boxShadow)}}><ReferenceElement key={config.componentType} kind={config.componentType as ReferenceElementKind} title={config.titleText || undefined}/></div>}
                 {/* 0. 3D CLAY AVATAR WITH RECESSED INSET SUBSTRATE & POP-OUT OVERHANG */}
                 {config.componentType === 'clay-avatar' && (
                   <div
                     className="w-full max-w-sm flex flex-col items-center text-center gap-3 select-none overflow-visible"
                     style={{
-                      background: computed.background,
+                      background: materialBackground(computed.background),
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
-                      boxShadow: computed.boxShadow,
+                      boxShadow: materialShadow(computed.boxShadow),
                     }}
                   >
                     <ClayAvatar
@@ -794,11 +795,11 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                     <div
                       className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6 overflow-visible"
                       style={{
-                        background: computed.background,
+                        background: materialBackground(computed.background),
                         borderRadius: computed.borderRadius,
                         padding: `${config.physics.padding}px`,
                         color: computed.textColor,
-                        boxShadow: computed.boxShadow,
+                        boxShadow: materialShadow(computed.boxShadow),
                       }}
                     >
                       <div className="relative z-30 shrink-0 -mt-8 -mb-7">
@@ -874,11 +875,11 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                   <div
                     className="w-full max-w-md space-y-5"
                     style={{
-                      background: 'linear-gradient(145deg, #FCEFF3 0%, #EFE8FA 100%)',
+                      background: materialBackground('linear-gradient(145deg, #FCEFF3 0%, #EFE8FA 100%)'),
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
-                      boxShadow: computed.boxShadow,
+                      boxShadow: materialShadow(computed.boxShadow),
                     }}
                   >
                     <div className="space-y-1.5">
@@ -942,11 +943,11 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                   <div
                     className="w-full max-w-lg space-y-3.5"
                     style={{
-                      background: computed.background,
+                      background: materialBackground(computed.background),
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
-                      boxShadow: computed.boxShadow,
+                      boxShadow: materialShadow(computed.boxShadow),
                     }}
                   >
                     <ClayToggle
@@ -985,19 +986,19 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                   <div
                     className="w-full max-w-[240px] select-none"
                     style={{
-                      background: computed.background,
+                      background: materialBackground(computed.background),
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
-                      boxShadow: computed.boxShadow,
+                      boxShadow: materialShadow(computed.boxShadow),
                     }}
                   >
                     <div
                       className="w-14 h-14 flex items-center justify-center mb-4"
                       style={{
-                        background: `linear-gradient(145deg, ${activePreset.badgeBgHex} 0%, ${activePreset.innerDarkHex} 100%)`,
+                        background: materialBackground(`linear-gradient(145deg, ${activePreset.badgeBgHex} 0%, ${activePreset.innerDarkHex} 100%)`),
                         borderRadius: `${Math.min(18, computed.innerChildRadius)}px`,
-                        boxShadow: `4px 10px 18px -3px rgba(${activePreset.outerShadowRgb}, 0.42), 2px 4px 8px rgba(${activePreset.outerShadowRgb}, 0.24), inset 2.5px 3px 5px rgba(255,255,255,0.78), inset -3px -4px 7px rgba(0,0,0,0.2)`,
+                        boxShadow: materialShadow(`4px 10px 18px -3px rgba(${activePreset.outerShadowRgb}, 0.42), 2px 4px 8px rgba(${activePreset.outerShadowRgb}, 0.24), inset 2.5px 3px 5px rgba(255,255,255,0.78), inset -3px -4px 7px rgba(0,0,0,0.2)`),
                       }}
                     >
                       <img
@@ -1022,10 +1023,10 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                       <div
                         className="w-full flex items-center pl-16 pr-5 py-4"
                         style={{
-                          background: computed.background,
+                          background: materialBackground(computed.background),
                           borderRadius: computed.borderRadius,
                           color: computed.textColor,
-                          boxShadow: computed.boxShadow,
+                          boxShadow: materialShadow(computed.boxShadow),
                         }}
                       >
                         <input
@@ -1040,9 +1041,9 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                       <div
                         className="absolute left-1.5 w-12 h-12 rounded-full flex items-center justify-center pointer-events-none"
                         style={{
-                          background: 'linear-gradient(145deg, #B298FA 0%, #8C6DE6 100%)',
+                          background: materialBackground('linear-gradient(145deg, #B298FA 0%, #8C6DE6 100%)'),
                           boxShadow:
-                            '3px 8px 14px -2px rgba(98, 66, 189, 0.48), inset 2px 3px 5px rgba(255,255,255,0.75), inset -3px -4px 6px rgba(79, 49, 166, 0.72)',
+                            materialShadow('3px 8px 14px -2px rgba(98, 66, 189, 0.48), inset 2px 3px 5px rgba(255,255,255,0.75), inset -3px -4px 6px rgba(79, 49, 166, 0.72)'),
                         }}
                       >
                         <img
@@ -1061,11 +1062,11 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                   <div
                     className="w-full max-w-md"
                     style={{
-                      background: computed.background,
+                      background: materialBackground(computed.background),
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
-                      boxShadow: computed.boxShadow,
+                      boxShadow: materialShadow(computed.boxShadow),
                     }}
                   >
                     <div className="flex items-center justify-between mb-5">
@@ -1105,8 +1106,8 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                               }`}
                               style={{
                                 height: bar.h,
-                                background: bar.grad,
-                                boxShadow: `2px 6px 10px -2px rgba(90,70,130,0.3), inset 2px 3px 4px rgba(255,255,255,0.8), inset -2px -4px 6px ${bar.shadow}`,
+                                background: materialBackground(bar.grad),
+                                boxShadow: materialShadow(`2px 6px 10px -2px rgba(90,70,130,0.3), inset 2px 3px 4px rgba(255,255,255,0.8), inset -2px -4px 6px ${bar.shadow}`),
                               }}
                             />
                           </div>
@@ -1122,11 +1123,11 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                   <div
                     className="w-full max-w-md"
                     style={{
-                      background: computed.background,
+                      background: materialBackground(computed.background),
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
-                      boxShadow: computed.boxShadow,
+                      boxShadow: materialShadow(computed.boxShadow),
                     }}
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -1142,9 +1143,9 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                         className="w-36 h-36 rounded-full flex items-center justify-center relative shrink-0"
                         style={{
                           background:
-                            'conic-gradient(#9D82F2 0% 45%, #F294A8 45% 70%, #F7CE68 70% 85%, #95D17B 85% 95%, #79B4EC 95% 100%)',
+                            materialBackground('conic-gradient(#9D82F2 0% 45%, #F294A8 45% 70%, #F7CE68 70% 85%, #95D17B 85% 95%, #79B4EC 95% 100%)'),
                           boxShadow:
-                            '6px 14px 24px -4px rgba(95, 75, 140, 0.34), inset 4px 5px 8px rgba(255, 255, 255, 0.8), inset -4px -7px 10px rgba(70, 50, 120, 0.38)',
+                            materialShadow('6px 14px 24px -4px rgba(95, 75, 140, 0.34), inset 4px 5px 8px rgba(255, 255, 255, 0.8), inset -4px -7px 10px rgba(70, 50, 120, 0.38)'),
                         }}
                       >
                         <div
@@ -1152,9 +1153,9 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                           style={{
                             width: '72px',
                             height: '72px',
-                            background: computed.background,
+                            background: materialBackground(computed.background),
                             boxShadow:
-                              'inset 3px 5px 8px rgba(95, 75, 140, 0.28), 0 3px 6px rgba(255, 255, 255, 0.9)',
+                              materialShadow('inset 3px 5px 8px rgba(95, 75, 140, 0.28), 0 3px 6px rgba(255, 255, 255, 0.9)'),
                           }}
                         >
                           100%
@@ -1174,9 +1175,9 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                               <span
                                 className="w-3.5 h-3.5 rounded-full inline-block"
                                 style={{
-                                  background: g.color,
+                                  background: materialBackground(g.color),
                                   boxShadow:
-                                    '1px 2px 4px rgba(0,0,0,0.18), inset 1px 1.5px 2px rgba(255,255,255,0.85), inset -1px -2px 3px rgba(0,0,0,0.22)',
+                                    materialShadow('1px 2px 4px rgba(0,0,0,0.18), inset 1px 1.5px 2px rgba(255,255,255,0.85), inset -1px -2px 3px rgba(0,0,0,0.22)'),
                                 }}
                               />
                               <span>{g.label}</span>
@@ -1195,11 +1196,11 @@ export function ComponentGenerator({ config, onChangeConfig }: ComponentGenerato
                   <div
                     className="w-full max-w-md flex items-center justify-between gap-4"
                     style={{
-                      background: computed.background,
+                      background: materialBackground(computed.background),
                       borderRadius: computed.borderRadius,
                       padding: `${config.physics.padding}px`,
                       color: computed.textColor,
-                      boxShadow: computed.boxShadow,
+                      boxShadow: materialShadow(computed.boxShadow),
                     }}
                   >
                     <div className="flex items-center gap-4">

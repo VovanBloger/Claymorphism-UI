@@ -23,112 +23,69 @@
 
 /* Soft Matte Clay Surface Texture & Crisp Directional 3D Extrusion Utilities */
 .clay-board {
-  background: linear-gradient(145deg, #FFFDF9 0%, #F6EDE3 100%);
-  box-shadow:
-    8px 24px 44px -10px rgba(68, 46, 126, 0.32),
-    3px 8px 16px -3px rgba(68, 46, 126, 0.22),
-    inset 3px 4px 7px rgba(255, 255, 255, 0.98),
-    inset -4px -7px 12px #D5C4B2;
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg), #FFFDF9 0%, #F6EDE3 100%);
+  box-shadow:calc(8px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(24px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(44px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-10px * var(--clay-volume, 1)) rgba(68, 46, 126, calc(0.32 * var(--clay-shadow-strength, 1))), calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(16px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-3px * var(--clay-volume, 1)) rgba(68, 46, 126, calc(0.22 * var(--clay-shadow-strength, 1))), inset calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(7px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.98), inset calc(-4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-7px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #D5C4B2;
 }
 
 .clay-sidebar-purple {
-  background: linear-gradient(160deg, #B69EFA 0%, #9678EB 52%, #8262DC 100%);
-  box-shadow:
-    10px 12px 24px -4px rgba(52, 32, 110, 0.38),
-    4px 5px 10px -1px rgba(45, 26, 98, 0.28),
-    -4px 8px 18px -4px rgba(62, 40, 124, 0.24),
-    inset 4px 4px 7px rgba(255, 255, 255, 0.68),
-    inset -5px -8px 12px #6345C0;
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 25deg), #B69EFA 0%, #9678EB 52%, #8262DC 100%);
+  box-shadow:calc(10px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(24px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-4px * var(--clay-volume, 1)) rgba(52, 32, 110, calc(0.38 * var(--clay-shadow-strength, 1))), calc(4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(10px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-1px * var(--clay-volume, 1)) rgba(45, 26, 98, calc(0.28 * var(--clay-shadow-strength, 1))), calc(-4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(18px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-4px * var(--clay-volume, 1)) rgba(62, 40, 124, calc(0.24 * var(--clay-shadow-strength, 1))), inset calc(4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(7px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.68), inset calc(-5px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-8px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #6345C0;
 }
 
 .clay-card-cream {
-  background: linear-gradient(145deg, #FFFDFB 0%, #F4ECE2 100%);
-  box-shadow:
-    6px 16px 26px -5px rgba(82, 60, 134, 0.26),
-    2px 6px 12px -2px rgba(82, 60, 134, 0.18),
-    inset 3px 4px 6px rgba(255, 255, 255, 0.98),
-    inset -4px -6px 10px #D5C4B3;
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg), #FFFDFB 0%, #F4ECE2 100%);
+  box-shadow:calc(6px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(16px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(26px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-5px * var(--clay-volume, 1)) rgba(82, 60, 134, calc(0.26 * var(--clay-shadow-strength, 1))), calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(6px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-2px * var(--clay-volume, 1)) rgba(82, 60, 134, calc(0.18 * var(--clay-shadow-strength, 1))), inset calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(6px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.98), inset calc(-4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-6px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(10px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #D5C4B3;
 }
 
 .clay-card-lavender {
-  background: linear-gradient(145deg, #EFE7FF 0%, #DAC8FA 100%);
-  box-shadow:
-    6px 16px 28px -5px rgba(98, 70, 168, 0.30),
-    2px 6px 12px -2px rgba(98, 70, 168, 0.20),
-    inset 3px 4px 7px rgba(255, 255, 255, 0.92),
-    inset -4px -7px 12px #BDA6EC;
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg), #EFE7FF 0%, #DAC8FA 100%);
+  box-shadow:calc(6px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(16px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(28px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-5px * var(--clay-volume, 1)) rgba(98, 70, 168, calc(0.30 * var(--clay-shadow-strength, 1))), calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(6px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-2px * var(--clay-volume, 1)) rgba(98, 70, 168, calc(0.20 * var(--clay-shadow-strength, 1))), inset calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(7px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.92), inset calc(-4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-7px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #BDA6EC;
 }
 
 .clay-card-peach {
-  background: linear-gradient(145deg, #FFEDE6 0%, #FAD3C6 100%);
-  box-shadow:
-    6px 16px 28px -5px rgba(168, 98, 86, 0.28),
-    2px 6px 12px -2px rgba(168, 98, 86, 0.18),
-    inset 3px 4px 7px rgba(255, 255, 255, 0.94),
-    inset -4px -7px 12px #E5B2A3;
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg), #FFEDE6 0%, #FAD3C6 100%);
+  box-shadow:calc(6px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(16px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(28px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-5px * var(--clay-volume, 1)) rgba(168, 98, 86, calc(0.28 * var(--clay-shadow-strength, 1))), calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(6px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-2px * var(--clay-volume, 1)) rgba(168, 98, 86, calc(0.18 * var(--clay-shadow-strength, 1))), inset calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(7px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.94), inset calc(-4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-7px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #E5B2A3;
 }
 
 .clay-card-butter {
-  background: linear-gradient(145deg, #FFF8E3 0%, #FCE5B4 100%);
-  box-shadow:
-    6px 16px 28px -5px rgba(166, 132, 64, 0.28),
-    2px 6px 12px -2px rgba(166, 132, 64, 0.18),
-    inset 3px 4px 7px rgba(255, 255, 255, 0.95),
-    inset -4px -7px 12px #E3C68A;
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg), #FFF8E3 0%, #FCE5B4 100%);
+  box-shadow:calc(6px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(16px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(28px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-5px * var(--clay-volume, 1)) rgba(166, 132, 64, calc(0.28 * var(--clay-shadow-strength, 1))), calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(6px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-2px * var(--clay-volume, 1)) rgba(166, 132, 64, calc(0.18 * var(--clay-shadow-strength, 1))), inset calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(7px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.95), inset calc(-4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-7px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #E3C68A;
 }
 
 .clay-card-sky {
-  background: linear-gradient(145deg, #ECF4FF 0%, #D2E3FA 100%);
-  box-shadow:
-    6px 16px 28px -5px rgba(80, 114, 168, 0.28),
-    2px 6px 12px -2px rgba(80, 114, 168, 0.18),
-    inset 3px 4px 7px rgba(255, 255, 255, 0.94),
-    inset -4px -7px 12px #B0C8EB;
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg), #ECF4FF 0%, #D2E3FA 100%);
+  box-shadow:calc(6px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(16px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(28px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-5px * var(--clay-volume, 1)) rgba(80, 114, 168, calc(0.28 * var(--clay-shadow-strength, 1))), calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(6px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-2px * var(--clay-volume, 1)) rgba(80, 114, 168, calc(0.18 * var(--clay-shadow-strength, 1))), inset calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(7px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.94), inset calc(-4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-7px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #B0C8EB;
 }
 
 .clay-recessed-input {
-  background: linear-gradient(145deg, #EAE0D5 0%, #FAF5EF 100%);
-  box-shadow:
-    inset 3px 4px 8px rgba(148, 132, 118, 0.54),
-    inset -2px -3px 6px rgba(255, 255, 255, 0.96),
-    0 2px 4px rgba(255, 255, 255, 0.88);
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg), #EAE0D5 0%, #FAF5EF 100%);
+  box-shadow:inset calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(148, 132, 118, 0.54), inset calc(-2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(6px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.96), calc(0px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, calc(0.88 * var(--clay-shadow-strength, 1)));
 }
 
 .clay-btn-purple {
-  background: linear-gradient(145deg, #B299FA 0%, #8B6CE8 100%);
-  box-shadow:
-    4px 10px 20px -3px rgba(96, 64, 192, 0.50),
-    2px 4px 8px -1px rgba(74, 46, 160, 0.36),
-    inset 2.5px 3.5px 5px rgba(255, 255, 255, 0.75),
-    inset -3px -5px 8px #5B3BC0;
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg), #B299FA 0%, #8B6CE8 100%);
+  box-shadow:calc(4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(10px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(20px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-3px * var(--clay-volume, 1)) rgba(96, 64, 192, calc(0.50 * var(--clay-shadow-strength, 1))), calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-1px * var(--clay-volume, 1)) rgba(74, 46, 160, calc(0.36 * var(--clay-shadow-strength, 1))), inset calc(2.5px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(3.5px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.75), inset calc(-3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-5px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #5B3BC0;
   transition: filter 160ms ease, box-shadow 160ms ease, transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .clay-btn-purple:hover {
-  filter: brightness(1.04);
+  filter:brightness(1.04);
 }
 
 .clay-btn-purple:active {
   transform: translateY(1px);
-  box-shadow:
-    2px 4px 8px -2px rgba(96, 64, 192, 0.38),
-    inset 3px 4px 7px rgba(64, 38, 142, 0.62),
-    inset -2px -3px 5px rgba(255, 255, 255, 0.45);
+  box-shadow:calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-2px * var(--clay-volume, 1)) rgba(96, 64, 192, calc(0.38 * var(--clay-shadow-strength, 1))), inset calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(7px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(64, 38, 142, 0.62), inset calc(-2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.45);
 }
 
 .clay-btn-rose {
-  background: linear-gradient(145deg, #FA9CB0 0%, #E66B86 100%);
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg), #FA9CB0 0%, #E66B86 100%);
   color: #FFFFFF;
-  box-shadow:
-    4px 10px 18px -3px rgba(184, 72, 98, 0.48),
-    2px 4px 8px -1px rgba(160, 56, 82, 0.32),
-    inset 2.5px 3px 5px rgba(255, 255, 255, 0.76),
-    inset -3px -5px 8px #C24663;
+  box-shadow:calc(4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(10px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(18px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-3px * var(--clay-volume, 1)) rgba(184, 72, 98, calc(0.48 * var(--clay-shadow-strength, 1))), calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-1px * var(--clay-volume, 1)) rgba(160, 56, 82, calc(0.32 * var(--clay-shadow-strength, 1))), inset calc(2.5px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, 0.76), inset calc(-3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-5px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #C24663;
   transition: filter 160ms ease, transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .clay-btn-rose:hover {
-  filter: brightness(1.04);
+  filter:brightness(1.04);
 }
 
 .clay-squish {
@@ -154,9 +111,8 @@
 
 /* Crisp 3D elevation for icons sitting inside square badges or on the sidebar */
 .clay-icon-3d {
-  filter:
-    drop-shadow(1.5px 3.5px 3.5px rgba(38, 22, 84, 0.38))
-    drop-shadow(0px 1px 1.5px rgba(38, 22, 84, 0.24));
+  filter:drop-shadow(calc(1.5px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(3.5px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(3.5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(38, 22, 84, calc(0.38 * var(--clay-shadow-strength, 1))))
+    drop-shadow(calc(0px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(1px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(1.5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(38, 22, 84, calc(0.24 * var(--clay-shadow-strength, 1))));
 }
 
 .clay-sidebar-text-3d {
@@ -174,15 +130,15 @@
 /* Native Clay scrollbars: same light, bevel and pastel material as the UI. */
 :root {--clay-scroll-size:14px;--clay-scroll-track:#F1E8F8;--clay-scroll-thumb:#B598DC}
 ::-webkit-scrollbar {width:var(--clay-scroll-size);height:var(--clay-scroll-size)}
-::-webkit-scrollbar-track {background:linear-gradient(135deg,#F7F0FB,var(--clay-scroll-track));border-radius:999px;box-shadow:inset 1px 2px 3px #9e7abc26; margin:8px}
-::-webkit-scrollbar-thumb {min-height:44px;min-width:44px;border:3px solid transparent;border-radius:999px;background:linear-gradient(135deg,#DDCAF5,#B598DC 65%,#A382CC);background-clip:padding-box;box-shadow:inset 1px 2px 2px #ffffffb3,inset -1px -2px 2px #8e6bb24d}
-::-webkit-scrollbar-thumb:hover {background:linear-gradient(135deg,#D4BAF2,#A887D3 65%,#9672C3);background-clip:padding-box}
-::-webkit-scrollbar-thumb:active {background:linear-gradient(135deg,#C3A4E5,#9570BF);background-clip:padding-box}
+::-webkit-scrollbar-track {background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 0deg),#F7F0FB,var(--clay-scroll-track));border-radius:999px;box-shadow:inset calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #9e7abc26; margin:8px}
+::-webkit-scrollbar-thumb {min-height:44px;min-width:44px;border:3px solid transparent;border-radius:999px;background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 0deg),#DDCAF5,#B598DC 65%,#A382CC);background-clip:padding-box;box-shadow:inset calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #ffffffb3, inset calc(-1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #8e6bb24d}
+::-webkit-scrollbar-thumb:hover {background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 0deg),#D4BAF2,#A887D3 65%,#9672C3);background-clip:padding-box}
+::-webkit-scrollbar-thumb:active {background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 0deg),#C3A4E5,#9570BF);background-clip:padding-box}
 ::-webkit-scrollbar-corner {background:transparent}
 ::-webkit-scrollbar-button {display:none;width:0;height:0}
 @supports not selector(::-webkit-scrollbar) {* {scrollbar-width:thin;scrollbar-color:var(--clay-scroll-thumb) var(--clay-scroll-track)}}
 @media (forced-colors:active) {* {scrollbar-color:auto}}
-.clay-scroll-demo {height:252px;overflow-y:scroll;overflow-x:hidden;scrollbar-gutter:stable;border-radius:24px;padding:14px;background:linear-gradient(145deg,#F0E7F6,#FBF7FD);box-shadow:inset 2px 3px 6px #9d80af26,inset -1px -2px 4px #fff;overscroll-behavior:contain}
+.clay-scroll-demo {height:252px;overflow-y:scroll;overflow-x:hidden;scrollbar-gutter:stable;border-radius:24px;padding:14px;background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg),#F0E7F6,#FBF7FD);box-shadow:inset calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(6px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #9d80af26, inset calc(-1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #fff;overscroll-behavior:contain}
 .clay-scroll-demo:focus-visible {outline:3px solid #74529f;outline-offset:4px}
 .clay-scroll-demo > * + * {margin-top:12px}
 
@@ -190,35 +146,35 @@
 body {font-family:var(--font-display);background:#f8f5fa}
 .clay-board,.clay-card-cream,.clay-card-lavender,.clay-card-peach,.clay-card-butter,.clay-card-sky,.clay-sidebar-purple,.clay-btn-purple,.clay-btn-rose {
   --surface-top:#fffdfc;--surface-bottom:#f8f0ef;--surface-edge:#e6d7d8;--surface-shadow:111,89,121;
-  background:linear-gradient(150deg,var(--surface-top),var(--surface-bottom));
-  box-shadow:3px 8px 12px -4px rgba(var(--surface-shadow),.23),0 2px 4px rgba(var(--surface-shadow),.09),inset 2px 3px 5px #fffffff0,inset -2px -4px 6px var(--surface-edge);
+  background:radial-gradient(ellipse at var(--clay-light-origin-x,0%) var(--clay-light-origin-y,0%),#ffffff45,transparent 56%),linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg),var(--surface-top),var(--surface-bottom));
+  box-shadow:calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(12px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-4px * var(--clay-volume, 1)) rgba(var(--surface-shadow), calc(.26 * var(--clay-shadow-strength, 1))), calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-1px * var(--clay-volume, 1)) rgba(var(--surface-shadow), calc(.14 * var(--clay-shadow-strength, 1))), inset calc(4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(7px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #fffffff2, inset calc(-4px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-7px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(9px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) var(--surface-edge);
 }
-.clay-card-lavender {--surface-top:#e4d1fa;--surface-bottom:#d3b9f3;--surface-edge:#b99bdc;--surface-shadow:115,83,153}
-.clay-card-peach {--surface-top:#ffe4d8;--surface-bottom:#f9cbbd;--surface-edge:#e7afa0;--surface-shadow:165,102,96}
-.clay-card-butter {--surface-top:#fff3c3;--surface-bottom:#f8e09b;--surface-edge:#dfc47f;--surface-shadow:149,124,65}
-.clay-card-sky {--surface-top:#d0edf9;--surface-bottom:#b4dced;--surface-edge:#99c2d7;--surface-shadow:84,126,150}
+.clay-card-lavender {--surface-top:#e5ccff;--surface-bottom:#c29bf0;--surface-edge:#a27ccc;--surface-shadow:115,83,153}
+.clay-card-peach {--surface-top:#ffe5cd;--surface-bottom:#ffc8b2;--surface-edge:#e99f8e;--surface-shadow:165,102,96}
+.clay-card-butter {--surface-top:#fff3a6;--surface-bottom:#ffde76;--surface-edge:#d8ad46;--surface-shadow:149,124,65}
+.clay-card-sky {--surface-top:#bee7ff;--surface-bottom:#9acaf0;--surface-edge:#6ea6ce;--surface-shadow:84,126,150}
 .clay-sidebar-purple,.clay-btn-purple {--surface-top:#c5a8ee;--surface-bottom:#ac89df;--surface-edge:#9472c7;--surface-shadow:109,79,153}
-.clay-btn-rose {--surface-top:#ffb0a6;--surface-bottom:#ff9289;--surface-edge:#e97b76;--surface-shadow:181,91,109}
-.clay-recessed-input {background:linear-gradient(150deg,#eee5ef,#fffbfc);box-shadow:inset 2px 3px 5px #9e86a62b,inset -2px -2px 4px #ffffffed,0 1px 2px #fff}
-.clay-icon-3d {filter:drop-shadow(1px 2px 2px #50406f45)}
+.clay-btn-rose {--surface-top:#ffaaa1;--surface-bottom:#ff817c;--surface-edge:#e36567;--surface-shadow:181,91,109}
+.clay-recessed-input {background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 15deg),#eee5ef,#fffbfc);box-shadow:inset calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #9e86a62b, inset calc(-2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #ffffffed, calc(0px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(1px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, calc(1 * var(--clay-shadow-strength, 1)))}
+.clay-icon-3d {filter:drop-shadow(calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(80, 64, 111, calc(0.27059 * var(--clay-shadow-strength, 1))))}
 .clay-text-3d,.clay-sidebar-text-3d {text-shadow:0 1px 2px #6d478b38}
-.studio-header {border-radius:27px;background:linear-gradient(145deg,#e0cef7,#d0b6ef);box-shadow:0 5px 8px #a589ba26,inset 1px 2px 3px #ffffffab,inset -1px -3px 4px #baa1d4}
-.studio-top-nav {flex:1;max-width:590px;min-width:0;background:#f7effb;box-shadow:inset 1px 2px 4px #a17cb52b,0 1px 1px #ffffffa1}
+.studio-header {border-radius:27px;background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg),#e0cef7,#d0b6ef);box-shadow:calc(0px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(165, 137, 186, calc(0.14902 * var(--clay-shadow-strength, 1))), inset calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #ffffffab, inset calc(-1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #baa1d4}
+.studio-top-nav {flex:1;max-width:590px;min-width:0;background:#f7effb;box-shadow:inset calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #a17cb52b, calc(0px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(1px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(1px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, calc(0.63137 * var(--clay-shadow-strength, 1)))}
 button:focus-visible,a:focus-visible,input:focus-visible {outline:3px solid #74529f!important;outline-offset:4px}
 .clay-squish:active {transform:translateY(1px) scaleX(1.025) scaleY(.97)}
 .dashboard-sidebar {
-  background:linear-gradient(165deg,#BEABE8 0%,#AD95DE 48%,#9983D0 100%);
-  box-shadow:3px 8px 13px -4px rgba(70,48,116,.32),1px 2px 4px rgba(70,48,116,.16),inset 1px 2px 4px rgba(255,255,255,.48),inset -2px -3px 5px rgba(112,84,171,.32);
+  background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 30deg),#BEABE8 0%,#AD95DE 48%,#9983D0 100%);
+  box-shadow:calc(3px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(13px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-4px * var(--clay-volume, 1)) rgba(70, 48, 116, calc(.32 * var(--clay-shadow-strength, 1))), calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(70, 48, 116, calc(.16 * var(--clay-shadow-strength, 1))), inset calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255,255,255,.48), inset calc(-2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(112,84,171,.32);
 }
 .dashboard-profile {padding-top:2px}
-.dashboard-profile-avatar {width:132px;height:132px;flex-shrink:0;padding:5px;border:0;border-radius:50%;cursor:pointer;background:linear-gradient(145deg,#FFF4E9,#F3DCE1);box-shadow:2px 5px 8px -2px #60438c52,inset 1px 2px 3px #fffdf8,inset -1px -2px 3px #d7c1d3;transition:transform 220ms cubic-bezier(.22,1,.36,1)}
+.dashboard-profile-avatar {width:132px;height:132px;flex-shrink:0;padding:5px;border:0;border-radius:50%;cursor:pointer;background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg),#FFF4E9,#F3DCE1);box-shadow:calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(8px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) calc(-2px * var(--clay-volume, 1)) rgba(96, 67, 140, calc(0.32157 * var(--clay-shadow-strength, 1))), inset calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #fffdf8, inset calc(-1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #d7c1d3;transition:transform 220ms cubic-bezier(.22,1,.36,1)}
 .dashboard-profile-avatar:hover {transform:translateY(-2px)}
-.dashboard-profile-portrait {position:relative;display:block;width:100%;height:100%;overflow:visible;border-radius:50%;background:linear-gradient(145deg,#ead4ed,#cfb2e2);box-shadow:inset 1px 2px 3px #a086bb40,inset -1px -1px 2px #fff6f380}
-.dashboard-profile-portrait img {display:block;width:100%;height:100%;object-fit:contain;transform:translateY(-3px) scale(1.06);filter:drop-shadow(0 2px 2px #76548233)}
+.dashboard-profile-portrait {position:relative;display:block;width:100%;height:100%;overflow:visible;border-radius:50%;background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg),#ead4ed,#cfb2e2);box-shadow:inset calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #a086bb40, inset calc(-1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-1px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #fff6f380}
+.dashboard-profile-portrait img {display:block;width:100%;height:100%;object-fit:contain;transform:translateY(-3px) scale(1.06);filter:drop-shadow(calc(0px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(118, 84, 130, calc(0.2 * var(--clay-shadow-strength, 1))))}
 .dashboard-profile-greeting {text-shadow:0 1px 2px #63498e40}
 .dashboard-nav-item {min-height:48px;font-size:14px;line-height:20px;font-weight:800}
-.dashboard-nav-icon {width:25px;height:25px;flex-shrink:0;color:#fff9ef;filter:drop-shadow(0 1px 0 #ffffffb3) drop-shadow(1px 3px 1.5px #60468e70);transition:color 200ms,filter 200ms}
-.dashboard-nav-icon.is-active {color:#a98bd5;filter:drop-shadow(0 -1px 0 #d9c2f5) drop-shadow(1px 2px 1px #73559955)}
+.dashboard-nav-icon {width:25px;height:25px;flex-shrink:0;color:#fff9ef;filter:drop-shadow(calc(0px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(1px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(0px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, calc(0.70196 * var(--clay-shadow-strength, 1)))) drop-shadow(calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(1.5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(96, 70, 142, calc(0.43922 * var(--clay-shadow-strength, 1))));transition:color 200ms,filter 200ms}
+.dashboard-nav-icon.is-active {color:#a98bd5;filter:drop-shadow(calc(0px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(-1px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(0px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(217, 194, 245, calc(1 * var(--clay-shadow-strength, 1)))) drop-shadow(calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(1px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(115, 85, 153, calc(0.33333 * var(--clay-shadow-strength, 1))))}
 .dashboard-nav-label {font-weight:inherit;text-shadow:0 1px 2px #65468e38}
 @media(max-width:1150px){.studio-header-cta{display:none}.studio-top-nav{max-width:580px}.studio-header{gap:15px;padding-left:23px;padding-right:18px}}
 @media(max-width:760px){.studio-header{flex-wrap:wrap;border-radius:24px;padding:16px}.studio-top-nav{width:100%;flex-basis:100%;max-width:none;font-size:10px;gap:1px;padding:4px}.studio-top-nav button{padding-left:4px;padding-right:4px;height:35px}.studio-shell>header{padding-top:16px}.studio-shell>main{padding-top:6px}}
@@ -238,3 +194,9 @@ button:focus-visible,a:focus-visible,input:focus-visible {outline:3px solid #745
   .dashboard-sidebar nav button{padding-top:10px;padding-bottom:10px;min-height:45px}
   .dashboard-studio-nav{margin-top:12px;padding-top:12px}
 }
+
+/* Shared scene defaults; the design-system controls persist overrides on :root. */
+:root{--clay-volume:1;--clay-shadow-softness:1;--clay-shadow-strength:1;--clay-light-x:1;--clay-light-y:1;--clay-light-angle:135deg;--clay-light-origin-x:0%;--clay-light-origin-y:0%}
+.material-range input{appearance:none;background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg),#e6d7f4,#c7afe1);box-shadow:inset calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(2px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #8d70a640, calc(0px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(1px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(1px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(255, 255, 255, calc(1 * var(--clay-shadow-strength, 1)))}
+.material-range input::-webkit-slider-thumb{appearance:none;width:23px;height:23px;border-radius:50%;background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg),#dfc5fc,#a77ed4);box-shadow:inset calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #fff1ff, calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(113, 83, 138, calc(0.34902 * var(--clay-shadow-strength, 1)));cursor:grab}
+.material-range input::-moz-range-thumb{border:0;width:23px;height:23px;border-radius:50%;background:linear-gradient(calc(var(--clay-light-angle, 135deg) + 10deg),#dfc5fc,#a77ed4);box-shadow:inset calc(2px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(3px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) #fff1ff, calc(1px * var(--clay-volume, 1) * var(--clay-light-x, 1)) calc(4px * var(--clay-volume, 1) * var(--clay-light-y, 1)) calc(5px * var(--clay-volume, 1) * var(--clay-shadow-softness, 1)) rgba(113, 83, 138, calc(0.34902 * var(--clay-shadow-strength, 1)));cursor:grab}

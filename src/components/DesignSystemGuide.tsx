@@ -1,3 +1,4 @@
+import { materialBackground, materialShadow } from '../utils/materialStyle';
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import {
@@ -11,6 +12,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { CLAY_COLOR_PRESETS, ClayColorPresetId, UPLOADED_CLAY_ASSETS, resolveClayAssetPath } from '../utils/clayEngine';
+import { MaterialSettingsPanel } from './MaterialSettings';
 
 interface DesignSystemGuideProps {
   onSelectPresetForGenerator?: (presetId: ClayColorPresetId) => void;
@@ -31,11 +33,12 @@ export function DesignSystemGuide({ onSelectPresetForGenerator }: DesignSystemGu
 
   return (
     <div className="space-y-8 pb-12">
+      <MaterialSettingsPanel />
       <section className="clay-card-cream rounded-[30px] p-6 sm:p-8">
-        <span className="text-xs font-extrabold tracking-wider text-[#8C6AAB]">КАЛИБРОВКА ПО РЕФЕРЕНСАМ · 14.11.2026</span>
+        <span className="text-xs font-extrabold tracking-wider text-[#8C6AAB]">КАЛИБРОВКА ПО РЕФЕРЕНСАМ · 17.11.2026</span>
         <h2 className="text-2xl font-black mt-3 mb-5">Мягкий объём, спокойное движение</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 text-sm">
-          <div><b>Свет и тень</b><p className="mt-2 text-[#796A88] leading-relaxed">Один источник сверху слева. Цветная тень 3 × 7 px, контактный слой 0 × 2 px, белая верхняя кромка и нижняя фаска 4–5 px. Тень короткая: элемент лежит на поверхности.</p></div>
+          <div><b>Свет и тень</b><p className="mt-2 text-[#796A88] leading-relaxed">Общий источник света; эталон — сверху слева. Объём создают широкий блик и цветная нижняя грань. Внешние тени короткие и деликатные: рассеянная около 26%, контактная около 14%; у маленьких кнопок пятно тени меньше.</p></div>
           <div><b>Геометрия</b><p className="mt-2 text-[#796A88] leading-relaxed">Карточки 26–48 px, кнопки 22–30 px или капсула. Большие цветовые плоскости, округлая Nunito и тёмные чернильные иконки. Белый фон сохраняет воздух между объектами.</p></div>
           <div><b>Микродвижение</b><p className="mt-2 text-[#796A88] leading-relaxed">Hover: подъём 2 px за 220 ms. Press: вниз 2 px, scaleX 1.025 / scaleY 0.965. Тумблер: 340 ms. Сердце и колокольчик реагируют один раз на действие, без постоянной пульсации.</p></div>
           <div><b>Доступность</b><p className="mt-2 text-[#796A88] leading-relaxed">Состояние передаётся текстом и aria-атрибутами. Видимый focus-ring, клавиатура и нативные range. При prefers-reduced-motion анимации отключаются, конечные состояния сохраняются.</p></div>
@@ -132,7 +135,7 @@ export function DesignSystemGuide({ onSelectPresetForGenerator }: DesignSystemGu
                   style={{
                     position: 'absolute',
                     zIndex: 10,
-                    boxShadow: '6px 18px 34px rgba(104, 79, 179, 0.28), 3px 8px 14px rgba(104, 79, 179, 0.16)',
+                    boxShadow: materialShadow('6px 18px 34px rgba(104, 79, 179, 0.28), 3px 8px 14px rgba(104, 79, 179, 0.16)'),
                     pointerEvents: explodedView ? 'auto' : 'none',
                   }}
                 >
@@ -154,7 +157,7 @@ export function DesignSystemGuide({ onSelectPresetForGenerator }: DesignSystemGu
                   style={{
                     position: 'absolute',
                     zIndex: 20,
-                    boxShadow: 'inset -4px -8px 14px rgba(114, 84, 198, 0.38)',
+                    boxShadow: materialShadow('inset -4px -8px 14px rgba(114, 84, 198, 0.38)'),
                     pointerEvents: explodedView ? 'auto' : 'none',
                   }}
                 >
@@ -176,7 +179,7 @@ export function DesignSystemGuide({ onSelectPresetForGenerator }: DesignSystemGu
                   style={{
                     position: 'absolute',
                     zIndex: 30,
-                    boxShadow: 'inset 4px 5px 10px rgba(255, 255, 255, 0.96)',
+                    boxShadow: materialShadow('inset 4px 5px 10px rgba(255, 255, 255, 0.96)'),
                     pointerEvents: explodedView ? 'auto' : 'none',
                   }}
                 >
@@ -197,10 +200,10 @@ export function DesignSystemGuide({ onSelectPresetForGenerator }: DesignSystemGu
                   style={{
                     position: 'absolute',
                     zIndex: 40,
-                    background: 'linear-gradient(145deg, #B59BFF 0%, #8E6FE8 52%, #7554D3 100%)',
-                    boxShadow: explodedView
+                    background: materialBackground('linear-gradient(145deg, #B59BFF 0%, #8E6FE8 52%, #7554D3 100%)'),
+                    boxShadow: materialShadow(explodedView
                       ? '0 8px 18px rgba(117, 84, 211, 0.25), inset 2px 3px 6px rgba(255,255,255,0.45)'
-                      : '6px 18px 34px rgba(96, 68, 175, 0.36), 3px 8px 14px rgba(96, 68, 175, 0.22), inset 3px 4px 8px rgba(255, 255, 255, 0.56), inset -4px -7px 14px rgba(68, 42, 146, 0.52)',
+                      : '6px 18px 34px rgba(96, 68, 175, 0.36), 3px 8px 14px rgba(96, 68, 175, 0.22), inset 3px 4px 8px rgba(255, 255, 255, 0.56), inset -4px -7px 14px rgba(68, 42, 146, 0.52)'),
                   }}
                 >
                   <div className="flex items-center gap-3">
@@ -208,7 +211,7 @@ export function DesignSystemGuide({ onSelectPresetForGenerator }: DesignSystemGu
                       className="w-11 h-11 rounded-[15px] bg-[#FAF4EC] flex items-center justify-center shrink-0"
                       style={{
                         boxShadow:
-                          '3px 6px 12px rgba(56, 33, 120, 0.32), inset 2px 2px 4px rgba(255, 255, 255, 0.98), inset -2px -3px 5px rgba(212, 198, 180, 0.65)',
+                          materialShadow('3px 6px 12px rgba(56, 33, 120, 0.32), inset 2px 2px 4px rgba(255, 255, 255, 0.98), inset -2px -3px 5px rgba(212, 198, 180, 0.65)'),
                       }}
                     >
                       <img src={resolveClayAssetPath(UPLOADED_CLAY_ASSETS[0].path)} alt="Star" className="w-8 h-8 object-contain clay-icon-3d" />
@@ -261,12 +264,12 @@ export function DesignSystemGuide({ onSelectPresetForGenerator }: DesignSystemGu
               <div
                 className="h-24 rounded-[20px] mb-3.5 flex items-end justify-between p-3 relative overflow-hidden"
                 style={{
-                  background: `linear-gradient(145deg, ${preset.gradStart} 0%, ${preset.gradEnd} 100%)`,
-                  boxShadow: `
+                  background: materialBackground(`linear-gradient(145deg, ${preset.gradStart} 0%, ${preset.gradEnd} 100%)`),
+                  boxShadow: materialShadow(`
                     4px 10px 20px rgba(${preset.outerShadowRgb}, 0.28),
                     inset 3px 3px 6px rgba(255,255,255,0.78),
                     inset -3px -5px 9px ${preset.innerDarkHex}
-                  `,
+                  `),
                 }}
               >
                 <span

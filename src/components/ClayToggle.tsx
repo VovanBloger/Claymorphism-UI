@@ -1,3 +1,4 @@
+import { materialBackground, materialShadow } from '../utils/materialStyle';
 import React from 'react';
 import { motion } from 'motion/react';
 import { resolveClayAssetPath } from '../utils/clayEngine';
@@ -118,9 +119,9 @@ export function ClayToggle({
         <div
           className="w-[156px] h-[52px] p-1.5 rounded-[20px] flex items-center justify-center shrink-0"
           style={{
-            background: 'linear-gradient(145deg, #E8DFD5 0%, #F7F0E8 100%)',
+            background: materialBackground('linear-gradient(145deg, #E8DFD5 0%, #F7F0E8 100%)'),
             boxShadow:
-              'inset 3px 4px 8px rgba(145, 130, 118, 0.45), inset -2px -2px 4px rgba(255,255,255,0.9)',
+              materialShadow('inset 3px 4px 8px rgba(145, 130, 118, 0.45), inset -2px -2px 4px rgba(255,255,255,0.9)'),
           }}
         >
           <motion.button
@@ -142,15 +143,15 @@ export function ClayToggle({
             style={
               checked
                 ? {
-                    background: palette.buttonLatchedBg,
+                    background: materialBackground(palette.buttonLatchedBg),
                     color: '#FFFFFF',
-                    boxShadow: palette.buttonLatchedShadow,
+                    boxShadow: materialShadow(palette.buttonLatchedShadow),
                   }
                 : {
-                    background: 'linear-gradient(145deg, #FFFDFB 0%, #F2EAE1 100%)',
+                    background: materialBackground('linear-gradient(145deg, #FFFDFB 0%, #F2EAE1 100%)'),
                     color: '#5A4D73',
                     boxShadow:
-                      '3px 6px 12px -2px rgba(95, 75, 140, 0.28), inset 2px 3px 5px #FFFFFF, inset -2px -4px 7px #D6C7B8',
+                      materialShadow('3px 6px 12px -2px rgba(95, 75, 140, 0.28), inset 2px 3px 5px #FFFFFF, inset -2px -4px 7px #D6C7B8'),
                   }
             }
           >
@@ -196,23 +197,23 @@ export function ClayToggle({
         onClick={handleToggle}
         className="relative w-[84px] h-[44px] rounded-full p-1.5 transition-colors duration-300 cursor-pointer focus:outline-none shrink-0 flex items-center"
         style={{
-          background: checked
+          background: materialBackground(checked
             ? palette.trackOnBg
-            : 'linear-gradient(145deg, #E8DFD6 0%, #F9F3EC 100%)',
-          boxShadow: checked
+            : 'linear-gradient(145deg, #E8DFD6 0%, #F9F3EC 100%)'),
+          boxShadow: materialShadow(checked
             ? palette.trackOnShadow
-            : 'inset 0 5px 9px rgba(156, 140, 128, 0.48), inset 0 -3px 6px rgba(255, 255, 255, 0.92), 0 2px 4px rgba(255, 255, 255, 0.85)',
+            : 'inset 0 5px 9px rgba(156, 140, 128, 0.48), inset 0 -3px 6px rgba(255, 255, 255, 0.92), 0 2px 4px rgba(255, 255, 255, 0.85)'),
         }}
       >
         {/* Fixed-Size 3D Clay Spherical Thumb (32px x 32px) */}
         <motion.div
           style={{
-            background: checked
+            background: materialBackground(checked
               ? palette.knobOnBg
-              : 'radial-gradient(circle at 32% 28%, #FFFFFF 0%, #F7EFE6 55%, #E0D3C5 100%)',
-            boxShadow: checked
+              : 'radial-gradient(circle at 32% 28%, #FFFFFF 0%, #F7EFE6 55%, #E0D3C5 100%)'),
+            boxShadow: materialShadow(checked
               ? palette.knobOnShadow
-              : '0 6px 12px -2px rgba(95, 75, 140, 0.32), inset 0 4px 5px #FFFFFF, inset 0 -5px 7px #C9B9A8',
+              : '0 6px 12px -2px rgba(95, 75, 140, 0.32), inset 0 4px 5px #FFFFFF, inset 0 -5px 7px #C9B9A8'),
           }}
           animate={{
             x: checked ? 40 : 0,
@@ -229,10 +230,10 @@ export function ClayToggle({
           <span
             className="w-3 h-3 rounded-full transition-colors duration-300"
             style={{
-              background: checked ? palette.trackOnBg : '#E8DFD6',
-              boxShadow: checked
+              background: materialBackground(checked ? palette.trackOnBg : '#E8DFD6'),
+              boxShadow: materialShadow(checked
                 ? 'inset 0 2px 3px rgba(0,0,0,0.28)'
-                : 'inset 0 1.5px 2px rgba(120,105,95,0.35)',
+                : 'inset 0 1.5px 2px rgba(120,105,95,0.35)'),
             }}
           />
         </motion.div>

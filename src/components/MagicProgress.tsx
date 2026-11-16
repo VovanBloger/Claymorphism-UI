@@ -4,6 +4,7 @@ import { useReducedMotion } from 'motion/react';
 import { advanceMagicProgress, getCheckpointPositions, getCompletedCount, getMagicDurationMs, getStarLevels } from '../utils/magicProgress';
 import { resolveClayAssetPath } from '../utils/clayEngine';
 import './magic-progress.css';
+import { useMaterialSettings } from './MaterialSettings';
 
 const STARS = [
   { name: 'Искорка', crop: '65 260 300 283' },
@@ -23,6 +24,9 @@ function StarSprite({ level }: { level: number }) {
 
 export function MagicProgress() {
   const id = useId().replace(/:/g, '');
+  const { settings: material } = useMaterialSettings();
+  const lightX = material.light.includes('right') ? -1 : 1;
+  const lightY = material.light.includes('bottom') ? -1 : 1;
   const reduced = useReducedMotion();
   const [count, setCount] = useState(5);
   const [speed, setSpeed] = useState(1);
@@ -114,7 +118,7 @@ export function MagicProgress() {
         {levels.map((level, index) => {
           const lit = index < completed;
           return <button type="button" key={`${count}-${index}`} aria-label={`Посмотреть этап ${index + 1}: ${STARS[level].name}`} aria-pressed={previewIndex === index} onClick={() => previewStage(index)} className={`magic-checkpoint${lit ? ' is-lit' : ''}${previewIndex !== null && index < previewIndex ? ' is-previous' : ''}`} data-level={level} style={{ left: `${positions[index]*100}%`, '--star-size': `clamp(${28+level*3}px, ${8.8+level*1.5}cqw, ${76+level*14}px)`, '--celebrate': `${(680+level*100)/speed}ms` } as React.CSSProperties}>
-            <svg className="magic-slot" viewBox="0 0 100 102" aria-hidden="true"><defs><linearGradient id={`${id}-slot-${index}`} x2=".8" y2="1"><stop stopColor="#bba3d6"/><stop offset="1" stopColor="#e8daf5"/></linearGradient><filter id={`${id}-inset-${index}`} x="-20%" y="-20%" width="140%" height="140%"><feOffset in="SourceAlpha" dx="2" dy="4" result="offset"/><feGaussianBlur in="offset" stdDeviation="3" result="blur"/><feComposite in="SourceAlpha" in2="blur" operator="out" result="shadow"/><feFlood floodColor="#72518d" floodOpacity=".4"/><feComposite in2="shadow" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter></defs><path d={STAR_PATH} fill={`url(#${id}-slot-${index})`} filter={`url(#${id}-inset-${index})`}/><path d={STAR_PATH} fill="none" stroke="#fff5ff" strokeWidth="2" opacity=".5" transform="translate(0 1)"/></svg>
+            <svg className="magic-slot" viewBox="0 0 100 102" aria-hidden="true"><defs><linearGradient id={`${id}-slot-${index}`} x1={lightX < 0 ? 1 : 0} y1={lightY < 0 ? 1 : 0} x2={lightX < 0 ? 0 : 1} y2={lightY < 0 ? 0 : 1}><stop stopColor="#bba3d6"/><stop offset="1" stopColor="#e8daf5"/></linearGradient><filter id={`${id}-inset-${index}`} x="-20%" y="-20%" width="140%" height="140%"><feOffset in="SourceAlpha" dx={2 * lightX * material.volume} dy={4 * lightY * material.volume} result="offset"/><feGaussianBlur in="offset" stdDeviation={3 * material.shadowSoftness} result="blur"/><feComposite in="SourceAlpha" in2="blur" operator="out" result="shadow"/><feFlood floodColor="#72518d" floodOpacity={.4 * material.shadowStrength}/><feComposite in2="shadow" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter></defs><path d={STAR_PATH} fill={`url(#${id}-slot-${index})`} filter={`url(#${id}-inset-${index})`}/><path d={STAR_PATH} fill="none" stroke="#fff5ff" strokeWidth="2" opacity=".5" transform="translate(0 1)"/></svg>
             <span className="magic-aura"/>
             <span className="magic-character"><StarSprite level={level}/></span>
             <span className="magic-burst" aria-hidden="true">{Array.from({ length: 5+level*2 }, (_, n) => <i key={n} style={{ '--angle': `${n*360/(5+level*2)}deg`, '--distance': `${45+level*9}px` } as React.CSSProperties}>✦</i>)}</span>

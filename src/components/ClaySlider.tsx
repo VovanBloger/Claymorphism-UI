@@ -1,3 +1,4 @@
+import { materialBackground, materialShadow } from '../utils/materialStyle';
 import React, { useState, useEffect } from 'react';
 
 export type ClayThumbVariant = 'pink' | 'blue' | 'mint' | 'lavender' | 'butter';
@@ -134,9 +135,9 @@ export function ClaySlider({
         <div
           className="w-full h-4 rounded-full relative overflow-hidden"
           style={{
-            background: 'linear-gradient(180deg, #FFFFFF 0%, #F7EFE6 58%, #E6DBD0 100%)',
+            background: materialBackground('linear-gradient(180deg, #FFFFFF 0%, #F7EFE6 58%, #E6DBD0 100%)'),
             boxShadow:
-              '0 6px 12px -2px rgba(95, 75, 140, 0.18), 0 2px 4px rgba(95, 75, 140, 0.10), inset 0 3px 4px rgba(255, 255, 255, 1), inset 0 -3px 5px #D5C7B8',
+              materialShadow('0 6px 12px -2px rgba(95, 75, 140, 0.18), 0 2px 4px rgba(95, 75, 140, 0.10), inset 0 3px 4px rgba(255, 255, 255, 1), inset 0 -3px 5px #D5C7B8'),
           }}
         >
           {/* Lockstep Pastel Clay Progress Fill (zero lag behind thumb) */}
@@ -144,8 +145,8 @@ export function ClaySlider({
             className="h-full rounded-full"
             style={{
               width: `${clampedPct}%`,
-              background: theme.fillBg,
-              boxShadow: `inset 0 2px 3px rgba(255, 255, 255, 0.9), inset 0 -2px 4px ${theme.fillBevel}`,
+              background: materialBackground(theme.fillBg),
+              boxShadow: materialShadow(`inset 0 2px 3px rgba(255, 255, 255, 0.9), inset 0 -2px 4px ${theme.fillBevel}`),
               willChange: 'width',
             }}
           />
@@ -160,8 +161,8 @@ export function ClaySlider({
             height: '34px',
             left: `calc(${clampedPct}% - ${(clampedPct / 100) * 34}px)`,
             borderRadius: `${resolvedThumbRadius}px`,
-            background: isAngular ? theme.thumbBgAngular : theme.thumbBgSphere,
-            boxShadow: theme.thumbShadow,
+            background: materialBackground(isAngular ? theme.thumbBgAngular : theme.thumbBgSphere),
+            boxShadow: materialShadow(theme.thumbShadow),
             transform: isPressed
               ? 'translate3d(0, -50%, 0) scaleX(1.12) scaleY(0.90)'
               : 'translate3d(0, -50%, 0) scaleX(1) scaleY(1)',

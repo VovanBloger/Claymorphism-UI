@@ -1,3 +1,5 @@
+import { materialBackground, materialShadow, materialStylesheet } from './materialStyle';
+
 const referenceKinds = ['status-pills','action-rows','clay-calendar','product-card','workout-card','activity-rings','filter-chips'];
 
 export interface ClayAsset {
@@ -184,13 +186,13 @@ export const CLAY_COLOR_PRESETS: Record<ClayColorPresetId, ClayColorPreset> = {
     ruName: 'Тёплый сливочный зефир',
     shortLabel: 'Зефир',
     role: 'Основные доски, контейнеры, карточки графиков и инпуты',
-    gradStart: '#FFFDFB',
-    gradEnd: '#F5EDE4',
+    gradStart: '#fffefd',
+    gradEnd: '#f6f1f4',
     textHex: '#2E2360',
     mutedTextHex: '#7A6F8E',
     outerShadowRgb: '95, 75, 140',
     innerLightRgba: 'rgba(255, 255, 255, 0.96)',
-    innerDarkHex: '#DACBBE',
+    innerDarkHex: '#d8cdd8',
     badgeBgHex: '#9E82F5',
   },
   lavender: {
@@ -199,13 +201,13 @@ export const CLAY_COLOR_PRESETS: Record<ClayColorPresetId, ClayColorPreset> = {
     ruName: 'Нежная сиреневая дымка',
     shortLabel: 'Сирень',
     role: 'Приветственные баннеры, карточка Songs Played, фоновые плашки',
-    gradStart: '#E5D2FF',
-    gradEnd: '#C9AAF2',
+    gradStart: '#e5ccff',
+    gradEnd: '#c29bf0',
     textHex: '#2E2348',
     mutedTextHex: '#6C5B91',
     outerShadowRgb: '104, 78, 168',
     innerLightRgba: 'rgba(255, 255, 255, 0.9)',
-    innerDarkHex: '#B193DC',
+    innerDarkHex: '#a27ccc',
     badgeBgHex: '#9374F2',
   },
   'purple-cta': {
@@ -229,13 +231,13 @@ export const CLAY_COLOR_PRESETS: Record<ClayColorPresetId, ClayColorPreset> = {
     ruName: 'Персиковый румянец',
     shortLabel: 'Персик',
     role: 'Карточка Favorites, блок Go Premium и тёплые акценты',
-    gradStart: '#FFF0EA',
-    gradEnd: '#FAD8CE',
+    gradStart: '#ffe5cd',
+    gradEnd: '#ffc8b2',
     textHex: '#3B2528',
     mutedTextHex: '#8C6568',
     outerShadowRgb: '168, 102, 92',
     innerLightRgba: 'rgba(255, 255, 255, 0.92)',
-    innerDarkHex: '#E8B7AA',
+    innerDarkHex: '#e99f8e',
     badgeBgHex: '#F27D72',
   },
   butter: {
@@ -244,13 +246,13 @@ export const CLAY_COLOR_PRESETS: Record<ClayColorPresetId, ClayColorPreset> = {
     ruName: 'Ванильно-медовый крем',
     shortLabel: 'Ваниль',
     role: 'Карточка Hours Listened, золотые звёзды и корона премиума',
-    gradStart: '#FFF5BC',
-    gradEnd: '#FFE597',
+    gradStart: '#fff3a6',
+    gradEnd: '#ffde76',
     textHex: '#3B301E',
     mutedTextHex: '#8A7550',
     outerShadowRgb: '166, 134, 68',
     innerLightRgba: 'rgba(255, 255, 255, 0.94)',
-    innerDarkHex: '#E8C66B',
+    innerDarkHex: '#d8ad46',
     badgeBgHex: '#F5B841',
   },
   sky: {
@@ -259,13 +261,13 @@ export const CLAY_COLOR_PRESETS: Record<ClayColorPresetId, ClayColorPreset> = {
     ruName: 'Пудрово-небесный',
     shortLabel: 'Небо',
     role: 'Карточка Current Streak, голубые столбцы графиков и бейджи',
-    gradStart: '#C6EDFC',
-    gradEnd: '#A9D9F1',
+    gradStart: '#bee7ff',
+    gradEnd: '#9acaf0',
     textHex: '#22304A',
     mutedTextHex: '#617799',
     outerShadowRgb: '82, 114, 166',
     innerLightRgba: 'rgba(255, 255, 255, 0.92)',
-    innerDarkHex: '#8BBCD7',
+    innerDarkHex: '#6ea6ce',
     badgeBgHex: '#6CA2EA',
   },
   mint: {
@@ -274,13 +276,13 @@ export const CLAY_COLOR_PRESETS: Record<ClayColorPresetId, ClayColorPreset> = {
     ruName: 'Мятно-фисташковый пластилин',
     shortLabel: 'Мята',
     role: 'Статусы прироста, иконки проверки и безопасности',
-    gradStart: '#C5F4E5',
-    gradEnd: '#A0DFC7',
+    gradStart: '#bff5e1',
+    gradEnd: '#92d9be',
     textHex: '#1D3B35',
     mutedTextHex: '#4F8278',
     outerShadowRgb: '64, 140, 125',
     innerLightRgba: 'rgba(255, 255, 255, 0.92)',
-    innerDarkHex: '#88C5AD',
+    innerDarkHex: '#72b79f',
     badgeBgHex: '#4DB6A5',
   },
   rose: {
@@ -289,13 +291,13 @@ export const CLAY_COLOR_PRESETS: Record<ClayColorPresetId, ClayColorPreset> = {
     ruName: 'Ягодно-розовый',
     shortLabel: 'Роза',
     role: 'Кнопка Upgrade, бейджи уведомлений и акцентные сердечки',
-    gradStart: '#FFADA5',
-    gradEnd: '#FF8B82',
+    gradStart: '#ffaaa1',
+    gradEnd: '#ff817c',
     textHex: '#FFFFFF',
     mutedTextHex: '#FFEBF0',
     outerShadowRgb: '184, 78, 104',
     innerLightRgba: 'rgba(255, 255, 255, 0.65)',
-    innerDarkHex: '#EC756E',
+    innerDarkHex: '#e36567',
     badgeBgHex: '#FFFFFF',
   },
 };
@@ -370,12 +372,12 @@ export function computeClayStyles(params: ClayPhysicsParams): ComputedClayStyles
     const dropY1 = Math.round(d * 0.78);
     const dropBlur1 = Math.round(blur * 0.7);
     const dropSpread1 = -Math.round(d * 0.25);
-    const dropAlpha1 = params.surfaceMode === 'floating-pill' ? 0.28 : 0.20;
+    const dropAlpha1 = params.surfaceMode === 'floating-pill' ? 0.34 : 0.26;
 
     const dropX2 = Math.max(2, Math.round(d * 0.2));
     const dropY2 = Math.max(3, Math.round(d * 0.46));
     const dropBlur2 = Math.max(5, Math.round(blur * 0.38));
-    const dropAlpha2 = params.surfaceMode === 'floating-pill' ? 0.18 : 0.12;
+    const dropAlpha2 = params.surfaceMode === 'floating-pill' ? 0.24 : 0.14;
 
     const insetLightX = Math.max(2, Math.round(d * 0.24));
     const insetLightY = Math.max(2, Math.round(d * 0.38));
@@ -393,6 +395,10 @@ export function computeClayStyles(params: ClayPhysicsParams): ComputedClayStyles
     ];
   }
 
+  // Bake CSS variables into the returned strings, so standalone exports need no helper import.
+  background = materialBackground(background);
+  if (params.surfaceMode !== 'recessed') background = `radial-gradient(ellipse at var(--clay-light-origin-x, 0%) var(--clay-light-origin-y, 0%), #ffffff52, transparent 56%), ${background}`;
+  shadowLayers = shadowLayers.map(materialShadow);
   const boxShadow = shadowLayers.join(', ');
 
   const cssString = `.clay-element {
@@ -469,7 +475,7 @@ export function generateComponentCode(
 
   if (format === 'css') {
     if (referenceKinds.includes(config.componentType)) return `${styles.cssString}\n\n${referenceExports?.css || '/* Pass the reference CSS source to export this component. */'}`;
-    return `/* ==========================================================
+    return materialStylesheet(`/* ==========================================================
  * Soft 3D Claymorphism — Сгенерированный CSS (${config.componentType})
  * Палитра: ${preset.ruName} (${preset.gradStart} -> ${preset.gradEnd})
  * Формула 4-слойного объёма + Неоднородная тягучая Clay-анимация
@@ -552,7 +558,7 @@ ${styles.cssString}
     0 6px 14px -2px rgba(${preset.outerShadowRgb}, 0.32),
     inset 0 3px 5px rgba(255, 255, 255, 0.65),
     inset 0 -4px 6px rgba(0, 0, 0, 0.18);
-}`;
+}`);
   }
 
   if (format === 'tokens') {
@@ -625,18 +631,18 @@ export function ClayPopOutAvatarCard() {
         <div
           className="relative w-[248px] h-[172px] p-[15px] rounded-t-[64px] rounded-b-[38px] flex items-center justify-center overflow-visible"
           style={{
-            background: 'linear-gradient(145deg, #F5EEFF 0%, #B89EFA 44%, #7A58DE 100%)',
+            background: '${materialBackground(`linear-gradient(145deg, #F5EEFF 0%, #B89EFA 44%, #7A58DE 100%)`)}',
             boxShadow:
-              '8px 18px 30px -4px rgba(58, 34, 128, 0.56), 3px 6px 12px -1px rgba(58, 34, 128, 0.36), inset 3.5px 4.5px 7px rgba(255, 255, 255, 0.94), inset -4px -7px 12px #5E3EC4',
+              '${materialShadow(`8px 18px 30px -4px rgba(58, 34, 128, 0.30), 3px 6px 12px -1px rgba(58, 34, 128, 0.16), inset 3.5px 4.5px 7px rgba(255, 255, 255, 0.94), inset -4px -7px 12px #5E3EC4`)}',
           }}
         >
           {/* Recessed Inner Well with Deep Inset Shadow */}
           <div
             className="w-full h-full rounded-t-[49px] rounded-b-[23px]"
             style={{
-              background: 'linear-gradient(155deg, #CFBBEF 0%, #E7DAFF 42%, #FCF9FF 100%)',
+              background: '${materialBackground(`linear-gradient(155deg, #CFBBEF 0%, #E7DAFF 42%, #FCF9FF 100%)`)}',
               boxShadow:
-                'inset 11px 15px 24px rgba(38, 16, 102, 0.64), inset 3px 5px 9px rgba(38, 16, 102, 0.42), inset -5px -6px 12px rgba(255, 255, 255, 0.96)',
+                '${materialShadow(`inset 11px 15px 24px rgba(38, 16, 102, 0.28), inset 3px 5px 9px rgba(38, 16, 102, 0.14), inset -5px -6px 12px rgba(255, 255, 255, 0.96)`)}',
               border: '1.5px solid rgba(255, 255, 255, 0.68)',
             }}
           />
@@ -694,11 +700,11 @@ export function ClayPhysicalToggle() {
         className="relative w-[84px] h-[44px] rounded-full p-1.5 transition-colors duration-300 cursor-pointer shrink-0 flex items-center"
         style={{
           background: checked
-            ? 'linear-gradient(145deg, #62C4B2 0%, #8FE3D3 100%)'
-            : 'linear-gradient(145deg, #E8DFD6 0%, #F9F3EC 100%)',
+            ? '${materialBackground(`linear-gradient(145deg, #62C4B2 0%, #8FE3D3 100%)`)}'
+            : '${materialBackground(`linear-gradient(145deg, #E8DFD6 0%, #F9F3EC 100%)`)}',
           boxShadow: checked
-            ? 'inset 0 5px 10px rgba(36, 110, 96, 0.5), inset 0 -3px 6px rgba(255,255,255,0.7)'
-            : 'inset 0 5px 9px rgba(156, 140, 128, 0.48), inset 0 -3px 6px rgba(255,255,255,0.92)',
+            ? '${materialShadow(`inset 0 5px 10px rgba(36, 110, 96, 0.5), inset 0 -3px 6px rgba(255,255,255,0.7)`)}'
+            : '${materialShadow(`inset 0 5px 9px rgba(156, 140, 128, 0.48), inset 0 -3px 6px rgba(255,255,255,0.92)`)}',
         }}
       >
         <motion.div
@@ -707,11 +713,11 @@ export function ClayPhysicalToggle() {
           className="w-8 h-8 rounded-full shrink-0"
           style={{
             background: checked
-              ? 'radial-gradient(circle at 32% 28%, #FFFFFF 0%, #EBFBF7 58%, #A0DFC7 100%)'
-              : 'radial-gradient(circle at 32% 28%, #FFFFFF 0%, #F7EFE6 55%, #E0D3C5 100%)',
+              ? '${materialBackground(`radial-gradient(circle at 32% 28%, #FFFFFF 0%, #EBFBF7 58%, #A0DFC7 100%)`)}'
+              : '${materialBackground(`radial-gradient(circle at 32% 28%, #FFFFFF 0%, #F7EFE6 55%, #E0D3C5 100%)`)}',
             boxShadow: checked
-              ? '0 6px 12px -2px rgba(42, 122, 108, 0.42), inset 0 4px 6px #FFF, inset 0 -5px 8px #88C5AD'
-              : '0 6px 12px -2px rgba(95, 75, 140, 0.32), inset 0 4px 5px #FFF, inset 0 -5px 7px #C9B9A8',
+              ? '${materialShadow(`0 6px 12px -2px rgba(42, 122, 108, 0.42), inset 0 4px 6px #FFF, inset 0 -5px 8px #88C5AD`)}'
+              : '${materialShadow(`0 6px 12px -2px rgba(95, 75, 140, 0.32), inset 0 4px 5px #FFF, inset 0 -5px 7px #C9B9A8`)}',
           }}
         />
       </button>
@@ -763,9 +769,9 @@ export function ClayBottomNavDock() {
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-0 rounded-full -z-10 pointer-events-none"
               style={{
-                background: 'linear-gradient(145deg, #C5A8EE 0%, #AC89DF 100%)',
+                background: '${materialBackground(`linear-gradient(145deg, #C5A8EE 0%, #AC89DF 100%)`)}',
                 boxShadow:
-                  '0 10px 18px -4px rgba(98, 66, 189, 0.48), inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -5px 8px #5E3EC4',
+                  '${materialShadow(`0 10px 18px -4px rgba(98, 66, 189, 0.48), inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -5px 8px #5E3EC4`)}',
               }}
             />
             <span>{item.label}</span>
@@ -796,16 +802,16 @@ export function Clay3DSlider() {
         <div
           className="w-full h-4 rounded-full overflow-hidden"
           style={{
-            background: 'linear-gradient(180deg, #FFFFFF 0%, #F7EFE6 58%, #E6DBD0 100%)',
+            background: '${materialBackground(`linear-gradient(180deg, #FFFFFF 0%, #F7EFE6 58%, #E6DBD0 100%)`)}',
             boxShadow:
-              '0 6px 12px -2px rgba(95,75,140,0.18), inset 0 3px 4px #FFF, inset 0 -3px 5px #D5C7B8',
+              '${materialShadow(`0 6px 12px -2px rgba(95,75,140,0.18), inset 0 3px 4px #FFF, inset 0 -3px 5px #D5C7B8`)}',
           }}
         >
           <div
             className="h-full rounded-full"
             style={{
               width: \`\${val}%\`,
-              background: 'linear-gradient(180deg, #FFE8EE 0%, #F9C2D0 100%)',
+              background: '${materialBackground(`linear-gradient(180deg, #FFE8EE 0%, #F9C2D0 100%)`)}',
             }}
           />
         </div>
@@ -819,10 +825,10 @@ export function Clay3DSlider() {
             borderRadius: \`\${thumbRadius}px\`,
             background:
               thumbRadius < 14
-                ? 'linear-gradient(145deg, #FFD8E2 0%, #F7A3B8 55%, #E37892 100%)'
-                : 'radial-gradient(circle at 32% 28%, #FFE0E8 0%, #F7A3B8 52%, #E37892 100%)',
+                ? '${materialBackground(`linear-gradient(145deg, #FFD8E2 0%, #F7A3B8 55%, #E37892 100%)`)}'
+                : '${materialBackground(`radial-gradient(circle at 32% 28%, #FFE0E8 0%, #F7A3B8 52%, #E37892 100%)`)}',
             boxShadow:
-              '0 10px 18px -3px rgba(184,78,104,0.45), inset 0 4px 6px rgba(255,255,255,0.92), inset 0 -5px 8px #C25570',
+              '${materialShadow(`0 10px 18px -3px rgba(184,78,104,0.45), inset 0 4px 6px rgba(255,255,255,0.92), inset 0 -5px 8px #C25570`)}',
             transform: pressed
               ? 'translate3d(0, -50%, 0) scaleX(1.12) scaleY(0.975)'
               : 'translate3d(0, -50%, 0) scaleX(1) scaleY(1)',
@@ -860,9 +866,9 @@ export function ClayKpiCard() {
       <div
         className="w-14 h-14 flex items-center justify-center mb-4"
         style={{
-          background: 'linear-gradient(145deg, ${preset.badgeBgHex} 0%, ${preset.innerDarkHex} 100%)',
+          background: '${materialBackground(`linear-gradient(145deg, ${preset.badgeBgHex} 0%, ${preset.innerDarkHex} 100%)`)}',
           borderRadius: '${Math.min(18, styles.innerChildRadius)}px',
-          boxShadow: '0 8px 16px -3px rgba(${preset.outerShadowRgb}, 0.35), inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -4px 6px rgba(0,0,0,0.16)',
+          boxShadow: '${materialShadow(`0 8px 16px -3px rgba(${preset.outerShadowRgb}, 0.35), inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -4px 6px rgba(0,0,0,0.16)`)}',
         }}
       >
         <img
@@ -906,8 +912,8 @@ export function ClayBadgeInput() {
       <div
         className="absolute left-1.5 w-12 h-12 rounded-full flex items-center justify-center pointer-events-none"
         style={{
-          background: 'linear-gradient(145deg, #B298FA 0%, #8C6DE6 100%)',
-          boxShadow: '0 6px 12px -2px rgba(98, 66, 189, 0.45), inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -4px 6px rgba(79, 49, 166, 0.7)',
+          background: '${materialBackground(`linear-gradient(145deg, #B298FA 0%, #8C6DE6 100%)`)}',
+          boxShadow: '${materialShadow(`0 6px 12px -2px rgba(98, 66, 189, 0.45), inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -4px 6px rgba(79, 49, 166, 0.7)`)}',
         }}
       >
         <img

@@ -1,3 +1,4 @@
+import { materialBackground, materialFilter, materialShadow } from '../utils/materialStyle';
 import React from 'react';
 import { CLAY_COLOR_PRESETS, ClayColorPresetId, resolveClayAssetPath } from '../utils/clayEngine';
 
@@ -99,15 +100,15 @@ export function ClayAvatar({
           padding: `${cfg.rimPx}px`,
           borderRadius: outerBorderRadius,
           background:
-            presetId === 'purple-cta'
+            materialBackground(presetId === 'purple-cta'
               ? 'linear-gradient(145deg, #F5EEFF 0%, #B89EFA 44%, #7A58DE 100%)'
-              : `linear-gradient(145deg, ${preset.gradStart} 0%, ${preset.gradEnd} 100%)`,
-          boxShadow: `
-            8px ${dropY}px ${dropBlur}px -4px rgba(${preset.outerShadowRgb}, 0.56),
-            3px 6px 12px -1px rgba(${preset.outerShadowRgb}, 0.36),
+              : `linear-gradient(145deg, ${preset.gradStart} 0%, ${preset.gradEnd} 100%)`),
+          boxShadow: materialShadow(`
+            8px ${dropY}px ${dropBlur}px -4px rgba(${preset.outerShadowRgb}, 0.30),
+            3px 6px 12px -1px rgba(${preset.outerShadowRgb}, 0.16),
             inset 3.5px 4.5px 7px rgba(255, 255, 255, 0.975),
             inset -4px -7px 12px ${preset.innerDarkHex}
-          `,
+          `),
         }}
       >
         {/* LAYER 2: Deep Recessed Inner Substrate (Вдавленная подложка с глубокой внутренней тенью inset) */}
@@ -116,12 +117,12 @@ export function ClayAvatar({
           style={{
             borderRadius: innerBorderRadius,
             background:
-              'linear-gradient(155deg, #CFBBEF 0%, #E7DAFF 42%, #FCF9FF 100%)',
-            boxShadow: `
-              inset ${insetDepth}px ${insetDepth + 4}px ${Math.round(insetDepth * 2.2)}px rgba(38, 16, 102, 0.64),
-              inset 3px 5px 9px rgba(38, 16, 102, 0.42),
+              materialBackground('linear-gradient(155deg, #CFBBEF 0%, #E7DAFF 42%, #FCF9FF 100%)'),
+            boxShadow: materialShadow(`
+              inset ${insetDepth}px ${insetDepth + 4}px ${Math.round(insetDepth * 2.2)}px rgba(38, 16, 102, 0.28),
+              inset 3px 5px 9px rgba(38, 16, 102, 0.14),
               inset -5px -6px 12px rgba(255, 255, 255, 0.96)
-            `,
+            `),
             border: '1.5px solid rgba(255, 255, 255, 0.68)',
           }}
         >
@@ -130,7 +131,7 @@ export function ClayAvatar({
             className="absolute inset-2 pointer-events-none opacity-65"
             style={{
               borderRadius: `${Math.max(8, innerTopR - 7)}px ${Math.max(8, innerTopR - 7)}px ${Math.max(6, innerBottomR - 7)}px ${Math.max(6, innerBottomR - 7)}px`,
-              boxShadow: 'inset 3px 4px 8px rgba(72, 42, 152, 0.24)',
+              boxShadow: materialShadow('inset 3px 4px 8px rgba(72, 42, 152, 0.24)'),
             }}
           />
         </div>
@@ -150,7 +151,7 @@ export function ClayAvatar({
               width: `${cfg.imgSize}px`,
               height: `${cfg.imgSize}px`,
               filter:
-                'drop-shadow(3px 9px 9px rgba(34, 16, 84, 0.46)) drop-shadow(0px 3px 4px rgba(34, 16, 84, 0.32))',
+                materialFilter('drop-shadow(3px 9px 9px rgba(34, 16, 84, 0.46)) drop-shadow(0px 3px 4px rgba(34, 16, 84, 0.32))'),
             }}
             className={`max-w-none object-contain transition-transform duration-300 ${
               isGirlCat ? '' : 'scale-110 -translate-y-2'
@@ -163,9 +164,9 @@ export function ClayAvatar({
           <div
             className="absolute -bottom-2 -right-2 z-30 px-2.5 py-0.5 rounded-full text-[10px] font-black text-white tracking-wide"
             style={{
-              background: 'linear-gradient(145deg, #62C4B2 0%, #46A896 100%)',
+              background: materialBackground('linear-gradient(145deg, #62C4B2 0%, #46A896 100%)'),
               boxShadow:
-                '2px 5px 10px rgba(32, 92, 80, 0.45), inset 1.5px 2px 3px rgba(255, 255, 255, 0.8), inset -2px -3px 4px #2E7D6E',
+                materialShadow('2px 5px 10px rgba(32, 92, 80, 0.45), inset 1.5px 2px 3px rgba(255, 255, 255, 0.8), inset -2px -3px 4px #2E7D6E'),
             }}
           >
             {badgeText}

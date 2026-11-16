@@ -1,4 +1,4 @@
-import React, { useId, useLayoutEffect, useRef, useState } from 'react';
+import React, { useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { buildSymmetricalNotch, getTabCenterX, calculateTransitDuration, computeFramePhysics } from '../utils/notchMath';
 import './sticker-notch-nav.css';
@@ -14,6 +14,20 @@ const STICKER_TABS = [
 
 export type StickerTabId = typeof STICKER_TABS[number]['id'];
 
+// Self-contained bridge keeps the raw component export usable outside the studio.
+const NOTCH_MATERIAL_DEFAULT = '1|1|1|1';
+const getNotchServerMaterial = () => NOTCH_MATERIAL_DEFAULT;
+function getNotchMaterialSnapshot() {
+  if (typeof document === 'undefined') return NOTCH_MATERIAL_DEFAULT;
+  const style = getComputedStyle(document.documentElement);
+  return ['--clay-volume', '--clay-shadow-softness', '--clay-light-x', '--clay-light-y']
+    .map(name => style.getPropertyValue(name).trim() || '1').join('|');
+}
+function subscribeNotchMaterial(onChange: () => void) {
+  window.addEventListener('clay-material-change', onChange);
+  return () => window.removeEventListener('clay-material-change', onChange);
+}
+
 export function StickerNotchNav({activeId, onSelect, speed = .6}: {
   activeId: StickerTabId;
   onSelect: (id: StickerTabId) => void;
@@ -21,6 +35,10 @@ export function StickerNotchNav({activeId, onSelect, speed = .6}: {
 }) {
   const uid = useId().replace(/:/g, '');
   const reduced = useReducedMotion();
+  const materialSnapshot = useSyncExternalStore(subscribeNotchMaterial, getNotchMaterialSnapshot, getNotchServerMaterial);
+  const materialValues = materialSnapshot.split('|').map(Number);
+  const bounded = (index: number, low: number, high: number) => Number.isFinite(materialValues[index]) ? Math.min(high, Math.max(low, materialValues[index])) : 1;
+  const material = { volume: bounded(0, .6, 1.5), softness: bounded(1, .6, 1.5), x: bounded(2, -1, 1), y: bounded(3, -1, 1) };
   const host = useRef<HTMLElement>(null);
   const panel = useRef<SVGPathElement>(null);
   const rim = useRef<SVGPathElement>(null);
@@ -116,14 +134,14 @@ export function StickerNotchNav({activeId, onSelect, speed = .6}: {
   return <nav ref={host} className="sticker-notch" aria-label="Нижнее меню с пластилиновой выемкой" style={{opacity:ready?1:0}}>
     <svg className="sticker-notch-panel" viewBox={`0 0 ${width} 90`} preserveAspectRatio="none" aria-hidden="true">
       <defs>
-        <linearGradient id={`${uid}-fill`} x1="0" y1="22" x2={width*.28} y2="90" gradientUnits="userSpaceOnUse"><stop stopColor="#C7ACF0"/><stop offset="1" stopColor="#AA86DF"/></linearGradient>
+        <linearGradient id={`${uid}-fill`} x1={material.x > 0 ? 0 : width} y1={material.y > 0 ? 22 : 90} x2={width*(material.x > 0 ? .28 : .72)} y2={material.y > 0 ? 90 : 22} gradientUnits="userSpaceOnUse"><stop stopColor="#C7ACF0"/><stop offset="1" stopColor="#AA86DF"/></linearGradient>
         <filter id={`${uid}-bevel`} x="-10%" y="-20%" width="120%" height="150%" colorInterpolationFilters="sRGB">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="lightBlur"/><feOffset in="lightBlur" dx="2" dy="4" result="lightOffset"/><feComposite in="SourceAlpha" in2="lightOffset" operator="out" result="lightMask"/><feFlood floodColor="#FFFFFF" floodOpacity=".6" result="lightColor"/><feComposite in="lightColor" in2="lightMask" operator="in" result="light"/>
-          <feGaussianBlur in="SourceAlpha" stdDeviation="3.6" result="shadeBlur"/><feOffset in="shadeBlur" dx="-2" dy="-5" result="shadeOffset"/><feComposite in="SourceAlpha" in2="shadeOffset" operator="out" result="shadeMask"/><feFlood floodColor="#6947AE" floodOpacity=".34" result="shadeColor"/><feComposite in="shadeColor" in2="shadeMask" operator="in" result="shade"/>
+          <feGaussianBlur in="SourceAlpha" stdDeviation={3*material.volume*material.softness} result="lightBlur"/><feOffset in="lightBlur" dx={2*material.x*material.volume} dy={4*material.y*material.volume} result="lightOffset"/><feComposite in="SourceAlpha" in2="lightOffset" operator="out" result="lightMask"/><feFlood floodColor="#FFFFFF" floodOpacity={Math.min(.85,.6*material.volume)} result="lightColor"/><feComposite in="lightColor" in2="lightMask" operator="in" result="light"/>
+          <feGaussianBlur in="SourceAlpha" stdDeviation={3.6*material.volume*material.softness} result="shadeBlur"/><feOffset in="shadeBlur" dx={-2*material.x*material.volume} dy={-5*material.y*material.volume} result="shadeOffset"/><feComposite in="SourceAlpha" in2="shadeOffset" operator="out" result="shadeMask"/><feFlood floodColor="#6947AE" floodOpacity={.34*material.volume} result="shadeColor"/><feComposite in="shadeColor" in2="shadeMask" operator="in" result="shade"/>
           <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="shade"/><feMergeNode in="light"/></feMerge>
         </filter>
       </defs>
-      <path ref={rim} d={path(target)} transform="translate(0 3.5)" fill="#8A67CC" opacity=".82"/>
+      <path ref={rim} d={path(target)} transform={`translate(0 ${3.5*material.y*material.volume})`} fill="#8A67CC" opacity=".82"/>
       <path ref={panel} d={path(target)} fill={`url(#${uid}-fill)`} filter={`url(#${uid}-bevel)`}/>
     </svg>
     <div ref={orb} className="sticker-notch-orb" style={{left:target}} aria-hidden="true"><div ref={orbIcon} className="sticker-notch-orb-icon"><img className="sticker-notch-clay-icon" src={displayedTab.icon} alt="" draggable={false}/>{'badge' in displayedTab && <span className="sticker-notch-badge">{displayedTab.badge}</span>}</div></div>

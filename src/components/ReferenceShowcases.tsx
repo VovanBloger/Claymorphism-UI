@@ -1,3 +1,4 @@
+import { materialBackground, materialShadow } from '../utils/materialStyle';
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import {
@@ -185,9 +186,9 @@ export function ReferenceShowcases({
                           transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
                           className="absolute inset-0 rounded-full -z-10 pointer-events-none"
                           style={{
-                            background: 'linear-gradient(150deg, #FFFDF8 0%, #F5EDE9 100%)',
+                            background: materialBackground('linear-gradient(150deg, #FFFDF8 0%, #F5EDE9 100%)'),
                             boxShadow:
-                              '1px 4px 6px -2px rgba(73, 50, 112, 0.25), inset 1px 2px 3px rgba(255,255,255,0.9), inset -1px -2px 3px #E5D8DC',
+                              materialShadow('1px 4px 6px -2px rgba(73, 50, 112, 0.25), inset 1px 2px 3px rgba(255,255,255,0.9), inset -1px -2px 3px #E5D8DC'),
                           }}
                         />
 
@@ -283,9 +284,9 @@ export function ReferenceShowcases({
                     <span
                       className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] font-black text-white flex items-center justify-center"
                       style={{
-                        background: 'linear-gradient(145deg, #FA9CB0 0%, #E36582 100%)',
+                        background: materialBackground('linear-gradient(145deg, #FA9CB0 0%, #E36582 100%)'),
                         boxShadow:
-                          '2px 4px 8px rgba(184, 78, 104, 0.45), inset 1px 1.5px 2px rgba(255, 255, 255, 0.8)',
+                          materialShadow('2px 4px 8px rgba(184, 78, 104, 0.45), inset 1px 1.5px 2px rgba(255, 255, 255, 0.8)'),
                       }}
                     >
                       3
@@ -361,9 +362,9 @@ export function ReferenceShowcases({
                   <div
                     className="w-12 h-12 rounded-[16px] flex items-center justify-center mb-3"
                     style={{
-                      background: 'linear-gradient(145deg, #B59BF9 0%, #8C6DE6 100%)',
+                      background: materialBackground('linear-gradient(145deg, #B59BF9 0%, #8C6DE6 100%)'),
                       boxShadow:
-                        '4px 10px 18px -3px rgba(98, 66, 189, 0.48), 2px 4px 8px rgba(98, 66, 189, 0.28), inset 2.5px 3px 5px rgba(255, 255, 255, 0.78), inset -3px -4px 7px #6242C4',
+                        materialShadow('4px 10px 18px -3px rgba(98, 66, 189, 0.48), 2px 4px 8px rgba(98, 66, 189, 0.28), inset 2.5px 3px 5px rgba(255, 255, 255, 0.78), inset -3px -4px 7px #6242C4'),
                     }}
                   >
                     <Music className="w-6 h-6 text-white clay-icon-3d" />
@@ -383,9 +384,9 @@ export function ReferenceShowcases({
                   <div
                     className="w-12 h-12 rounded-[16px] flex items-center justify-center mb-3"
                     style={{
-                      background: 'linear-gradient(145deg, #FFA299 0%, #ED766C 100%)',
+                      background: materialBackground('linear-gradient(145deg, #FFA299 0%, #ED766C 100%)'),
                       boxShadow:
-                        '4px 10px 18px -3px rgba(204, 88, 78, 0.46), 2px 4px 8px rgba(204, 88, 78, 0.28), inset 2.5px 3px 5px rgba(255, 255, 255, 0.78), inset -3px -4px 7px #C95247',
+                        materialShadow('4px 10px 18px -3px rgba(204, 88, 78, 0.46), 2px 4px 8px rgba(204, 88, 78, 0.28), inset 2.5px 3px 5px rgba(255, 255, 255, 0.78), inset -3px -4px 7px #C95247'),
                     }}
                   >
                     <Heart className="w-6 h-6 text-white fill-white clay-icon-3d" />
@@ -405,9 +406,9 @@ export function ReferenceShowcases({
                   <div
                     className="w-12 h-12 rounded-[16px] flex items-center justify-center mb-3"
                     style={{
-                      background: 'linear-gradient(145deg, #FFE08C 0%, #F2BA49 100%)',
+                      background: materialBackground('linear-gradient(145deg, #FFE08C 0%, #F2BA49 100%)'),
                       boxShadow:
-                        '4px 10px 18px -3px rgba(196, 144, 42, 0.45), 2px 4px 8px rgba(196, 144, 42, 0.26), inset 2.5px 3px 5px rgba(255, 255, 255, 0.85), inset -3px -4px 7px #CE9424',
+                        materialShadow('4px 10px 18px -3px rgba(196, 144, 42, 0.45), 2px 4px 8px rgba(196, 144, 42, 0.26), inset 2.5px 3px 5px rgba(255, 255, 255, 0.85), inset -3px -4px 7px #CE9424'),
                     }}
                   >
                     <Clock className="w-6 h-6 text-[#4A3810] clay-icon-3d" />
@@ -427,9 +428,9 @@ export function ReferenceShowcases({
                   <div
                     className="w-12 h-12 rounded-[16px] flex items-center justify-center mb-3"
                     style={{
-                      background: 'linear-gradient(145deg, #9CC8FA 0%, #6FA4E8 100%)',
+                      background: materialBackground('linear-gradient(145deg, #9CC8FA 0%, #6FA4E8 100%)'),
                       boxShadow:
-                        '4px 10px 18px -3px rgba(82, 132, 196, 0.46), 2px 4px 8px rgba(82, 132, 196, 0.26), inset 2.5px 3px 5px rgba(255, 255, 255, 0.78), inset -3px -4px 7px #4B7EC2',
+                        materialShadow('4px 10px 18px -3px rgba(82, 132, 196, 0.46), 2px 4px 8px rgba(82, 132, 196, 0.26), inset 2.5px 3px 5px rgba(255, 255, 255, 0.78), inset -3px -4px 7px #4B7EC2'),
                     }}
                   >
                     <Flame className="w-6 h-6 text-white fill-white clay-icon-3d" />
@@ -476,8 +477,8 @@ export function ReferenceShowcases({
                               className="w-full rounded-full transition-all duration-500 hover:brightness-105"
                               style={{
                                 height: `${bar.heightPct}%`,
-                                background: bar.grad,
-                                boxShadow: `3px 6px 12px -2px ${bar.glow}, inset 2px 3px 4px rgba(255,255,255,0.82), inset -2px -4px 6px ${bar.shadow}`,
+                                background: materialBackground(bar.grad),
+                                boxShadow: materialShadow(`3px 6px 12px -2px ${bar.glow}, inset 2px 3px 4px rgba(255,255,255,0.82), inset -2px -4px 6px ${bar.shadow}`),
                               }}
                             />
                           </div>
@@ -503,18 +504,18 @@ export function ReferenceShowcases({
                       className="relative w-36 h-36 rounded-full flex items-center justify-center shrink-0"
                       style={{
                         background:
-                          'conic-gradient(#9B80F0 0deg 162deg, #F5968E 162deg 252deg, #F7CB68 252deg 306deg, #8FD186 306deg 342deg, #7BB6EE 342deg 360deg)',
+                          materialBackground('conic-gradient(#9B80F0 0deg 162deg, #F5968E 162deg 252deg, #F7CB68 252deg 306deg, #8FD186 306deg 342deg, #7BB6EE 342deg 360deg)'),
                         boxShadow:
-                          '6px 14px 26px -4px rgba(95, 75, 140, 0.34), 2px 5px 10px rgba(95, 75, 140, 0.2), inset 4px 5px 8px rgba(255, 255, 255, 0.78), inset -4px -6px 10px rgba(72, 52, 117, 0.36)',
+                          materialShadow('6px 14px 26px -4px rgba(95, 75, 140, 0.34), 2px 5px 10px rgba(95, 75, 140, 0.2), inset 4px 5px 8px rgba(255, 255, 255, 0.78), inset -4px -6px 10px rgba(72, 52, 117, 0.36)'),
                       }}
                     >
                       {/* Inner Recessed Donut Hole */}
                       <div
                         className="w-16 h-16 rounded-full"
                         style={{
-                          background: 'linear-gradient(145deg, #EDE4DA 0%, #FFFDFB 100%)',
+                          background: materialBackground('linear-gradient(145deg, #EDE4DA 0%, #FFFDFB 100%)'),
                           boxShadow:
-                            'inset 3px 5px 9px rgba(95, 75, 140, 0.28), 0 2px 4px rgba(255, 255, 255, 0.9)',
+                            materialShadow('inset 3px 5px 9px rgba(95, 75, 140, 0.28), 0 2px 4px rgba(255, 255, 255, 0.9)'),
                         }}
                       />
                     </div>
@@ -533,9 +534,9 @@ export function ReferenceShowcases({
                             <span
                               className="w-3.5 h-3.5 rounded-full inline-block"
                               style={{
-                                background: g.color,
+                                background: materialBackground(g.color),
                                 boxShadow:
-                                  '1px 2px 4px rgba(0,0,0,0.18), inset 1px 1.5px 2px rgba(255,255,255,0.85), inset -1px -2px 3px rgba(0,0,0,0.22)',
+                                  materialShadow('1px 2px 4px rgba(0,0,0,0.18), inset 1px 1.5px 2px rgba(255,255,255,0.85), inset -1px -2px 3px rgba(0,0,0,0.22)'),
                               }}
                             />
                             {g.label}
@@ -574,9 +575,9 @@ export function ReferenceShowcases({
                             <div
                               className="w-12 h-12 rounded-[16px] shrink-0"
                               style={{
-                                background: track.coverGrad,
+                                background: materialBackground(track.coverGrad),
                                 boxShadow:
-                                  '3px 6px 12px -2px rgba(95,75,140,0.28), inset 2px 2px 4px rgba(255,255,255,0.65), inset -2px -3px 5px rgba(0,0,0,0.2)',
+                                  materialShadow('3px 6px 12px -2px rgba(95,75,140,0.28), inset 2px 2px 4px rgba(255,255,255,0.65), inset -2px -3px 5px rgba(0,0,0,0.2)'),
                               }}
                             />
                             <div>
@@ -616,9 +617,9 @@ export function ReferenceShowcases({
                     className="relative h-48 rounded-[24px] p-5 flex flex-col justify-end overflow-hidden"
                     style={{
                       background:
-                        'linear-gradient(135deg, #7A5896 0%, #9E7BB8 45%, #E0A98B 100%)',
+                        materialBackground('linear-gradient(135deg, #7A5896 0%, #9E7BB8 45%, #E0A98B 100%)'),
                       boxShadow:
-                        'inset 2px 3px 6px rgba(255,255,255,0.5), inset -3px -6px 12px rgba(45,28,64,0.45), 4px 10px 20px -4px rgba(95,75,140,0.32)',
+                        materialShadow('inset 2px 3px 6px rgba(255,255,255,0.5), inset -3px -6px 12px rgba(45,28,64,0.45), 4px 10px 20px -4px rgba(95,75,140,0.32)'),
                     }}
                   >
                     <div className="absolute top-4 right-5 w-24 h-24 rounded-full bg-[#FFE8B5]/40 blur-xl pointer-events-none" />
@@ -652,9 +653,9 @@ export function ReferenceShowcases({
                 onClick={() => triggerInspect('promo-banner', 'star_mascot')}
                 className="rounded-[30px] px-6 py-4 flex flex-wrap items-center justify-between gap-4 cursor-pointer transition-transform hover:-translate-y-0.5"
                 style={{
-                  background: 'linear-gradient(145deg, #B59BF9 0%, #9374ED 100%)',
+                  background: materialBackground('linear-gradient(145deg, #B59BF9 0%, #9374ED 100%)'),
                   boxShadow:
-                    '6px 16px 28px -4px rgba(102, 71, 194, 0.44), 2px 6px 12px rgba(102, 71, 194, 0.25), inset 3px 4px 7px rgba(255, 255, 255, 0.65), inset -4px -6px 10px #6A49C9',
+                    materialShadow('6px 16px 28px -4px rgba(102, 71, 194, 0.44), 2px 6px 12px rgba(102, 71, 194, 0.25), inset 3px 4px 7px rgba(255, 255, 255, 0.65), inset -4px -6px 10px #6A49C9'),
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -677,9 +678,9 @@ export function ReferenceShowcases({
                   type="button"
                   className="px-6 py-2.5 rounded-full text-xs font-extrabold text-white cursor-pointer clay-squish clay-sidebar-text-3d"
                   style={{
-                    background: 'linear-gradient(145deg, #C7B2FC 0%, #A488F5 100%)',
+                    background: materialBackground('linear-gradient(145deg, #C7B2FC 0%, #A488F5 100%)'),
                     boxShadow:
-                      '3px 8px 16px -2px rgba(58, 35, 128, 0.45), inset 2px 3px 5px rgba(255, 255, 255, 0.72), inset -2px -4px 6px #7858D6',
+                      materialShadow('3px 8px 16px -2px rgba(58, 35, 128, 0.45), inset 2px 3px 5px rgba(255, 255, 255, 0.72), inset -2px -4px 6px #7858D6'),
                   }}
                 >
                   Explore Now
@@ -731,9 +732,9 @@ export function ReferenceShowcases({
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
                 style={{
-                  background: 'linear-gradient(145deg, #FFB5C2 0%, #F07D94 100%)',
+                  background: materialBackground('linear-gradient(145deg, #FFB5C2 0%, #F07D94 100%)'),
                   boxShadow:
-                    '3px 8px 14px -2px rgba(204, 88, 112, 0.42), inset 2px 2.5px 4px rgba(255,255,255,0.82), inset -2px -3px 5px #C9546C',
+                    materialShadow('3px 8px 14px -2px rgba(204, 88, 112, 0.42), inset 2px 2.5px 4px rgba(255,255,255,0.82), inset -2px -3px 5px #C9546C'),
                 }}
               >
                 <Heart className="w-5 h-5 text-white fill-white clay-icon-3d" />
@@ -776,9 +777,9 @@ export function ReferenceShowcases({
                   <div
                     className="absolute left-1.5 w-11 h-11 rounded-full flex items-center justify-center"
                     style={{
-                      background: 'linear-gradient(145deg, #B59BF9 0%, #8E6FE8 100%)',
+                      background: materialBackground('linear-gradient(145deg, #B59BF9 0%, #8E6FE8 100%)'),
                       boxShadow:
-                        '3px 6px 12px -2px rgba(98, 66, 189, 0.48), inset 2px 3px 4px rgba(255,255,255,0.75), inset -2px -4px 6px #5E3EC4',
+                        materialShadow('3px 6px 12px -2px rgba(98, 66, 189, 0.48), inset 2px 3px 4px rgba(255,255,255,0.75), inset -2px -4px 6px #5E3EC4'),
                     }}
                   >
                     <User className="w-5 h-5 text-white fill-white clay-icon-3d" />
@@ -800,9 +801,9 @@ export function ReferenceShowcases({
                   <div
                     className="absolute left-1.5 w-11 h-11 rounded-full flex items-center justify-center"
                     style={{
-                      background: 'linear-gradient(145deg, #B59BF9 0%, #8E6FE8 100%)',
+                      background: materialBackground('linear-gradient(145deg, #B59BF9 0%, #8E6FE8 100%)'),
                       boxShadow:
-                        '3px 6px 12px -2px rgba(98, 66, 189, 0.48), inset 2px 3px 4px rgba(255,255,255,0.75), inset -2px -4px 6px #5E3EC4',
+                        materialShadow('3px 6px 12px -2px rgba(98, 66, 189, 0.48), inset 2px 3px 4px rgba(255,255,255,0.75), inset -2px -4px 6px #5E3EC4'),
                     }}
                   >
                     <img
@@ -918,9 +919,9 @@ export function ReferenceShowcases({
                 <div
                   className="w-28 h-28 rounded-[26px] flex items-center justify-center my-3 transition-transform duration-300 group-hover:scale-105"
                   style={{
-                    background: 'linear-gradient(145deg, #F6F0FF 0%, #E2D4FA 100%)',
+                    background: materialBackground('linear-gradient(145deg, #F6F0FF 0%, #E2D4FA 100%)'),
                     boxShadow:
-                      '4px 10px 20px -4px rgba(104, 78, 168, 0.28), 2px 4px 8px rgba(104, 78, 168, 0.16), inset 3px 3px 6px rgba(255, 255, 255, 0.92), inset -3px -5px 9px #C7B4EE',
+                      materialShadow('4px 10px 20px -4px rgba(104, 78, 168, 0.28), 2px 4px 8px rgba(104, 78, 168, 0.16), inset 3px 3px 6px rgba(255, 255, 255, 0.92), inset -3px -5px 9px #C7B4EE'),
                   }}
                 >
                   <img
