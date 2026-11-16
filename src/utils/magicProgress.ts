@@ -23,7 +23,8 @@ export function getCheckpointPositions(count: number): number[] {
 
 export function getCompletedCount(progress: number, count: number): number {
   const fill = Number.isFinite(progress) ? clamp(progress, 0, 1) : 0;
-  return getCheckpointPositions(count).filter(position => fill >= position).length;
+  // Multiplying a checkpoint by the duration and dividing back can lose one ULP.
+  return getCheckpointPositions(count).filter(position => fill + Number.EPSILON >= position).length;
 }
 
 export function getMagicDurationMs(count: number): number {
@@ -44,6 +45,8 @@ export interface MagicProgressStep {
   stageCount: number;
   speed?: number;
   playing?: boolean;
+  /** Preview can stop at a checkpoint instead of completing the whole track. */
+  targetProgress?: number;
 }
 
 /**
@@ -51,12 +54,13 @@ export interface MagicProgressStep {
  * completed before/after this call to celebrate every crossed checkpoint.
  * Reset the frame timestamp on resume so paused wall time is never counted.
  */
-export function advanceMagicProgress({ elapsedMs, deltaMs, stageCount, speed = 1, playing = true }: MagicProgressStep): MagicProgressState {
+export function advanceMagicProgress({ elapsedMs, deltaMs, stageCount, speed = 1, playing = true, targetProgress = 1 }: MagicProgressStep): MagicProgressState {
   const duration = getMagicDurationMs(stageCount);
+  const target = (Number.isFinite(targetProgress) ? clamp(targetProgress, 0, 1) : 1) * duration;
   const previous = Number.isFinite(elapsedMs) ? clamp(elapsedMs, 0, duration) : 0;
   const delta = Number.isFinite(deltaMs) ? Math.max(0, deltaMs) : 0;
   const multiplier = Number.isFinite(speed) ? clamp(speed, 0.5, 2) : 1;
-  const next = Math.min(duration, previous + (playing ? delta * multiplier : 0));
+  const next = playing ? Math.min(target, previous + delta * multiplier) : previous;
   const progress = next / duration;
-  return { elapsedMs: next, progress, completed: getCompletedCount(progress, stageCount), finished: next >= duration };
+  return { elapsedMs: next, progress, completed: getCompletedCount(progress, stageCount), finished: next >= target };
 }

@@ -28,7 +28,9 @@ export function MagicProgress() {
   const [speed, setSpeed] = useState(1);
   const [elapsed, setElapsed] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const elapsedRef = useRef(0);
+  const playback = useRef({ targetProgress: 1, rate: 1 });
   const duration = getMagicDurationMs(count);
   const progress = Math.min(1, elapsed / duration);
   const completed = getCompletedCount(progress, count);
@@ -37,6 +39,8 @@ export function MagicProgress() {
 
   const reset = (nextCount = count) => {
     setPlaying(false);
+    setPreviewIndex(null);
+    playback.current = { targetProgress: 1, rate: 1 };
     elapsedRef.current = 0;
     setElapsed(0);
     setCount(nextCount);
@@ -45,8 +49,8 @@ export function MagicProgress() {
   useEffect(() => {
     if (!playing) return;
     if (reduced) {
-      elapsedRef.current = duration;
-      setElapsed(duration);
+      elapsedRef.current = playback.current.targetProgress * duration;
+      setElapsed(elapsedRef.current);
       setPlaying(false);
       return;
     }
@@ -56,7 +60,7 @@ export function MagicProgress() {
       // Background tabs and long stalls should not skip the little celebrations.
       const deltaMs = document.hidden ? 0 : Math.min(64, now - previous);
       previous = now;
-      const next = advanceMagicProgress({ elapsedMs: elapsedRef.current, deltaMs, stageCount: count, speed });
+      const next = advanceMagicProgress({ elapsedMs: elapsedRef.current, deltaMs: deltaMs * playback.current.rate, stageCount: count, speed, targetProgress: playback.current.targetProgress });
       elapsedRef.current = next.elapsedMs;
       setElapsed(next.elapsedMs);
       if (next.finished) setPlaying(false);
@@ -67,14 +71,28 @@ export function MagicProgress() {
   }, [playing, speed, count, duration, reduced]);
 
   const toggle = () => {
-    if (progress >= 1) { elapsedRef.current = 0; setElapsed(0); }
+    if (progress >= 1) { elapsedRef.current = 0; setElapsed(0); setPreviewIndex(null); }
+    if (!playing && (progress >= 1 || elapsedRef.current >= playback.current.targetProgress * duration)) {
+      playback.current = { targetProgress: 1, rate: 1 };
+    }
     setPlaying(value => !value);
+  };
+
+  const previewStage = (index: number) => {
+    const start = index === 0 ? 0 : positions[index - 1];
+    const targetProgress = index === count - 1 ? 1 : positions[index];
+    // Every individual preview travels in 900 ms at 1x, regardless of stage count.
+    playback.current = { targetProgress, rate: (targetProgress - start) * duration / 900 };
+    elapsedRef.current = (reduced ? targetProgress : start) * duration;
+    setElapsed(elapsedRef.current);
+    setPreviewIndex(index);
+    setPlaying(!reduced);
   };
 
   return <section className="magic-progress ref-playground" aria-labelledby={`${id}-title`}>
     <div className="ref-stage-label"><span>04 / A LITTLE COSMIC MAGIC</span><span>От искры до целой вселенной</span></div>
     <div className="magic-heading">
-      <div><span className="magic-eyebrow"><Sparkles size={14} /> КОЛЛЕКЦИЯ ДОСТИЖЕНИЙ</span><h2 id={`${id}-title`}>Маленькие шаги. Большая магия.</h2><p>Наполняйте космосом звёздные слоты — с каждым этапом ваша звезда становится ярче.</p></div>
+      <div><span className="magic-eyebrow"><Sparkles size={14} /> КОЛЛЕКЦИЯ ДОСТИЖЕНИЙ</span><h2 id={`${id}-title`}>Маленькие шаги. Большая магия.</h2><p>Нажмите на любую звезду или её название, чтобы посмотреть, как космос пробуждает этот этап.</p></div>
       <div className="magic-counter"><strong>{completed}<span> / {count}</span></strong><span>звёзд зажжено</span></div>
     </div>
 
@@ -94,13 +112,13 @@ export function MagicProgress() {
         </div>
         {levels.map((level, index) => {
           const lit = index < completed;
-          return <div key={`${count}-${index}`} className={`magic-checkpoint${lit ? ' is-lit' : ''}`} data-level={level} style={{ left: `${positions[index]*100}%`, '--star-size': `clamp(${28+level*3}px, ${8.8+level*1.5}cqw, ${76+level*14}px)`, '--celebrate': `${(680+level*100)/speed}ms` } as React.CSSProperties}>
+          return <button type="button" key={`${count}-${index}`} aria-label={`Посмотреть этап ${index + 1}: ${STARS[level].name}`} aria-pressed={previewIndex === index} onClick={() => previewStage(index)} className={`magic-checkpoint${lit ? ' is-lit' : ''}${previewIndex !== null && index < previewIndex ? ' is-previous' : ''}`} data-level={level} style={{ left: `${positions[index]*100}%`, '--star-size': `clamp(${28+level*3}px, ${8.8+level*1.5}cqw, ${76+level*14}px)`, '--celebrate': `${(680+level*100)/speed}ms` } as React.CSSProperties}>
             <svg className="magic-slot" viewBox="0 0 100 102" aria-hidden="true"><defs><linearGradient id={`${id}-slot-${index}`} x2=".8" y2="1"><stop stopColor="#bba3d6"/><stop offset="1" stopColor="#e8daf5"/></linearGradient><filter id={`${id}-inset-${index}`} x="-20%" y="-20%" width="140%" height="140%"><feOffset in="SourceAlpha" dx="2" dy="4" result="offset"/><feGaussianBlur in="offset" stdDeviation="3" result="blur"/><feComposite in="SourceAlpha" in2="blur" operator="out" result="shadow"/><feFlood floodColor="#72518d" floodOpacity=".4"/><feComposite in2="shadow" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter></defs><path d={STAR_PATH} fill={`url(#${id}-slot-${index})`} filter={`url(#${id}-inset-${index})`}/><path d={STAR_PATH} fill="none" stroke="#fff5ff" strokeWidth="2" opacity=".5" transform="translate(0 1)"/></svg>
-            <div className="magic-aura"/>
-            <div className="magic-character"><StarSprite level={level}/></div>
-            <div className="magic-burst" aria-hidden="true">{Array.from({ length: 5+level*2 }, (_, n) => <i key={n} style={{ '--angle': `${n*360/(5+level*2)}deg`, '--distance': `${45+level*9}px` } as React.CSSProperties}>✦</i>)}</div>
+            <span className="magic-aura"/>
+            <span className="magic-character"><StarSprite level={level}/></span>
+            <span className="magic-burst" aria-hidden="true">{Array.from({ length: 5+level*2 }, (_, n) => <i key={n} style={{ '--angle': `${n*360/(5+level*2)}deg`, '--distance': `${45+level*9}px` } as React.CSSProperties}>✦</i>)}</span>
             <span className="magic-checkpoint-label"><small>0{index+1}</small>{STARS[level].name}</span>
-          </div>;
+          </button>;
         })}
       </div>
       <div className="magic-stage-bottom"><span className="magic-live" role="status">{completed ? `${STARS[levels[completed-1]].name} ${completed === count ? '— финальная звезда ваша!' : 'зажглась. Дальше — ещё чудеснее.'}` : 'Нажмите «Запустить магию», чтобы разбудить звёзды.'}</span><span>✧ SOFT CLAY / DEEP SPACE</span></div>

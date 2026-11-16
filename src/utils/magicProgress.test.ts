@@ -63,3 +63,26 @@ test('invalid frame inputs cannot make progress reverse, become NaN, or exceed t
   assert.equal(getCompletedCount(-1, 5), 0);
   assert.equal(getCompletedCount(10, 5), 5);
 });
+
+test('stage previews stop on the chosen star, replay, pause, and can continue to the end', () => {
+  for (const stageCount of [2, 3, 4, 5]) {
+    const duration = getMagicDurationMs(stageCount);
+    const positions = getCheckpointPositions(stageCount);
+    positions.forEach((position, index) => {
+      const targetProgress = index === stageCount - 1 ? 1 : position;
+      const start = (positions[index - 1] ?? 0) * duration;
+      const options = { elapsedMs: start, stageCount, targetProgress };
+      assert.equal(getCompletedCount(start / duration, stageCount), index);
+      const paused = advanceMagicProgress({ ...options, deltaMs: 1e5, playing: false });
+      assert.equal(paused.elapsedMs, start);
+      const finish = advanceMagicProgress({ ...options, deltaMs: 1e5 });
+      assert.equal(finish.elapsedMs, targetProgress * duration);
+      assert.equal(finish.completed, index + 1);
+      assert.equal(finish.finished, true);
+      assert.deepEqual(advanceMagicProgress({ ...options, deltaMs: 1e5 }), finish);
+      const continued = advanceMagicProgress({ elapsedMs: finish.elapsedMs, stageCount, deltaMs: 1e5 });
+      assert.equal(continued.progress, 1);
+      assert.equal(continued.completed, stageCount);
+    });
+  }
+});
