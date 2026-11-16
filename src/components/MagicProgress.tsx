@@ -26,6 +26,7 @@ export function MagicProgress() {
   const reduced = useReducedMotion();
   const [count, setCount] = useState(5);
   const [speed, setSpeed] = useState(1);
+  const [thickness, setThickness] = useState(72);
   const [elapsed, setElapsed] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
@@ -96,7 +97,7 @@ export function MagicProgress() {
       <div className="magic-counter"><strong>{completed}<span> / {count}</span></strong><span>звёзд зажжено</span></div>
     </div>
 
-    <div style={{ '--spark-time': `${850/speed}ms`, '--nebula-time': `${6/speed}s`, '--twinkle-time': `${2.2/speed}s` } as React.CSSProperties} className={`magic-stage${playing ? ' is-playing' : ''}${progress === 1 ? ' is-complete' : ''}`}>
+    <div style={{ '--track-height': `${thickness}px`, '--spark-time': `${850/speed}ms`, '--nebula-time': `${6/speed}s`, '--twinkle-time': `${2.2/speed}s` } as React.CSSProperties} className={`magic-stage${playing ? ' is-playing' : ''}${progress === 1 ? ' is-complete' : ''}`}>
       <div className="magic-stage-caption"><span>{progress === 1 ? 'ВАША ВСЕЛЕННАЯ ЗАЖГЛАСЬ' : playing ? 'МАГИЯ УЖЕ В ПУТИ' : progress > 0 ? 'ПРОДОЛЖИМ ПУТЕШЕСТВИЕ?' : 'КАЖДАЯ ЗВЕЗДА — НОВАЯ ИСТОРИЯ'}</span><span>{Math.round(progress * 100)}%</span></div>
       <div className="magic-track-space">
         <div className="magic-track" role="progressbar" aria-label="Космический прогресс" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)} aria-valuetext={`${completed} из ${count} звёзд`}>
@@ -126,7 +127,8 @@ export function MagicProgress() {
 
     <div className="magic-controls">
       <fieldset><legend>Количество этапов</legend><div className="magic-count-options">{[2,3,4,5].map(value => <button type="button" key={value} aria-pressed={count === value} aria-label={`${value} ${value === 5 ? 'этапов' : 'этапа'}`} onClick={() => reset(value)}>{value}</button>)}</div></fieldset>
-      <label className="magic-speed" htmlFor={`${id}-speed`}><span>Скорость <output>{speed.toLocaleString('ru-RU')}×</output></span><input id={`${id}-speed`} type="range" min="0.5" max="2" step="0.25" value={speed} onChange={event => setSpeed(Number(event.target.value))}/><span className="magic-speed-limits"><span>Мечтательно</span><span>Стремительно</span></span></label>
+      <label className="magic-range" htmlFor={`${id}-speed`}><span>Скорость <output>{speed.toLocaleString('ru-RU')}×</output></span><input id={`${id}-speed`} type="range" min="0.5" max="2" step="0.25" value={speed} onChange={event => setSpeed(Number(event.target.value))}/><span className="magic-range-limits"><span>Мечтательно</span><span>Стремительно</span></span></label>
+      <label className="magic-range magic-thickness" htmlFor={`${id}-thickness`}><span>Толщина <output>{thickness} px</output></span><input id={`${id}-thickness`} type="range" min="24" max="112" step="2" value={thickness} aria-label="Толщина прогресс-бара" aria-valuetext={`${thickness} пикселей`} onChange={event => setThickness(Number(event.target.value))}/><span className="magic-range-limits"><span>Тоньше</span><span>Толще</span></span></label>
       <div className="magic-actions"><button type="button" className="magic-play" onClick={toggle}>{playing ? <Pause size={16}/> : <Play size={16}/ >}{playing ? 'Пауза' : progress >= 1 ? 'Ещё раз' : progress > 0 ? 'Продолжить' : 'Запустить магию'}</button><button type="button" className="magic-reset" onClick={() => reset()} aria-label="Сбросить магический прогресс"><RotateCcw size={18}/></button></div>
     </div>
     <p className="magic-footnote">Пять характеров из референса. Выберите от двух до пяти этапов — финал всегда достанется звезде с короной.</p>
