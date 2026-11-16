@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-17",
+  "environment": "Local Node via node --import tsx; separate before/after processes; no browser or PNG encoder",
+  "request": {
+    "width": 500,
+    "height": 500,
+    "radius": 40,
+    "layer": "foundation",
+    "face": [
+      222,
+      196,
+      255
+    ],
+    "edge": [
+      190,
+      166,
+      247
+    ],
+    "lightX": 1,
+    "lightY": 1,
+    "volume": 1,
+    "quality": 1
+  },
+  "warmupRuns": 3,
+  "measuredRuns": 7,
+  "pixels": 250000,
+  "beforeSortedMs": [
+    21.51,
+    22.04,
+    22.07,
+    22.31,
+    22.41,
+    23.1,
+    24.19
+  ],
+  "afterSortedMs": [
+    5.5,
+    5.56,
+    5.72,
+    5.96,
+    6,
+    6.71,
+    8.45
+  ],
+  "beforeMedianMs": 22.31,
+  "afterMedianMs": 5.96,
+  "byteEquivalence": "Eleven geometry/light/volume/quality/projection/shape fixtures against independent unoptimized sample loop, passed; original alpha preserved with sidewall.",
+  "limits": "CPU timing for the RGBA math only; not end-to-end, not frame rate; no worker and no texture changes",
+  "sidewallSortedMs": [
+    6.68,
+    6.68,
+    6.87,
+    7.67,
+    10.32,
+    16.58,
+    18.76
+  ],
+  "sidewallMedianMs": 7.67,
+  "sidewallNotes": "Same request, profile default projectionX=3/projectionY=6; explicit standalone run after lint/material checks finished.",
+  "lightingAtBenchmark": {
+    "softboxAmplitude": 0.72,
+    "softboxSigmaControl": 0.14,
+    "softboxSigmaFoundation": 0.15,
+    "note": "Measured before final matte-light and explicit shape changes; these are historical RGBA-only timings."
+  }
+}

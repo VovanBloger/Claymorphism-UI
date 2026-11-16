@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-17",
+  "timezone": "Europe/Moscow",
+  "tests": 49,
+  "lint": "passed",
+  "build": "passed",
+  "warning": "JS chunk742.16kB",
+  "browser": {
+    "desktop": "checked",
+    "mobile390": "no horizontal overflow; Confirm and Notch checked",
+    "consoleErrorsAfterCleanLoad": 0,
+    "standaloneRuntimeStyles": [
+      2,
+      0,
+      2
+    ],
+    "unmarkedNeighbourUnchanged": true,
+    "localDepthAndSpecular": "bitmap changed independently"
+  },
+  "textureSha256": "D7ED8C8A9836B99E494641351417EAECF1EBBB90D9E12EAE4611887F34AD0090",
+  "notVerified": [
+    "Safari",
+    "Firefox",
+    "physical touch devices",
+    "mobile FPS/paint profile"
+  ],
+  "push": true,
+  "deploy": true,
+  "sourceCommit": "6b44c74",
+  "pagesCommit": "1817432",
+  "publicAssets": [
+    "index-D87nIlAV.js",
+    "index-P_KJh_Ak.css"
+  ],
+  "publicBrowser": {
+    "libraryMenu": "verified",
+    "profileShape": "disc",
+    "consoleErrors": 0
+  }
+}
