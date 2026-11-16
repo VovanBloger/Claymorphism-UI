@@ -4,6 +4,7 @@ import { ClayControlBoard, REFERENCE_ELEMENTS, ReferenceElement, ReferenceElemen
 import { resolveClayAssetPath } from '../utils/clayEngine';
 import './reference-clay.css';
 import { BottomNavExamples } from './BottomNavExamples';
+import { MagicProgress } from './MagicProgress';
 
 export function ReferenceLibrary({onInspect}:{onInspect:(kind:ReferenceElementKind)=>void}) {
  const [showReferences,setShowReferences]=useState(false);
@@ -13,6 +14,7 @@ export function ReferenceLibrary({onInspect}:{onInspect:(kind:ReferenceElementKi
   <div className="ref-section-heading"><div><span className="ref-kicker">02 / LITTLE THINGS, BIG PERSONALITY</span><h2>Больше, чем просто кнопки</h2></div><p>Новые формы из ваших референсов.<br/>Каждая — с собственным характером движения.</p></div>
   <div className="ref-component-grid">{(['product-card','workout-card','activity-rings','clay-calendar','filter-chips'] as ReferenceElementKind[]).map((kind,i)=><section className="ref-component-cell" key={kind}><div className="ref-component-caption"><span>0{i+1}</span><b>{REFERENCE_ELEMENTS.find(e=>e.id===kind)?.label}</b><button type="button" aria-label={`Открыть в генераторе: ${REFERENCE_ELEMENTS.find(e=>e.id===kind)?.label}`} onClick={()=>onInspect(kind)}><Code2 size={17}/></button></div><div className="ref-component-preview"><ReferenceElement kind={kind}/></div><p>{REFERENCE_ELEMENTS.find(e=>e.id===kind)?.description}</p></section>)}</div>
   <BottomNavExamples/>
+  <MagicProgress/>
   <div className="ref-library-note"><Sparkles size={20}/><div><b>Мягкость — это система.</b><p>Единый источник света, согласованные радиусы, короткие тени и спокойная упругость. Все новые элементы доступны в генераторе с React, CSS и токенами.</p></div></div>
  </div>;
 }
